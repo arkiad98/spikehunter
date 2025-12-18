@@ -1,0 +1,180 @@
+# config/feature_registry.yaml
+# [SpikeHunter v5.1 RFE Optimized]
+# AI가 RFE 분석을 통해 선정한 "최고 성능(AP 0.1343)을 내는 16개 정예 피처"
+# --------------------------------------------------------------------
+
+features:
+    # ==========================================================================
+    # [Tier 1] 절대적 중요도 Top 5 (Core of Core)
+    # ==========================================================================
+    
+    # 1. 세력의 발자국 (매집)
+    -   name: obv
+        status: core
+        category: fund_flow
+        description: "On-Balance Volume (거래량 누적지표, 세력 매집의 척도)"
+
+    # 2. 변동성 타이밍 (수렴)
+    -   name: bandwidth
+        status: core
+        category: volatility
+        description: "20일 볼린저 밴드폭 (변동성 수렴/발산 지표)"
+
+    # 3. 추세 기준선 (Trend)
+    -   name: ma20
+        status: core
+        category: momentum
+        description: "20일 이동평균선 (단기 추세의 중심)"
+
+    # 4. 유동성 기준 (Liquidity)
+    -   name: amount_ma5
+        status: core
+        category: liquidity
+        description: "5일 평균 거래대금 (주도주 판별)"
+
+    # 5. 과매수/과매도 심리 (Momentum)
+    -   name: rsi_14
+        status: core
+        category: momentum
+        description: "RSI (상대강도지수, 단기 과열 판단)"
+
+
+    # ==========================================================================
+    # [Tier 2] 필수 보조 지표 (Top 6~10)
+    # ==========================================================================
+    
+    # 6. 변동성 크기 (Risk)
+    -   name: std20
+        status: core
+        category: volatility
+        description: "20일 주가 표준편차"
+
+    # 7. 평소 변동성 (Baseline)
+    -   name: range_ma20
+        status: core
+        category: volatility
+        description: "20일 평균 변동폭 (종목의 고유 끼)"
+
+    # 8. 밴드 내 위치 (Position)
+    -   name: percent_b
+        status: core
+        category: volatility
+        description: "볼린저 밴드 내 주가 위치 (%B, 1.0 돌파 시 급등)"
+
+    # 9. 자금 유입 강도 (Smart Money)
+    -   name: mfi_14
+        status: core
+        category: fund_flow
+        description: "Money Flow Index (거래량 실린 상승)"
+
+    # 10. 모멘텀 가속도 (Velocity)
+    -   name: rsi_roc_3d
+        status: core
+        category: momentum
+        description: "RSI 3일 변화율 (모멘텀이 살아나는가?)"
+
+
+    # ==========================================================================
+    # [Tier 3] 정밀 타격용 지표 (Top 11~16)
+    # ==========================================================================
+    
+    -   name: range_ma5
+        status: core
+        category: volatility
+        description: "5일 평균 변동폭"
+
+    -   name: vol_ma5
+        status: core
+        category: volume
+        description: "5일 평균 거래량"
+
+    -   name: vol_ratio_5
+        status: core
+        category: volume
+        description: "거래량 급증 비율 (Volume Spike)"
+
+    -   name: range_ratio_20
+        status: core
+        category: volatility
+        description: "상대적 수렴도 (Relative Squeeze)"
+
+    -   name: obv_slope_5
+        status: core
+        category: fund_flow
+        description: "OBV 5일 기울기 (매집 가속도)"
+
+    -   name: daily_range
+        status: core
+        category: volatility
+        description: "일일 변동폭 (NR)"
+
+    # ==========================================================================
+    # [Tier 4] 추세 강도 및 방향 (Trend) - [NEW]
+    # ==========================================================================
+    -   name: adx_14
+        status: core
+        category: trend
+        description: "ADX (추세 강도, 25 이상 시 강한 추세)"
+
+    -   name: pdi_14
+        status: core
+        category: trend
+        description: "+DI (상승 방향성)"
+
+    -   name: mdi_14
+        status: core
+        category: trend
+        description: "-DI (하락 방향성)"
+
+# [누락된 핵심 피처 복구]
+    -   name: squeeze_energy
+        status: core
+        category: interaction
+        description: "수렴도 * 거래량 (에너지 응축 강도)"
+        
+    -   name: pv_trend
+        status: core
+        category: interaction
+        description: "가격변동폭 * 거래량 (거래량 실린 추세)"
+
+# [NEW] Cross-Sectional Rank Features
+    -   name: rsi_14_rank
+        status: core
+        category: momentum
+        description: "당일 시장 전체 대비 RSI 순위 (0~1)"
+
+    -   name: vol_ratio_5_rank
+        status: core
+        category: volume
+        description: "당일 시장 전체 대비 거래량 급증 순위"
+    
+    -   name: obv_slope_5_rank
+        status: core
+        category: fund_flow
+        description: "당일 시장 전체 대비 매집 강도 순위"
+
+    -   name: squeeze_energy_rank
+        status: core
+        category: interaction
+        description: "당일 시장 전체 대비 에너지 응축 순위"
+        
+    -   name: mfi_14_rank
+        status: core
+        category: fund_flow
+        description: "당일 시장 전체 대비 자금 유입 강도 순위"
+
+    # ==========================================================================
+    # [Deprecated / Candidates] RFE 탈락 피처 (사용 안 함)
+    # ==========================================================================
+    -   name: dist_from_ma20
+        status: deprecated
+    -   name: daily_ret
+        status: deprecated
+    -   name: ret_5d
+        status: deprecated
+    -   name: atr_norm_14d
+        status: deprecated
+    -   name: relative_value
+        status: deprecated
+    -   name: foreign_flow_ma5d
+        status: deprecated

@@ -1,0 +1,28 @@
+# .gitignore
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+.ipynb_checkpoints/
+
+# Data and Logs
+data/
+logs/
+backtest_results/
+old/
+
+# Generated Analysis Images
+analysis_*.png
+
+# Archives
+*.zip
+*.tar.gz
+
+merged/
+features/
+dev_space/catboost_info/
+DockerDesktopWSL/

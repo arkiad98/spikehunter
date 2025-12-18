@@ -1,0 +1,45 @@
+
+# AP 개선 계획 (목표: 0.4+) - Dev Space
+
+- [x] 1차 시도 (Baseline & Optimization) <!-- id: 0 -->
+    - [x] 개발 환경 및 데이터셋 구성 <!-- id: 12 -->
+    - [x] 모델 최적화 및 앙상블 학습 <!-- id: 7 -->
+    - [x] 결과 검증 (AP: 0.2828) <!-- id: 15 -->
+- [x] 2차 시도 (Advanced Features & Labeling) <!-- id: 17 -->
+    - [x] **복합 라벨링 구현** (Price + Volume) <!-- id: 18 -->
+    - [x] **장기 시계열 피처 추가** (T-10일 이상) <!-- id: 19 -->
+    - [x] 데이터셋 재생성 <!-- id: 20 -->
+    - [x] 모델 재학습 및 검증 (AP: 0.2035 - 성능 하락) <!-- id: 21 -->
+- [x] 3차 시도 (Rollback & Diversity) <!-- id: 22 -->
+    - [x] **라벨링 롤백** (Price Only) <!-- id: 23 -->
+    - [x] 데이터셋 재생성 <!-- id: 24 -->
+    - [x] **CatBoost 모델 추가** <!-- id: 25 -->
+    - [x] 3종 앙상블 학습 및 검증 (AP: 0.2862 - Baseline 복구) <!-- id: 26 -->
+- [x] 4차 시도 (Feature Selection) <!-- id: 27 -->
+    - [x] **피처 중요도 분석** (SHAP/Gain) <!-- id: 28 -->
+    - [x] **하위 20% 피처 제거** <!-- id: 29 -->
+    - [x] 모델 재학습 및 성능 비교 (AP: 0.2877 - 유지) <!-- id: 30 -->
+- [x] 5차 시도 (Optimization & Threshold) <!-- id: 31 -->
+    - [x] **하이퍼파라미터 재최적화** (Reduced Features) <!-- id: 32 -->
+    - [x] **Threshold 최적화** (Optimal: 0.35) <!-- id: 33 -->
+    - [x] 최종 모델 학습 및 목표 달성 확인 (AP: 0.3808 - Target 근접) <!-- id: 34 -->
+- [ ] 6차 시도 (Deep Optimization) <!-- id: 35 -->
+    - [x] **Optuna 100회 탐색** (LGBM, XGB, CatBoost) <!-- id: 36 -->
+    - [x] **최종 모델 학습 및 성능 검증** (AP: 0.2877 - Target 미달) <!-- id: 37 -->
+- [x] 7차 시도 (Refinement & Threshold) <!-- id: 38 -->
+    - [x] **Threshold 최적화** (Optimal: 0.30, F1: 0.3769) <!-- id: 39 -->
+    - [x] **Ensemble Weights 최적화** (AP: 0.3173, LGBM Dominance) <!-- id: 40 -->
+    - [x] **최종 성능 검증** (LGBM Solo AP: 0.3613) <!-- id: 41 -->
+    - [x] **피처 영향도 분석** (Market/Rank Features = 0.0) <!-- id: 42 -->
+- [/] 8차 시도 (Final Simplification) <!-- id: 43 -->
+    - [/] **Useless Features 제거** (Market, Rank 등) <!-- id: 44 -->
+    - [x] **LightGBM 단독 모델 재학습** (Clean Dataset, CV AP: 0.2863) <!-- id: 45 -->
+    - [x] **AP 0.36 재현 검증** (Test Set AP: 0.3613, Threshold: 0.40) <!-- id: 47 -->
+    - [x] **Deep Feature Optimization** (AP Maintained: 0.3613, Simplified) <!-- id: 48 -->
+    - [x] **Deep Feature Optimization** (AP Maintained: 0.3613, Simplified) <!-- id: 48 -->
+    - [x] **Final Backtest (Valid)** (CAGR -0.01%, Bias Removed) <!-- id: 46 -->
+    - [x] **After-Hours Strategy Check** (CAGR -7.66%, Gap Capture Failed) <!-- id: 49 -->
+    - [x] **Model Prediction Verification** (AP 0.2880 vs Baseline 0.1711, Model Valid) <!-- id: 50 -->
+    - [x] **Multi-Day Strategy Check (Max 5 Days)** (CAGR 60.76%, Profitable) <!-- id: 51 -->
+    - [x] **Full Period Backtest (2020-2025)** (CAGR 904.71%, Consistent) <!-- id: 52 -->
+    - [x] **AP Verification (Train vs Test)** (Train 0.3572 vs Test 0.2880, Generalization Confirmed) <!-- id: 53 -->
