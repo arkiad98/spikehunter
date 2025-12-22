@@ -21,15 +21,15 @@ def run_auto_optimization():
     cfg = read_yaml(settings_path)
 
     # 2. Optimize XGBoost
-    print("\n[Auto] Starting XGBoost Optimization...")
-    optimize_model(cfg, settings_path, model_type='xgb', target_key='xgb_params_classification', space_key='param_space_xgb')
+    # print("\n[Auto] Starting XGBoost Optimization...")
+    # optimize_model(cfg, settings_path, model_type='xgb', target_key='xgb_params_classification', space_key='param_space_xgb')
 
     # Reload config
-    cfg = read_yaml(settings_path)
+    # cfg = read_yaml(settings_path)
 
     # 3. Optimize CatBoost
-    print("\n[Auto] Starting CatBoost Optimization...")
-    optimize_model(cfg, settings_path, model_type='cat', target_key='cat_params_classification', space_key='param_space_cat')
+    # print("\n[Auto] Starting CatBoost Optimization...")
+    # optimize_model(cfg, settings_path, model_type='cat', target_key='cat_params_classification', space_key='param_space_cat')
 
 def optimize_model(cfg, settings_path, model_type, target_key, space_key):
     # Fix: Load param_space from ml_params -> target_key -> space_key

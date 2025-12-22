@@ -35,20 +35,19 @@ ml_params:
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 36
-  regression_train_months: 24
   classification_threshold: 0.35
 
   # [복구] 검증된 Golden Params (AP 0.18 달성 당시)
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 2.699771837956734
-    n_estimators: 609
-    learning_rate: 0.049981467135339755
-    num_leaves: 105
-    max_depth: 6
-    colsample_bytree: 0.7604169355907935
-    subsample: 0.7927770132256534
+    scale_pos_weight: 1.0 # [수정] Natural Learning (No Weight)
+    n_estimators: 1429
+    learning_rate: 0.01168031462970229
+    num_leaves: 116
+    max_depth: 13
+    colsample_bytree: 0.9166731992022644
+    subsample: 0.8912413198840847
     n_jobs: 4
     verbose: -1
 
@@ -58,7 +57,7 @@ ml_params:
       num_leaves: {type: int, low: 30, high: 150}
       max_depth: {type: int, low: 5, high: 15}
       n_estimators: {type: int, low: 500, high: 2000}
-      scale_pos_weight: {type: float, low: 1.0, high: 4.0}
+      # scale_pos_weight: {type: float, low: 1.0, high: 4.0} # [제거] Natural Learning 강제
       colsample_bytree: {type: float, low: 0.6, high: 1.0}
       subsample: {type: float, low: 0.6, high: 1.0}
 
@@ -119,9 +118,9 @@ optimization:
     optimize_on: Sharpe_raw
     n_trials: 100
     param_space:
-      target_r: {type: float, low: 0.10, high: 0.20}
+      target_r: {type: float, low: 0.10, high: 0.30}
       stop_r: {type: float, low: -0.10, high: -0.05}
-      min_ml_score: {type: float, low: 0.65, high: 0.80}
+      min_ml_score: {type: float, low: 0.60, high: 0.90}
       max_market_vol: {type: float, low: 0.015, high: 0.04}
       vbo_k: {type: float, low: 0.3, high: 0.7}
       min_mfi: {type: float, low: 40.0, high: 60.0}
@@ -133,7 +132,7 @@ strategies:
     target_r: 0.13122083277648386
     stop_r: -0.07052847171627037
     max_hold: 5
-    min_ml_score: 0.25
+    min_ml_score: 0.35
     vbo_k: 0.316594641524516
     max_market_vol: 0.024849773563554146
     min_mfi: 0

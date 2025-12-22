@@ -145,23 +145,23 @@ def _run_classification_training(cfg: dict, return_results_only: bool = False):
         if use_cat: models_str.append("CatBoost")
         print(f"    * 앙상블 모델: {', '.join(models_str)}")
 
-    # 병렬 학습 (Sequential Folds for Stability)
-    # n_jobs=1 ensures sequential execution of folds, allowing each model to use full threads
-    lgbm_results = Parallel(n_jobs=1, verbose=10)(
+    # 병렬 학습 (Parallel Folds)
+    # n_jobs=-1 uses all available cores. Assuming model n_jobs is set appropriately.
+    lgbm_results = Parallel(n_jobs=-1, verbose=10)(
         delayed(_train_single_fold)('lgbm', lgbm_params, X.iloc[tr], y.iloc[tr], X.iloc[te], y.iloc[te], threshold)
         for tr, te in fold_indices
     )
     
     xgb_results = []
     if use_xgb:
-        xgb_results = Parallel(n_jobs=1, verbose=10)(
+        xgb_results = Parallel(n_jobs=-1, verbose=10)(
             delayed(_train_single_fold)('xgb', xgb_params, X.iloc[tr], y.iloc[tr], X.iloc[te], y.iloc[te], threshold)
             for tr, te in fold_indices
         )
 
     cat_results = []
     if use_cat:
-        cat_results = Parallel(n_jobs=1, verbose=10)(
+        cat_results = Parallel(n_jobs=-1, verbose=10)(
             delayed(_train_single_fold)('cat', cat_params, X.iloc[tr], y.iloc[tr], X.iloc[te], y.iloc[te], threshold)
             for tr, te in fold_indices
         )

@@ -20,7 +20,7 @@ features:
     # [Group B] RFE 선정 Top Tier (개별 종목)
     # ==========================================================================
     -   name: obv
-        status: core
+        status: unused
         category: fund_flow
         description: "OBV (누적 매집)"
 
@@ -40,7 +40,7 @@ features:
         description: "5일 평균 변동폭"
 
     -   name: lower_band
-        status: core
+        status: unused
         category: volatility
         description: "볼린저 밴드 하단선"
 
@@ -80,7 +80,7 @@ features:
         description: "[Rank] 자금유입 순위"
 
     -   name: vol_ma5
-        status: core
+        status: unused
         category: volume
         description: "5일 평균 거래량"
 
@@ -105,7 +105,7 @@ features:
         description: "RSI 절대값"
 
     -   name: std20
-        status: core
+        status: unused
         category: volatility
         description: "20일 표준편차"
 
@@ -113,6 +113,22 @@ features:
         status: unused
         category: interaction
         description: "[Rank] 에너지 응축 순위"
+
+    # [Added Normalized Features]
+    -   name: vol_ratio_5
+        status: core
+        category: volume
+        description: "5일 평균 대비 거래량 비율"
+
+    -   name: mfi_14
+        status: core
+        category: fund_flow
+        description: "MFI (자금 흐름)"
+        
+    -   name: range_ratio_20
+        status: core
+        category: volatility
+        description: "20일 평균 대비 변동폭 비율"
 
     # ==========================================================================
     # [Group C] Long-Term & Chart Theory (2차 개선) - NEW
