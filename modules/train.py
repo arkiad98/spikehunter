@@ -85,17 +85,26 @@ def _run_classification_training(cfg: dict, return_results_only: bool = False):
     paths = cfg.get("paths", {})
     ml_params_cfg = cfg.get("ml_params", {})
     
-    # 1. 데이터 로드
+    # 1. 데이터 로드 (Fix: WF 호환성 - dataset_v4.parquet 존재 시 최우선 로드)
     dataset_dir = paths.get("ml_dataset", "data/proc/ml_dataset")
-    dataset_path = os.path.join(dataset_dir, "ml_classification_dataset.parquet")
     
+    # [Fix] Walk-Forward 등에서 생성한 학습 전용 데이터셋이 있으면 우선 사용
+    # run_pipeline.py에서 'features' 경로에 dataset_v4.parquet를 생성함
+    train_split_path = os.path.join(paths.get("features", ""), "dataset_v4.parquet")
+    
+    if os.path.exists(train_split_path):
+        dataset_path = train_split_path
+        if not return_results_only:
+             print(f" >> [Data] 학습 전용 데이터셋 로드 (WF Mode): {dataset_path}")
+    else:
+        dataset_path = os.path.join(dataset_dir, "ml_classification_dataset.parquet")
+        if not return_results_only:
+             print(f" >> [Data] 전체 데이터셋 로드: {dataset_path}")
+
     if not os.path.exists(dataset_path):
         logger.error(f"데이터셋이 없습니다: {dataset_path}")
         return
 
-    if not return_results_only:
-        print(f" >> 데이터 로드 중... ({dataset_path})")
-    
     df = pd.read_parquet(dataset_path)
     df = optimize_memory_usage(df)
     df['date'] = pd.to_datetime(df['date'])
@@ -251,7 +260,14 @@ class Objective:
         cfg = read_yaml("config/settings.yaml")
         
         # 데이터 로드 (동일 로직)
+        # 데이터 로드 (Fix: WF/Optim 호환성)
         dataset_path = os.path.join(cfg["paths"]["ml_dataset"], "ml_classification_dataset.parquet")
+        
+        # [Fix] Check for split dataset in optimization as well
+        train_split_path = os.path.join(cfg["paths"]["features"], "dataset_v4.parquet")
+        if os.path.exists(train_split_path):
+             dataset_path = train_split_path
+
         df = pd.read_parquet(dataset_path)
         df['date'] = pd.to_datetime(df['date'])
         df = df.sort_values('date').reset_index(drop=True)
@@ -306,17 +322,20 @@ class Objective:
         y_pred_proba = model.predict_proba(X_val)[:, 1]
         return average_precision_score(y_val, y_pred_proba)
 
-def run_ml_optimization_pipeline(settings_path: str, warm_start: bool = True):
+def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_trials: int = 20, n_jobs: int = 1, save: bool = False):
     """ML 모델 최적화 (LGBM / XGB / CatBoost 선택 가능)"""
     print("\n" + "="*60)
     print("      <<< ML 모델 하이퍼파라미터 최적화 >>>")
     print("="*60)
     
-    print("최적화할 모델을 선택하세요:")
-    print("1. LightGBM")
-    print("2. XGBoost")
-    print("3. CatBoost")
-    choice = get_user_input("선택 (1/2/3): ")
+    if model_type:
+        choice = {'lgbm': '1', 'xgb': '2', 'cat': '3'}.get(model_type, '1')
+    else:
+        print("최적화할 모델을 선택하세요:")
+        print("1. LightGBM")
+        print("2. XGBoost")
+        print("3. CatBoost")
+        choice = get_user_input("선택 (1/2/3): ")
     
     if choice == '1':
         target_model = 'lgbm'
@@ -335,10 +354,14 @@ def run_ml_optimization_pipeline(settings_path: str, warm_start: bool = True):
         return
     
     # 병렬 설정
-    n_jobs_input = get_user_input("병렬 작업 수(n_jobs) (엔터: 1, -1: 전체): ")
-    try:
-        optuna_n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
-    except: optuna_n_jobs = 1
+    if n_jobs is None:
+        n_jobs_input = get_user_input("병렬 작업 수(n_jobs) (엔터: 1, -1: 전체): ")
+        try:
+            optuna_n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
+        except: optuna_n_jobs = 1
+    else:
+        optuna_n_jobs = n_jobs
+
     model_n_jobs = 1 if optuna_n_jobs != 1 else -1
     
     cfg = read_yaml(settings_path)
@@ -353,7 +376,7 @@ def run_ml_optimization_pipeline(settings_path: str, warm_start: bool = True):
         print(f"설정 파일({target_key})에 {space_key}가 없습니다.")
         return
         
-    n_trials = 20 # Default
+    # n_trials is passed as argument
     
     print(f" >> 모델: {target_model.upper()}, Trials: {n_trials}, Optuna Jobs: {optuna_n_jobs}")
     
@@ -366,8 +389,12 @@ def run_ml_optimization_pipeline(settings_path: str, warm_start: bool = True):
         print(f"\n [최적화 완료] Best AP: {study.best_value:.4f}")
         print(f" Best Params: {study.best_params}")
         
-        save = get_user_input("설정 파일에 저장하시겠습니까? (y/n): ")
-        if save.lower() == 'y':
+        if save:
+            do_save = 'y'
+        else:
+            do_save = get_user_input("설정 파일에 저장하시겠습니까? (y/n): ")
+            
+        if do_save.lower() == 'y':
             # 기존 파라미터에 업데이트
             base_params = cfg['ml_params'].get(target_key, {})
             base_params.update(study.best_params)
@@ -385,4 +412,16 @@ def run_train_pipeline(settings_path: str):
     _run_classification_training(cfg)
 
 if __name__ == "__main__":
-    run_train_pipeline("config/settings.yaml")
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--optimize", action="store_true", help="Run optimization")
+    parser.add_argument("--model", type=str, default="lgbm", help="Model type (lgbm, xgb, cat)")
+    parser.add_argument("--trials", type=int, default=20, help="Number of trials")
+    parser.add_argument("--jobs", type=int, default=1, help="Number of jobs (-1 for all)")
+    parser.add_argument("--save", action="store_true", help="Auto save results")
+    args = parser.parse_args()
+
+    if args.optimize:
+        run_ml_optimization_pipeline("config/settings.yaml", model_type=args.model, n_trials=args.trials, n_jobs=args.jobs, save=args.save)
+    else:
+        run_train_pipeline("config/settings.yaml")

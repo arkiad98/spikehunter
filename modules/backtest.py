@@ -61,7 +61,8 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
                  start: str = None, end: str = None, initial_cash: Optional[float] = None,
                  param_overrides: Optional[dict] = None, quiet: bool = False, use_ml_target: bool = False,
                  trial_number: int = None, temp_model: Optional[lgb.LGBMRegressor] = None,
-                 preloaded_features: Optional[pd.DataFrame] = None, save_to_db: bool = True):
+                 preloaded_features: Optional[pd.DataFrame] = None, save_to_db: bool = True,
+                 skip_exclusion: bool = False):
     
     # 1. Load Settings
     if settings_cfg: cfg = settings_cfg
@@ -76,9 +77,26 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     top_n = int(cfg.get("top_n", 5))
     ml_params = cfg.get("ml_params", {})
     threshold = ml_params.get("classification_threshold", 0.40)
-    target_r = 0.10
-    stop_r = -0.05
-    max_hold = 5
+    
+    # [수정] 전략/ML 파라미터 우선순위 적용 (하드코딩 제거)
+    target_r = ml_params.get('target_surge_rate', 0.10)
+    stop_r = ml_params.get('stop_loss_rate', -0.07)
+    max_hold = ml_params.get('target_hold_period', 5)
+
+    # Strategy override if exists
+    if strategy_name in cfg.get('strategies', {}):
+        st_cfg = cfg['strategies'][strategy_name]
+        target_r = st_cfg.get('target_r', target_r)
+        stop_r = st_cfg.get('stop_r', stop_r)
+        stop_r = st_cfg.get('stop_r', stop_r)
+        max_hold = st_cfg.get('max_hold', max_hold)
+    
+    # [Fix] Apply Optimization Overrides
+    if param_overrides:
+        target_r = param_overrides.get('target_r', target_r)
+        stop_r = param_overrides.get('stop_r', stop_r)
+        max_hold = param_overrides.get('max_hold', max_hold)
+        threshold = param_overrides.get('min_ml_score', threshold) # Map min_ml_score to threshold
     
     # Load Model
     model_clf_path = os.path.join(paths["models"], "lgbm_model.joblib")
@@ -109,6 +127,49 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
         all_features['date'] = pd.to_datetime(all_features['date'])
         mask = (all_features['date'] >= start_d) & (all_features['date'] <= end_d)
         all_features = all_features.loc[mask].copy()
+
+    if all_features.empty: return None
+
+    # [NEW] Apply Date-Specific Exclusion
+    # [NEW] Apply Date-Specific Exclusion
+    if not skip_exclusion:
+        exclude_path = os.path.join(os.path.dirname(settings_path) if settings_path else "config", "exclude_dates.yaml")
+        if os.path.exists(exclude_path):
+            # from modules.utils_io import read_yaml # [Removed] Shadowing fix
+            ex_cfg = read_yaml(exclude_path)
+            exclusions = ex_cfg.get('exclusions', [])
+            
+            if exclusions:
+                original_len = len(all_features)
+                
+                # Efficient filtering using set of (code, date)
+                exclude_set = set()
+                for item in exclusions:
+                    c = item['code']
+                    for d in item['dates']:
+                        exclude_set.add((c, pd.Timestamp(d).date()))
+                
+                # Create excluded dataframe
+                exclude_records = []
+                for c, d in exclude_set:
+                    exclude_records.append({'code': c, 'date': pd.Timestamp(d)})
+                
+                if exclude_records:
+                    exclude_df = pd.DataFrame(exclude_records)
+                    exclude_df['exclude'] = True
+                    
+                    # Normalize date format
+                    exclude_df['date'] = pd.to_datetime(exclude_df['date'])
+                    
+                    # Merge
+                    all_features = all_features.merge(exclude_df, on=['code', 'date'], how='left')
+                    all_features = all_features[all_features['exclude'].isna()].drop(columns=['exclude'])
+                
+                filtered_len = len(all_features)
+                if original_len > filtered_len:
+                    msg = f" >> Anomaly Exclusion applied: Removed {original_len - filtered_len} rows."
+                    if not quiet: print(msg)
+                    logger.info(msg)
 
     if all_features.empty: return None
     
@@ -164,6 +225,7 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
             target_price = pos['entry_price'] * (1 + target_r)
             stop_price = pos['entry_price'] * (1 + stop_r)
             
+            # Gap Check
             # Gap Check
             if open_p >= target_price:
                 exit_price = open_p
@@ -230,6 +292,23 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
         
         daily_equity.append({'date': date, 'equity': current_equity})
 
+    # [Fix] Force Close at End (to show recent trades in log)
+    if portfolio and not all_features.empty:
+        last_date = all_features['date'].iloc[-1]
+        last_close_map = all_features[all_features['date'] == last_date].set_index('code')['close'].to_dict()
+        
+        for code, pos in portfolio.items():
+            exit_price = last_close_map.get(code, pos['entry_price']) # Fallback to entry if price missing
+            ret = (exit_price - pos['entry_price']) / pos['entry_price'] - fee
+            
+            trade_log.append({
+                'entry_date': pos['entry_date'],
+                'exit_date': last_date,
+                'code': code,
+                'return': ret,
+                'reason': "End"
+            })
+    
     # 5. Finalize
     if not daily_equity: return None
     equity_df = pd.DataFrame(daily_equity).set_index('date')

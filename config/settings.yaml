@@ -31,35 +31,38 @@ paths:
 # 2. 머신러닝 파라미터 (이 부분이 중요!)
 ml_params:
   # [복구] 타겟 기준을 10%로 완화하여 데이터 확보 (15%는 너무 적었음)
-  target_surge_rate: 0.10
+  target_surge_rate: 0.1344928226333169
+  stop_loss_rate: -0.05686049805983242 # [신규] 학습/백테스트 통일
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 36
-  classification_threshold: 0.35
+  classification_threshold: 0.7448009471330749
 
   # [복구] 검증된 Golden Params (AP 0.18 달성 당시)
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 1.0 # [수정] Natural Learning (No Weight)
-    n_estimators: 1429
-    learning_rate: 0.01168031462970229
-    num_leaves: 116
-    max_depth: 13
-    colsample_bytree: 0.9166731992022644
-    subsample: 0.8912413198840847
+    scale_pos_weight: 4.743379678262101  # [수정] Natural Learning (No Weight)
+    n_estimators: 1313
+    learning_rate: 0.005364725521057287
+    num_leaves: 21
+    max_depth: 11
+    colsample_bytree: 0.6471185057450073
+    subsample: 0.7046077526129331
     n_jobs: 4
     verbose: -1
 
     # [기존] LightGBM용 파라미터 공간
     param_space_lgbm:
-      learning_rate: {type: float, low: 0.01, high: 0.1, log: true}
-      num_leaves: {type: int, low: 30, high: 150}
-      max_depth: {type: int, low: 5, high: 15}
-      n_estimators: {type: int, low: 500, high: 2000}
-      # scale_pos_weight: {type: float, low: 1.0, high: 4.0} # [제거] Natural Learning 강제
-      colsample_bytree: {type: float, low: 0.6, high: 1.0}
-      subsample: {type: float, low: 0.6, high: 1.0}
+      learning_rate: {type: float, low: 0.005, high: 0.15, log: true}
+      num_leaves: {type: int, low: 20, high: 200}
+      max_depth: {type: int, low: 4, high: 20}
+      n_estimators: {type: int, low: 300, high: 3000}
+      scale_pos_weight: {type: float, low: 1.0, high: 5.0}
+      colsample_bytree: {type: float, low: 0.5, high: 1.0}
+      subsample: {type: float, low: 0.5, high: 1.0}
+      min_child_samples: {type: int, low: 10, high: 100}
+    min_child_samples: 98
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -114,7 +117,7 @@ ml_params:
 
 # 4. 전략 최적화 설정
 optimization:
-  SpikeHunter:
+  SpikeHunter_R1_BullStable:
     optimize_on: Sharpe_raw
     n_trials: 100
     param_space:
@@ -129,12 +132,12 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.13122083277648386
-    stop_r: -0.07052847171627037
+    target_r: 0.1344928226333169  # [수정] ml_params와 통일 (0.13 -> 0.10)
+    stop_r: -0.05686049805983242  # [수정] ml_params와 통일
     max_hold: 5
-    min_ml_score: 0.35
-    vbo_k: 0.316594641524516
-    max_market_vol: 0.024849773563554146
-    min_mfi: 0
+    min_ml_score: 0.7448009471330749 # [수정] ml_params.classification_threshold와 통일
+    vbo_k: 0.38372585092556344
+    max_market_vol: 0.03972917789908604
+    min_mfi: 49.946337192993994
     min_obv_slope: 0
     top_n: 5

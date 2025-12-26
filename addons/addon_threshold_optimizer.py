@@ -1,7 +1,7 @@
 # addons/addon_threshold_optimizer.py (v5.2.4 - Fix YAML Update Error)
 """
 [SpikeHunter] 최적 임계값(Threshold) 정밀 탐색기
-- 기능: 모델 예측 확률을 기반으로 0.15 ~ 0.35 구간을 정밀 스캔하여 최적의 매매 타점을 찾습니다.
+- 기능: 모델 예측 확률을 기반으로 0.15 ~ 0.80 구간을 정밀 스캔하여 최적의 매매 타점을 찾습니다.
 - 수정: 설정 파일 업데이트 시 float 타입 처리 오류 해결
 """
 import os
@@ -76,8 +76,8 @@ def run_threshold_optimization(settings_path: str):
         logger.error(f"예측 확률 계산 중 오류: {e}")
         return
 
-    # 3. 정밀 탐색 범위 설정 (0.15 ~ 0.35, 0.01 단위)
-    thresholds = np.arange(0.15, 0.50, 0.01)
+    # 3. 정밀 탐색 범위 설정 (0.15 ~ 0.80, 0.01 단위)
+    thresholds = np.arange(0.15, 0.81, 0.01)
     
     results = []
     for thresh in thresholds:
@@ -106,7 +106,7 @@ def run_threshold_optimization(settings_path: str):
     res_df = pd.DataFrame(results)
     
     print("\n" + "="*80)
-    print("             <<< 정밀 탐색 결과 (0.15 ~ 0.35) >>>")
+    print("             <<< 정밀 탐색 결과 (0.15 ~ 0.80) >>>")
     print("="*80)
     print(tabulate(res_df, headers="keys", tablefmt="psql", floatfmt=".4f", showindex=False))
     
@@ -152,10 +152,18 @@ def run_threshold_optimization(settings_path: str):
             # 단일 값 직접 할당
             data['ml_params']['classification_threshold'] = apply_val
             
+            # [Fix] 전략(Strategy) 섹션의 min_ml_score도 함께 업데이트하여 동기화
+            if 'strategies' in data:
+                # 모든 전략의 min_ml_score를 업데이트 (또는 특정 전략만)
+                # 여기서는 모든 전략을 순회하며 키가 있으면 업데이트
+                for strat_name, strat_params in data['strategies'].items():
+                    if 'min_ml_score' in strat_params:
+                         data['strategies'][strat_name]['min_ml_score'] = apply_val
+            
             with open(settings_path, 'w', encoding='utf-8') as f:
                 yaml.dump(data, f)
                 
-            logger.info(f"설정 파일 업데이트 완료: classification_threshold = {apply_val:.2f}")
+            logger.info(f"설정 파일 업데이트 완료: classification_threshold & min_ml_score = {apply_val:.2f}")
             
         except Exception as e:
             logger.error(f"설정 파일 업데이트 실패: {e}")

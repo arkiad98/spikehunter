@@ -346,6 +346,42 @@ def generate_and_save_recommendations(settings_path: str):
         logger.error(f"피처 데이터 로드 중 오류 발생: {e}")
         return
 
+    except Exception as e:
+        logger.error(f"피처 데이터 로드 중 오류 발생: {e}")
+        return
+
+    # [NEW] Apply Date-Specific Exclusion (Same as Backtest)
+    exclude_path = os.path.join(os.path.dirname(settings_path) if settings_path else "config", "exclude_dates.yaml")
+    if os.path.exists(exclude_path):
+        # from modules.utils_io import read_yaml # [Removed] Shadowing fix
+        ex_cfg = read_yaml(exclude_path)
+        exclusions = ex_cfg.get('exclusions', [])
+        
+        if exclusions and not features_today.empty:
+            original_len = len(features_today)
+            exclude_set = set()
+            for item in exclusions:
+                c = item['code']
+                for d in item['dates']:
+                     # For 'predict', we only care if today's date matches the exclusion
+                     exclude_set.add((c, pd.Timestamp(d).date()))
+            
+            # Check if any row in features_today matches exclusion
+            # features_today usually has 1 date, but iterate to be safe
+            keep_indices = []
+            for idx, row in features_today.iterrows():
+                if (row['code'], row['date'].date()) not in exclude_set:
+                    keep_indices.append(idx)
+            
+            features_today = features_today.loc[keep_indices]
+
+            if len(features_today) < original_len:
+                logger.info(f"이상치 데이터 제외 적용: {original_len - len(features_today)}개 종목 제외됨.")
+
+    if features_today.empty:
+        logger.warning("제외 목록 적용 후 추천 대상 종목이 없습니다.")
+        return
+
     # 2. 실시간 시장 상황 판단
     # [수정] KOSPI 데이터를 불러오는 함수를 load_index_data로 변경
     kospi = load_index_data(start_of_period, today, paths["raw_index"])

@@ -169,6 +169,7 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
             run_dir=os.path.join(period_dir, "result"),
             strategy_name=strategy_name,
             settings_cfg=period_cfg,
+            settings_path=settings_path, # [Fix] Pass explicit path for exclude_dates.yaml resolution
             start=str(test_start.date()),
             end=str(test_end.date()),
             initial_cash=next_initial_cash,
@@ -219,6 +220,7 @@ def _menu_data_management(settings_path):
         print("1. 데이터 수집 (Collect)")
         print("2. 피처 생성 및 라벨링 (Derive)")
         print("3. 데이터 무결성 점검 (Check)")
+        print("4. 데이터 정제 및 이상치 보정 (Clean) [NEW]")
         print("0. 이전 메뉴로")
         
         sel = get_user_input("선택: ")
@@ -230,6 +232,9 @@ def _menu_data_management(settings_path):
                 addon_data_integrity_check.run_data_integrity_check(settings_path)
             except (ImportError, AttributeError):
                 print("데이터 점검 모듈을 찾을 수 없습니다.")
+        elif sel == '4':
+            from modules import clean
+            clean.run_clean_pipeline(settings_path)
         elif sel == '0': break
 
 def _menu_training(settings_path):

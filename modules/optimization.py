@@ -1,21 +1,14 @@
-# modules/optimization.py (v5.9 - Parallel Optimization Restored)
-"""
-[SpikeHunter v5.9] 전략 파라미터 최적화 모듈
-- Optuna를 사용하여 백테스트 성능을 최대화하는 파라미터 조합을 탐색합니다.
-- 복원: 병렬 처리(n_jobs) 기능 복구 (사용자 입력 지원)
-"""
-
-import optuna
 import os
+import optuna
 import pandas as pd
 from datetime import datetime
-import joblib
+from ruamel.yaml import YAML
 
-from .utils_io import read_yaml, to_date, get_user_input, update_yaml
-from .utils_logger import logger
-from .backtest import run_backtest
+from modules.utils_logger import logger
+from modules.utils_io import read_yaml, update_yaml, get_user_input
+from modules.backtest import run_backtest
 
-def objective(trial, settings_path, strategy_name, start_date, end_date, preloaded_features):
+def objective(trial, settings_path, strategy_name, start_date, end_date, preloaded_features=None):
     """Optuna 목적 함수: 특정 파라미터 조합으로 백테스트 실행 후 성과 반환"""
     
     cfg = read_yaml(settings_path)
@@ -48,7 +41,8 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             param_overrides=params,
             quiet=True,
             preloaded_features=preloaded_features,
-            save_to_db=False # 최적화 중에는 DB 저장 생략
+            save_to_db=False, # 최적화 중에는 DB 저장 생략
+            skip_exclusion=True # [Optim] 이미 필터링된 데이터 사용
         )
         
         if not result: return -999.0 # 실패 시 페널티
@@ -76,7 +70,7 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     logger.info("      <<< 전략 파라미터 최적화 (Strategy Optimization) >>>")
     logger.info("="*60)
     
-    # [복구] 사용자 입력으로 병렬 작업 수 설정
+    # 사용자 입력으로 병렬 작업 수 설정
     n_jobs_input = get_user_input("병렬 작업 수(n_jobs)를 입력하세요 (엔터: 1, -1: 전체): ")
     try:
         n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
@@ -88,14 +82,27 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     cfg = read_yaml(settings_path)
     paths = cfg["paths"]
     
+    # Strategy Name Auto-Detection
+    if strategy_name == "SpikeHunter": # Default value check
+        strategies = cfg.get("strategies", {})
+        if strategies:
+            strategy_name = list(strategies.keys())[0]
+            logger.info(f" >> 감지된 전략: {strategy_name}")
+        else:
+            logger.warning("전략 설정이 없어 기본값 'SpikeHunter'를 사용합니다.")
+    
     # 최적화 기간 설정
     start_date = "2020-01-01"
     end_date = datetime.now().strftime('%Y-%m-%d')
     
     logger.info(f"최적화 데이터 로드 중... ({start_date} ~ {end_date})")
     
-    # 데이터 미리 로드 (속도 향상 및 I/O 병목 제거)
-    dataset_path = os.path.join(paths["features"], "dataset_v4.parquet")
+    # Correct Dataset Path
+    dataset_path = os.path.join(paths.get("ml_dataset", "data/proc/ml_dataset"), "ml_classification_dataset.parquet")
+    if not os.path.exists(dataset_path):
+        # Fallback to feature dir if not in ml_dataset
+        dataset_path = os.path.join(paths["features"], "dataset_v4.parquet")
+        
     if not os.path.exists(dataset_path):
         logger.error(f"데이터셋이 없습니다: {dataset_path}")
         return
@@ -109,6 +116,38 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     }
     df.rename(columns=rename_map, inplace=True)
     
+    # [Optim Efficiency] Pre-filter exclusions ONCE here
+    exclude_path = os.path.join(os.path.dirname(settings_path) if settings_path else "config", "exclude_dates.yaml")
+    if os.path.exists(exclude_path):
+        ex_cfg = read_yaml(exclude_path)
+        exclusions = ex_cfg.get('exclusions', [])
+        
+        if exclusions:
+            logger.info(" >> 최적화 전 이상 데이터 일괄 제거 중...")
+            original_len = len(df)
+            
+            exclude_set = set()
+            for item in exclusions:
+                c = item['code']
+                for d in item['dates']:
+                    exclude_set.add((c, pd.Timestamp(d).date()))
+            
+            exclude_records = []
+            for c, d in exclude_set:
+                exclude_records.append({'code': c, 'date': pd.Timestamp(d)})
+            
+            if exclude_records:
+                exclude_df = pd.DataFrame(exclude_records)
+                exclude_df['exclude'] = True
+                exclude_df['date'] = pd.to_datetime(exclude_df['date'])
+                
+                df = df.merge(exclude_df, on=['code', 'date'], how='left')
+                df = df[df['exclude'].isna()].drop(columns=['exclude'])
+            
+            filtered_len = len(df)
+            if original_len > filtered_len:
+                logger.info(f" >> 통합 필터링 완료: {original_len - filtered_len}건 제거됨.")
+    
     # Optuna Study 생성
     study_name = f"Opt-Strategy-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     study = optuna.create_study(direction="maximize", study_name=study_name)
@@ -116,6 +155,23 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     n_trials = cfg.get("optimization", {}).get(strategy_name, {}).get("n_trials", 20)
     
     logger.info(f"최적화 시작: {n_trials}회 시도")
+
+    # [NEW] Warm Start: 현재 파라미터를 초기 큐에 추가
+    baseline_value = -999.0
+    if warm_start:
+        current_strategy_params = cfg.get("strategies", {}).get(strategy_name, {})
+        opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
+        param_space = opt_cfg.get("param_space", {})
+        
+        # 최적화 대상 파라미터만 추출하여 초기값으로 설정
+        warm_params = {}
+        for key in param_space.keys():
+            if key in current_strategy_params:
+                warm_params[key] = current_strategy_params[key]
+        
+        if warm_params:
+            study.enqueue_trial(warm_params)
+            logger.info(f" >> Warm Start 설정됨: 현재 파라미터를 첫 번째 시도로 예약함 ({warm_params})")
     
     # 실행
     study.optimize(
@@ -128,10 +184,66 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     logger.info("="*60)
     logger.info(f"최적화 완료. Best Score: {study.best_value:.4f}")
     logger.info(f"Best Params: {study.best_params}")
+    
+    # [NEW] Baseline(Warm Start) 결과 존재 시 비교
+    improvement_msg = ""
+    is_improved = True
+    
+    if warm_start and len(study.trials) > 0:
+        # 첫 번째 Trial(Warm Start)의 결과를 Baseline으로 간주
+        # (주의: 병렬 처리 시 순서가 보장되지 않을 수 있으나, enqueue된 것은 보통 가장 먼저 할당됨)
+        try:
+            baseline_value = study.trials[0].value
+            if baseline_value is not None:
+                logger.info(f"Baseline Score (Current): {baseline_value:.4f}")
+                diff = study.best_value - baseline_value
+                if diff > 0.0001:
+                    improvement_msg = f" (▲ {diff:.4f} 개선됨)"
+                    is_improved = True
+                else:
+                    improvement_msg = " (개선 없음)"
+                    is_improved = False
+        except:
+            pass
+            
+    logger.info(f"성능 비교: {improvement_msg}")
     logger.info("="*60)
     
     # 결과 저장 여부
-    choice = get_user_input("최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): ")
+    if is_improved:
+        prompt_msg = "최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): "
+    else:
+        prompt_msg = "성능 개선이 없거나 미미합니다. 그래도 저장하시겠습니까? (y/n): "
+        
+    choice = get_user_input(prompt_msg)
     if choice.lower() == 'y':
         update_yaml(settings_path, "strategies", strategy_name, study.best_params)
+        
+        # Consistency: Update ml_params as well if target_r or stop_r changed
+        ml_updates = {}
+        if 'target_r' in study.best_params:
+            ml_updates['target_surge_rate'] = float(study.best_params['target_r']) # Cast to float for safety
+        if 'stop_r' in study.best_params:
+            ml_updates['stop_loss_rate'] = float(study.best_params['stop_r'])
+        
+        # XGB/LGBM thresholds mapping
+        if 'min_ml_score' in study.best_params:
+            ml_updates['classification_threshold'] = float(study.best_params['min_ml_score'])
+            
+        if ml_updates:
+            # 직접 YAML 로드 및 수정 (update_yaml의 한계 극복)
+            yaml = YAML()
+            yaml.preserve_quotes = True
+            
+            with open(settings_path, 'r', encoding='utf-8') as f:
+                config_data = yaml.load(f)
+            
+            if 'ml_params' in config_data:
+                for k, v in ml_updates.items():
+                    config_data['ml_params'][k] = v
+                
+                with open(settings_path, 'w', encoding='utf-8') as f:
+                    yaml.dump(config_data, f)
+                logger.info(" >> ml_params 동기화 완료 (target_r/stop_r/threshold)")
+            
         logger.info("설정 파일이 업데이트되었습니다.")

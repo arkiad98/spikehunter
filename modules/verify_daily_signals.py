@@ -241,10 +241,14 @@ def print_detailed_verification_report(settings_path: str):
         entry_price = float(row['entry_price'])
         
         # 기본 정보
+        highest_price = float(row['highest_price']) if row['highest_price'] else entry_price
+        high_ret = (highest_price - entry_price) / entry_price * 100
+        
         item = {
             '추천일': signal_date.strftime('%Y-%m-%d'),
             '종목명': row['name'] if row['name'] else name_map.get(code, code),
             '추천가(0일)': entry_price,
+            '최고가(Rate)': f"{int(highest_price):,} ({high_ret:+.1f}%)", # [추가] 최고가 정보 표시
             '상태': row['status']
         }
         
@@ -259,11 +263,20 @@ def print_detailed_verification_report(settings_path: str):
         ].sort_values('date')
         
         # +1일 ~ +5일 종가 매핑
+        exit_dt = pd.to_datetime(row['exit_date']) if row['exit_date'] else None
+
         for i in range(1, 6):
             col_name = f"+{i}일"
             if len(future_prices) >= i:
-                price = future_prices.iloc[i-1]['close']
-                item[col_name] = price
+                price_row = future_prices.iloc[i-1]
+                price = price_row['close']
+                price_date = price_row['date']
+                
+                # [수정] 종료일 이후의 데이터는 표시하지 않음
+                if exit_dt and price_date > exit_dt:
+                    item[col_name] = "-"
+                else:
+                    item[col_name] = price
             else:
                 item[col_name] = None # 미래 데이터 없음
         
@@ -295,7 +308,7 @@ def print_detailed_verification_report(settings_path: str):
     df_display = df_report.copy()
     
     # 컬럼 순서 정리
-    cols_order = ['추천일', '종목명', '추천가(0일)', '+1일', '+2일', '+3일', '+4일', '+5일', '수익률', '상태']
+    cols_order = ['추천일', '종목명', '추천가(0일)', '최고가(Rate)', '+1일', '+2일', '+3일', '+4일', '+5일', '수익률', '상태']
     # +1~+5일 컬럼이 없을 수도 있으니(데이터 전무) 확인
     existing_cols = [c for c in cols_order if c in df_display.columns]
     df_display = df_display[existing_cols]
@@ -304,7 +317,8 @@ def print_detailed_verification_report(settings_path: str):
     price_cols = ['추천가(0일)'] + [f"+{i}일" for i in range(1, 6)]
     for c in price_cols:
         if c in df_display.columns:
-            df_display[c] = df_display[c].apply(lambda x: f"{int(x):,}" if pd.notnull(x) and x != '' else "-")
+            # [Fix] '-' 문자가 들어있는 경우 int 변환 시 에러 발생 방지
+            df_display[c] = df_display[c].apply(lambda x: f"{int(x):,}" if pd.notnull(x) and x != '' and x != '-' else "-")
             
     # 수익률 포맷팅
     if '수익률' in df_display.columns:
