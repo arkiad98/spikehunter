@@ -75,7 +75,7 @@ def _train_single_fold(model_type, params, X_train, y_train, X_test, y_test, thr
     }
     return model, scores, probs
 
-def _run_classification_training(cfg: dict, return_results_only: bool = False):
+def _run_classification_training(cfg: dict, return_results_only: bool = False, benchmark_mode: bool = False):
     """분류 모델 학습 메인 로직 (앙상블 지원)"""
     if not return_results_only:
         print("\n" + "="*60)
@@ -138,9 +138,19 @@ def _run_classification_training(cfg: dict, return_results_only: bool = False):
     cat_params = ml_params_cfg.get("cat_params_classification")
     threshold = ml_params_cfg.get("classification_threshold", 0.5)
     
-    use_lgbm = True
-    use_xgb = False # (xgb_params is not None)
-    use_cat = False # (cat_params is not None) and (CatBoostClassifier is not None)
+    # 모델 선택 로직 (Settings > active_model 우선)
+    active_model = ml_params_cfg.get("active_model", "lgbm").lower()
+    
+    if benchmark_mode:
+        # 벤치마크: 가능한 모든 모델 활성화
+        use_lgbm = True
+        use_xgb = (xgb_params is not None)
+        use_cat = (cat_params is not None) and (CatBoostClassifier is not None)
+    else:
+        # 프로덕션: 선택된 단일 모델만 활성화
+        use_lgbm = (active_model == 'lgbm')
+        use_xgb = (active_model == 'xgb') and (xgb_params is not None)
+        use_cat = (active_model == 'cat') and (cat_params is not None) and (CatBoostClassifier is not None)
     
     n_splits = 5
     tscv = TimeSeriesSplit(n_splits=n_splits)
@@ -384,6 +394,25 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
     objective = Objective(target_model, param_space, "AP", model_n_jobs)
     
     try:
+        # Warm Start Logic
+        warm_params = {}
+        for k, v in target_params.items():
+            if k in param_space and not k.startswith('param_space'):
+                 space = param_space[k]
+                 # Clamp value to be within [low, high] for numerical params
+                 if space.get('type') in ['int', 'float']:
+                     low = space.get('low', float('-inf'))
+                     high = space.get('high', float('inf'))
+                     
+                     if v < low: v = low
+                     if v > high: v = high
+                 
+                 warm_params[k] = v
+                 
+        if warm_params:
+            print(f" >> Warm Start 설정됨: {warm_params}")
+            study.enqueue_trial(warm_params)
+
         study.optimize(objective, n_trials=n_trials, n_jobs=optuna_n_jobs, show_progress_bar=True)
         
         print(f"\n [최적화 완료] Best AP: {study.best_value:.4f}")
@@ -411,17 +440,52 @@ def run_train_pipeline(settings_path: str):
     cfg = read_yaml(settings_path)
     _run_classification_training(cfg)
 
+def run_benchmark_mode(settings_path: str):
+    """LGBM, XGB, CatBoost 3종 모델 성능 비교 벤치마크"""
+    print("\n" + "="*60)
+    print("      <<< ML Model Benchmark Mode >>>")
+    print("      LightGBM vs XGBoost vs CatBoost")
+    print("="*60)
+    
+    cfg = read_yaml(settings_path)
+    ml_params = cfg.get("ml_params", {})
+    
+    # 벤치마크용 기본 파라미터 주입 (설정에 없으면 기본값)
+    if "xgb_params_classification" not in ml_params:
+        logger.info("XGBoost 파라미터가 없어 기본값을 로드합니다.")
+        ml_params["xgb_params_classification"] = {
+            'n_estimators': 1000, 'learning_rate': 0.01, 'max_depth': 6, 
+            'subsample': 0.8, 'colsample_bytree': 0.8, 'n_jobs': 1, 'tree_method': 'hist'
+        }
+        
+    if "cat_params_classification" not in ml_params:
+        logger.info("CatBoost 파라미터가 없어 기본값을 로드합니다.")
+        ml_params["cat_params_classification"] = {
+            'iterations': 1000, 'learning_rate': 0.01, 'depth': 6, 
+            'verbose': 0, 'allow_writing_files': False, 'thread_count': 1
+        }
+    
+    # 중요: train.py 내부 로직이 params 존재 여부를 체크하므로, cfg를 갱신
+    cfg["ml_params"] = ml_params
+    
+    # _run_classification_training 호출
+    # (주의: 내부에서 import된 train.py 함수가 아니라 이 파일의 함수를 써야 함)
+    _run_classification_training(cfg, benchmark_mode=True)
+
 if __name__ == "__main__":
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument("--optimize", action="store_true", help="Run optimization")
+    parser.add_argument("--benchmark", action="store_true", help="Run model benchmark") # [ADD]
     parser.add_argument("--model", type=str, default="lgbm", help="Model type (lgbm, xgb, cat)")
     parser.add_argument("--trials", type=int, default=20, help="Number of trials")
     parser.add_argument("--jobs", type=int, default=1, help="Number of jobs (-1 for all)")
     parser.add_argument("--save", action="store_true", help="Auto save results")
     args = parser.parse_args()
 
-    if args.optimize:
+    if args.benchmark:
+        run_benchmark_mode("config/settings.yaml")
+    elif args.optimize:
         run_ml_optimization_pipeline("config/settings.yaml", model_type=args.model, n_trials=args.trials, n_jobs=args.jobs, save=args.save)
     else:
         run_train_pipeline("config/settings.yaml")

@@ -103,9 +103,9 @@ def run_derive(settings_path="config/settings.yaml"):
     logger.info("[Derive] 시장 대비 순위(Rank) 피처 생성 중...")
     df_features = add_cross_sectional_rank_features(df_features)
     
-    # 8. 라벨링 (5일/10% 기준, 손절 -7% 통일)
-    target_surge = ml_params.get('target_surge_rate', 0.10)
-    stop_loss = ml_params.get('stop_loss_rate', -0.07) # [수정] 설정값 사용
+    # 8. 라벨링 (5일/13.5% 기준 [최적값], 손절 -5.7%)
+    target_surge = ml_params.get('target_surge_rate', 0.135)
+    stop_loss = ml_params.get('stop_loss_rate', -0.057)
     target_hold = ml_params.get('target_hold_period', 5)
     
     logger.info(f"[Derive] 라벨링 생성 중... (익절: {target_surge*100}%, 손절: {stop_loss*100}%, 기간: {target_hold}일)")
