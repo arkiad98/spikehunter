@@ -15,10 +15,21 @@ def _select_backtest_run(backtest_path: str) -> str:
         logger.warning(f"백테스트 결과 폴더({backtest_path})가 없습니다.")
         return None
         
-    runs = sorted(
-        [d for d in os.listdir(backtest_path) if os.path.isdir(os.path.join(backtest_path, d))], 
-        reverse=True
-    )
+    # [수정] 수정 시간(mtime) 기준 내림차순 정렬 (최신 항목이 1번)
+    # 디렉토리만 리스트업
+    dirs = [d for d in os.listdir(backtest_path) if os.path.isdir(os.path.join(backtest_path, d))]
+    
+    # (폴더명, 수정시간) 튜플 리스트 생성
+    dir_info = []
+    for d in dirs:
+        full_path = os.path.join(backtest_path, d)
+        mtime = os.path.getmtime(full_path)
+        dir_info.append((d, mtime))
+    
+    # 수정시간 역순 정렬
+    dir_info.sort(key=lambda x: x[1], reverse=True)
+    
+    runs = [d[0] for d in dir_info]
     if not runs:
         logger.warning("분석할 백테스트 실행 결과가 없습니다.")
         return None

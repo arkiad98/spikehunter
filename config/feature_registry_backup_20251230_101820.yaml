@@ -1,0 +1,189 @@
+# config/feature_registry.yaml
+# [SpikeHunter v6.0 Final]
+# RFE 정예 19개 + Market Regime 2개 = 총 21개 핵심 피처
+
+features:
+    # ==========================================================================
+    # [Group A] 시장 국면 (Market Regime) - NEW
+    # ==========================================================================
+    -   name: market_bullish
+        status: core
+        category: market
+        description: "KOSPI 장기 추세 (1=상승장/정배열, 0=하락장/역배열)"
+
+    -   name: market_volatility
+        status: core
+        category: market
+        description: "KOSPI 20일 변동성 (시장의 공포 지수)"
+
+    # ==========================================================================
+    # [Group B] RFE 선정 Top Tier (개별 종목)
+    # ==========================================================================
+    -   name: obv
+        status: core
+        category: fund_flow
+        description: "OBV (누적 매집)"
+
+    -   name: adx_14
+        status: core
+        category: trend
+        description: "추세 강도"
+
+    -   name: range_ma20
+        status: core
+        category: volatility
+        description: "20일 평균 변동폭"
+
+    -   name: range_ma5
+        status: core
+        category: volatility
+        description: "5일 평균 변동폭"
+
+    -   name: lower_band
+        status: core
+        category: volatility
+        description: "볼린저 밴드 하단선"
+
+    -   name: pv_trend
+        status: core
+        category: interaction
+        description: "가격*거래량 트렌드"
+
+    -   name: pdi_14
+        status: core
+        category: trend
+        description: "+DI (상승압력)"
+
+    -   name: bandwidth
+        status: core
+        category: volatility
+        description: "밴드폭 (수렴)"
+
+    -   name: amount_ma5_rank
+        status: core
+        category: liquidity
+        description: "[Rank] 거래대금 순위"
+
+    -   name: rsi_roc_3d
+        status: core
+        category: momentum
+        description: "RSI 가속도"
+
+    -   name: percent_b
+        status: core
+        category: volatility
+        description: "%B (밴드 내 위치)"
+
+    -   name: mfi_14_rank
+        status: core
+        category: fund_flow
+        description: "[Rank] 자금유입 순위"
+
+    -   name: vol_ma5
+        status: core
+        category: volume
+        description: "5일 평균 거래량"
+
+    -   name: rsi_14_rank
+        status: core
+        category: momentum
+        description: "[Rank] RSI 순위"
+
+    -   name: mdi_14
+        status: core
+        category: trend
+        description: "-DI (하락압력)"
+
+    -   name: obv_slope_5_rank
+        status: core
+        category: fund_flow
+        description: "[Rank] 매집강도 순위"
+
+    -   name: rsi_14
+        status: core
+        category: momentum
+        description: "RSI 절대값"
+
+    -   name: std20
+        status: core
+        category: volatility
+        description: "20일 표준편차"
+
+    -   name: squeeze_energy_rank
+        status: core
+        category: interaction
+        description: "[Rank] 에너지 응축 순위"
+
+    # [Added Normalized Features]
+    -   name: vol_ratio_5
+        status: core
+        category: volume
+        description: "5일 평균 대비 거래량 비율"
+
+    -   name: mfi_14
+        status: core
+        category: fund_flow
+        description: "MFI (자금 흐름)"
+        
+    -   name: range_ratio_20
+        status: core
+        category: volatility
+        description: "20일 평균 대비 변동폭 비율"
+
+    # ==========================================================================
+    # [Group C] Long-Term & Chart Theory (2차 개선) - NEW
+    # ==========================================================================
+    -   name: mom_60
+        status: core
+        category: momentum
+        description: "60일 모멘텀 (중기 추세)"
+
+    -   name: vol_mom_20
+        status: core
+        category: volume
+        description: "20일 거래량 모멘텀"
+
+    -   name: slope_20
+        status: core
+        category: trend
+        description: "20일 추세 기울기"
+
+    -   name: dist_ma60
+        status: core
+        category: volatility
+        description: "60일 이격도"
+
+    -   name: upper_shadow_20
+        status: core
+        category: pattern
+        description: "20일 평균 윗꼬리 비율"
+
+    -   name: ma_convergence
+        status: core
+        category: pattern
+        description: "이동평균선(5/20/60) 수렴도"
+
+    -   name: golden_cross_score
+        status: core
+        category: pattern
+        description: "정배열(골든크로스) 점수"
+
+    -   name: ma_alignment
+        status: core
+        category: pattern
+        description: "정배열 지속 기간"
+
+    -   name: price_vs_vwap
+        status: core
+        category: chart_theory
+        description: "VWAP 대비 주가 위치"
+
+    -   name: macd_hist
+        status: core
+        category: chart_theory
+        description: "MACD 히스토그램"
+
+    -   name: stoch_k
+        status: core
+        category: chart_theory
+        description: "Stochastic Slow %K"

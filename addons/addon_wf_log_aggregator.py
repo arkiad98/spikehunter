@@ -11,20 +11,29 @@ from modules.backtest import run_backtest
 
 # [수정 2] '거래내역 분석기'의 폴더 선택 함수를 그대로 가져옵니다.
 def _select_backtest_run(backtest_path: str) -> str:
-    """사용자가 분석할 백테스트 실행 기록을 선택하도록 안내합니다."""
+    """사용자가 분석할 백테스트 실행 기록(WF)을 선택하도록 안내합니다."""
     if not os.path.exists(backtest_path):
         logger.warning(f"백테스트 결과 폴더({backtest_path})가 없습니다.")
         return None
         
-    runs = sorted(
-        [d for d in os.listdir(backtest_path) if os.path.isdir(os.path.join(backtest_path, d))], 
-        reverse=True
-    )
+    # [수정] WF로 시작하는 폴더만 필터링
+    all_dirs = [d for d in os.listdir(backtest_path) if os.path.isdir(os.path.join(backtest_path, d)) and d.upper().startswith("WF-")]
+    
+    # [수정] 수정 시간(mtime) 기준 내림차순 정렬 (최신 항목이 1번)
+    dir_info = []
+    for d in all_dirs:
+        full_path = os.path.join(backtest_path, d)
+        mtime = os.path.getmtime(full_path)
+        dir_info.append((d, mtime))
+        
+    dir_info.sort(key=lambda x: x[1], reverse=True)
+    runs = [d[0] for d in dir_info]
+    
     if not runs:
-        logger.warning("분석할 백테스트 실행 결과가 없습니다.")
+        logger.warning("분석할 Walk-Forward(WF) 실행 결과가 없습니다.")
         return None
     
-    logger.info("\n분석할 Walk-Forward 실행 기록을 선택하세요:")
+    logger.info(f"\n발견된 Walk-Forward 실행 기록 ({len(runs)}개):")
     for i, run_name in enumerate(runs[:15]): # 최근 15개만 표시
         print(f"  {i+1:2d}. {run_name}")
     
@@ -59,10 +68,10 @@ def run_aggregate_wf_logs(settings_path: str):
     logger.info(f"분석 대상 폴더: {wf_run_dir}")
 
     # [수정 4] 선택된 폴더가 Walk-Forward 실행 폴더가 맞는지 검증합니다.
+    # [수정 4] 선택된 폴더가 Walk-Forward 실행 폴더가 맞는지 검증합니다.
     temp_settings_path = os.path.join(wf_run_dir, 'temp_settings.yaml')
-    temp_models_dir = os.path.join(wf_run_dir, 'temp_models')
-    if not os.path.exists(temp_settings_path) or not os.path.exists(temp_models_dir):
-        logger.error(f"선택하신 폴더는 Walk-Forward 실행 결과 폴더가 아닙니다 ('temp_settings.yaml' 또는 'temp_models' 없음).")
+    if not os.path.exists(temp_settings_path):
+        logger.error(f"선택하신 폴더는 Walk-Forward 실행 결과 폴더가 아닙니다 ('temp_settings.yaml' 없음).")
         return
         
     wf_period_cfg = read_yaml(temp_settings_path)
@@ -93,30 +102,40 @@ def run_aggregate_wf_logs(settings_path: str):
     os.makedirs(temp_backtest_dir, exist_ok=True)
 
     for i, (_, _, test_start, test_end) in enumerate(tqdm(wf_periods, desc="Aggregating Period Logs")):
-        period_model_path = os.path.join(wf_run_dir, 'temp_models', f'period_{i+1}_temp_clf.joblib')
+        # [수정] 실제 파일 구조에 맞게 경로 수정
+        # 구조: WF-Run.../period_N/models/lgbm_model.joblib
+        period_dir_name = f"period_{i+1}"
+        period_model_path = os.path.join(wf_run_dir, period_dir_name, "models", "lgbm_model.joblib")
+        
         if not os.path.exists(period_model_path):
-            logger.warning(f"Period {i+1}의 모델 파일이 없어 해당 기간을 건너뜁니다.")
-            continue
-            
-        wf_period_cfg['paths']['models'] = os.path.join(wf_run_dir, 'temp_models')
+            logger.warning(f"{period_dir_name}의 모델 파일({period_model_path})이 없어 해당 기간을 건너뜁니다.")
+            # 혹시 모르니 temp_models 경로도 확인 (구버전 호환)
+            period_model_path_old = os.path.join(wf_run_dir, 'temp_models', f'period_{i+1}_temp_clf.joblib')
+            if os.path.exists(period_model_path_old):
+                period_model_path = period_model_path_old
+            else:
+                continue
+
+        # run_backtest에 전달할 임시 설정
+        # 모델 경로를 직접 주입하는 기능은 run_backtest에 없으므로, 
+        # temp_model 객체로 로드해서 전달하거나, paths['models']를 조작해야 함.
+        # 가장 안전한 방법: paths['models']를 해당 기간의 모델 폴더로 변경
+        
+        temp_cfg_for_run = wf_period_cfg.copy()
+        temp_cfg_for_run['paths']['models'] = os.path.dirname(period_model_path) # 모델 파일이 있는 디렉토리
         
         period_run_dir = os.path.join(temp_backtest_dir, f"period_{i+1}")
         
-        # run_backtest에 전달할 임시 설정 객체를 만듭니다.
-        temp_cfg_for_run = wf_period_cfg.copy()
-        # lgbm_model.joblib 대신 기간별 임시 모델을 사용하도록 모델 파일명을 덮어씁니다.
-        # 이 정보는 run_backtest 함수 내부에서 사용됩니다.
-        if 'lgbm_params_classification' not in temp_cfg_for_run:
-            temp_cfg_for_run['lgbm_params_classification'] = {}
-        temp_cfg_for_run['lgbm_params_classification']['model_filename_override'] = f'period_{i+1}_temp_clf.joblib'
-
         test_result = run_backtest(
             run_dir=period_run_dir, 
             strategy_name=strategy_name,
             settings_cfg=temp_cfg_for_run,
-            start=str(test_start.date()), end=str(test_end.date()),
-            quiet=True, use_ml_target=True,
-            initial_cash=next_initial_cash, save_to_db=False
+            start=str(test_start.date()), 
+            end=str(test_end.date()),
+            quiet=True, 
+            use_ml_target=True,
+            initial_cash=next_initial_cash, 
+            save_to_db=False
         )
         
         tradelog_path = test_result.get("tradelog_path") if test_result else None
@@ -132,12 +151,13 @@ def run_aggregate_wf_logs(settings_path: str):
     # 4. 전체 거래 기록 통합 및 저장
     if not all_trade_logs:
         logger.error("집계할 거래 기록이 없습니다.")
-        shutil.rmtree(temp_backtest_dir) # 임시 폴더 삭제
+        if os.path.exists(temp_backtest_dir): shutil.rmtree(temp_backtest_dir)
         return
 
     final_tradelog_df = pd.concat(all_trade_logs, ignore_index=True)
     output_path = os.path.join(wf_run_dir, "consolidated_tradelog.parquet")
     final_tradelog_df.to_parquet(output_path)
+    final_tradelog_df.to_csv(os.path.join(wf_run_dir, "consolidated_tradelog.csv"), index=False, encoding='utf-8-sig') # CSV도 저장
     
     logger.info("\n" + "="*80)
     logger.info("      <<< 전체 거래 기록 집계 완료 >>>")
@@ -145,4 +165,4 @@ def run_aggregate_wf_logs(settings_path: str):
     logger.info("이제 '거래내역 상세 분석기'를 이 폴더에 대해 실행하여 전체 기록을 분석할 수 있습니다.")
     logger.info("="*80)
     
-    shutil.rmtree(temp_backtest_dir)
+    if os.path.exists(temp_backtest_dir): shutil.rmtree(temp_backtest_dir)

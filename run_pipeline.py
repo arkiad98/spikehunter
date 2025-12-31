@@ -163,6 +163,39 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
         utils_logger.logger.info(f" >> 모델 학습 진행 (Train Data Only)...")
         train.run_train_pipeline(settings_path=train_settings_path)
         
+        # 6.5. 전략 최적화 (Train Data) - WFO 적용
+        utils_logger.logger.info(f" >> 전략 파라미터 최적화 (Train Data)...")
+        try:
+            best_params = optimization.optimize_strategy_headless(
+                settings_path=train_settings_path,
+                strategy_name=strategy_name,
+                start_date=str(train_start.date()),
+                end_date=str(train_end.date()),
+                n_trials=50, 
+                n_jobs=-1
+            )
+            
+            if best_params:
+                utils_logger.logger.info(f" >> 적용된 최적 파라미터: {best_params}")
+                # period_cfg 업데이트 (Test 기간 백테스트용)
+                if strategy_name not in period_cfg['strategies']:
+                    period_cfg['strategies'][strategy_name] = {}
+                period_cfg['strategies'][strategy_name].update(best_params)
+                
+                # ML Parameter Sync (중요: 백테스트 시 일관성 유지)
+                if 'target_r' in best_params:
+                    period_cfg['ml_params']['target_surge_rate'] = float(best_params['target_r'])
+                if 'stop_r' in best_params:
+                    period_cfg['ml_params']['stop_loss_rate'] = float(best_params['stop_r'])
+                if 'min_ml_score' in best_params:
+                    period_cfg['ml_params']['classification_threshold'] = float(best_params['min_ml_score'])
+                    
+                # 임시 설정 파일 재저장
+                with open(temp_settings_path, 'w', encoding='utf-8') as f:
+                    yaml_obj.dump(period_cfg, f)
+        except Exception as e:
+            utils_logger.logger.error(f"전략 최적화 중 오류 무시하고 진행: {e}")
+
         # 7. 백테스트 (Test Data)
         utils_logger.logger.info(f" >> 백테스트 진행 (Test Period)...")
         test_result = run_backtest(
@@ -331,12 +364,41 @@ def _menu_analysis(settings_path):
 def _menu_utils(settings_path: str):
     while True:
         print("\n--- [5. 유틸리티 (Utils)] ---")
-        print("1. (준비중)") 
+        print("1. 수정주가 데이터 정제 (Price Sanitizer)")
+        print("2. 전략 로직 디버거 (Strategy Debugger)")
+        print("3. WF 로그 통합 (Log Aggregator)")
+        print("4. 데이터 로직 검증 (Logic Verifier)")
         print("0. 이전 메뉴로")
         
         sel = get_user_input("선택: ")
-        if sel == '1': print("아직 구현되지 않았습니다.")
+        
+        if sel == '1':
+            try:
+                from addons import addon_price_sanitizer
+                addon_price_sanitizer.run_price_sanitizer(settings_path)
+            except ImportError as e:
+                print(f"모듈을 찾을 수 없습니다: {e}")
+        elif sel == '2':
+            try:
+                from addons import addon_strategy_debugger
+                addon_strategy_debugger.run_strategy_debugger(settings_path)
+            except ImportError as e:
+                print(f"모듈을 찾을 수 없습니다: {e}")
+        elif sel == '3':
+            try:
+                from addons import addon_wf_log_aggregator
+                addon_wf_log_aggregator.run_aggregate_wf_logs(settings_path)
+            except ImportError as e:
+                print(f"모듈을 찾을 수 없습니다: {e}")
+        elif sel == '4':
+            try:
+                from addons import verify_data_logic
+                verify_data_logic.verify_single_case()
+            except ImportError as e:
+                print(f"모듈을 찾을 수 없습니다: {e}")
         elif sel == '0': break
+        else:
+            print("잘못된 선택입니다.")
 
 def _menu_field_test(settings_path: str):
     """실전 검증 및 운영 관련 메뉴"""

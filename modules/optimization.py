@@ -50,7 +50,23 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
         metrics = result['metrics']
         optimize_on = opt_cfg.get("optimize_on", "Sharpe_raw")
         
-        score = metrics.get(optimize_on, -999.0)
+        if optimize_on == "Hybrid_Stability":
+            # [Refined V2] 안정성 + 리스크 관리 (MDD Constraint)
+            # 승률 30% 이상 AND MDD -20% 방어라는 '이중 안전장치' 적용.
+            # 이를 통과한 파라미터 중에서 수익률(Sharpe)이 가장 높은 것을 선택.
+            sharpe = metrics.get('Sharpe_raw', -999.0)
+            win_rate = metrics.get('win_rate_raw', 0.0)
+            mdd = metrics.get('MDD_raw', -1.0) # MDD는 보통 음수 (예: -0.5)
+            
+            # Constraint 1: 승률 < 30% (예측력 부족)
+            # Constraint 2: MDD < -20% (리스크 과다, 예: -0.4 < -0.2 => True)
+            if win_rate < 0.3 or mdd < -0.2: 
+                score = -999.0 # 탈락
+            else:
+                score = sharpe # 통과 시 수익성 추구
+        else:
+            score = metrics.get(optimize_on, -999.0)
+
         
         # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지)
         if metrics.get('총거래횟수', 0) < 10:
@@ -61,6 +77,71 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
     except Exception as e:
         # logger.warning(f"Trial {trial.number} failed: {e}")
         return -999.0
+
+def optimize_strategy_headless(settings_path: str, strategy_name: str, 
+                             start_date: str, end_date: str, 
+                             n_trials: int = 20, n_jobs: int = 1, dataset_path: str = None):
+    """비대화형 전략 최적화 (Walk-Forward용)"""
+    logger.info(f" >> [WFO] 전략 최적화 시작 ({start_date} ~ {end_date})")
+    
+    cfg = read_yaml(settings_path)
+    paths = cfg["paths"]
+    
+    # 데이터셋 로드
+    if dataset_path is None:
+        # Default logic for WFO (Train split prioritized)
+        train_split_path = os.path.join(paths["features"], "dataset_v4.parquet")
+        if os.path.exists(train_split_path):
+            dataset_path = train_split_path
+        else:
+            dataset_path = os.path.join(paths.get("ml_dataset", "data/proc/ml_dataset"), "ml_classification_dataset.parquet")
+        
+    if not os.path.exists(dataset_path):
+        logger.error(f"[WFO] 데이터셋 없음: {dataset_path}")
+        return {}
+
+    df = pd.read_parquet(dataset_path)
+    df['date'] = pd.to_datetime(df['date'])
+    
+    # Rename columns safety
+    rename_map = {'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume'}
+    df.rename(columns=rename_map, inplace=True)
+    
+    # Study
+    study_name = f"WFO-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+    study = optuna.create_study(direction="maximize", study_name=study_name)
+    
+    # Warm Start (현재 설정값)
+    current_params = cfg.get("strategies", {}).get(strategy_name, {})
+    opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
+    param_space = opt_cfg.get("param_space", {})
+    
+    warm_params = {}
+    for k, v in current_params.items():
+        if k in param_space:
+             space = param_space[k]
+             # Clamp value to be within [low, high]
+             low = space.get('low', float('-inf'))
+             high = space.get('high', float('inf'))
+             
+             if v < low: v = low
+             if v > high: v = high
+             
+             warm_params[k] = v
+             
+    if warm_params:
+        study.enqueue_trial(warm_params)
+        
+    # Execute
+    study.optimize(
+        lambda trial: objective(trial, settings_path, strategy_name, start_date, end_date, df),
+        n_trials=n_trials,
+        n_jobs=n_jobs,
+        show_progress_bar=False 
+    )
+    
+    logger.info(f" >> [WFO] 최적화 완료. Best Score: {study.best_value:.4f}")
+    return study.best_params
 
 def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHunter", 
                               use_ml_target: bool = True, regime_to_optimize: str = None, 

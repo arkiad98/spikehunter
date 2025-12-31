@@ -5,95 +5,125 @@ import os
 
 from modules.utils_io import read_yaml, load_partition_day, load_index_data
 from modules.utils_logger import logger
-from modules.backtest import _determine_regime
 
-def find_latest_feature_day(features_path: str) -> pd.Timestamp:
-    """피처 데이터가 존재하는 가장 최근 날짜를 찾습니다."""
-    date = pd.Timestamp.today().normalize()
-    for _ in range(30): # 최대 30일 전까지 탐색
-        df = load_partition_day(features_path, date, date)
-        if not df.empty:
-            return date
-        date -= timedelta(days=1)
-    return None
+def find_latest_date_in_parquet(file_path: str) -> pd.Timestamp:
+    """Parquet 파일 내 가장 최근 날짜를 반환합니다."""
+    if not os.path.exists(file_path):
+        return None
+    try:
+        # date 컬럼만 읽어서 최대값 확인 (효율성)
+        df_dates = pd.read_parquet(file_path, columns=['date'])
+        return df_dates['date'].max()
+    except Exception as e:
+        logger.error(f"날짜 확인 중 오류 발생: {e}")
+        return None
 
 def run_strategy_debugger(settings_path: str):
     """
-    SpikeHunter 전략의 필터링 과정을 단계별로 추적하여
-    매수 추천 종목이 없는 원인을 진단합니다.
+    SpikeHunter 전략(v4.0)의 필터링 과정을 추적하여
+    매수 추천 종목이 없는 원인을 진단합니다. (ML 스코어 중심)
     """
     logger.info("\n" + "="*80)
-    logger.info("      <<< SpikeHunter 전략 디버거 v2.0 시작 >>>")
+    logger.info("      <<< SpikeHunter 전략 디버거 v4.0 (ML Focus) >>>")
     logger.info("="*80)
 
     cfg = read_yaml(settings_path)
     paths = cfg["paths"]
 
-    # 1. 분석할 최신 데이터 로드
-    target_date = find_latest_feature_day(paths["features"])
+    # 1. 분석할 최신 데이터 로드 (ML Dataset 사용)
+    # derive.py가 생성한 최종 데이터셋을 사용해야 모든 피처가 포함되어 있음
+    dataset_path = os.path.join(paths["ml_dataset"], "ml_classification_dataset.parquet")
+    
+    if not os.path.exists(dataset_path):
+        logger.error(f"ML 데이터셋 파일이 없습니다: {dataset_path}")
+        logger.error("메인 메뉴에서 '2. 피처 생성 및 라벨링 (Derive)'을 먼저 실행해주세요.")
+        return
+
+    logger.info("데이터셋을 로드하여 최신 날짜를 확인합니다...")
+    target_date = find_latest_date_in_parquet(dataset_path)
+    
     if target_date is None:
-        logger.error("분석할 최신 피처 데이터가 없습니다. 피처 생성을 먼저 실행해주세요.")
+        logger.error("데이터셋에서 날짜 정보를 읽을 수 없습니다.")
         return
     
     logger.info(f"🔍 분석 대상 날짜: {target_date.date()}")
-    df_today = load_partition_day(paths["features"], target_date, target_date)
-
-    # 2. 해당일의 시장 국면(Regime) 및 전략 파라미터 결정
-    kospi = load_index_data(target_date - timedelta(days=400), target_date, paths["raw_index"])
-    kospi_today = kospi[kospi['date'] <= target_date]
     
-    current_kospi_close = kospi_today['kospi_close'].iloc[-1]
-    current_ma200 = kospi_today['kospi_close'].rolling(200).mean().iloc[-1]
-    current_kospi_vol_20d = kospi_today['kospi_close'].pct_change().rolling(20).std().iloc[-1]
-    
-    vol_threshold = cfg["strategies"]["SpikeHunter_R1_BullStable"]["max_market_vol"]
-    is_bull = current_kospi_close > current_ma200
-    is_stable = current_kospi_vol_20d < vol_threshold
-    current_regime = _determine_regime(is_bull, is_stable)
-    
-    strategy_key = f'SpikeHunter_{current_regime}'
-    # 공통 파라미터와 체제별 파라미터를 모두 합칩니다.
-    params = {**cfg, **cfg['strategies'][strategy_key]}
-    logger.info(f"시장 국면: {current_regime} | 적용 파라미터 세트: {strategy_key}")
+    # 해당 날짜의 데이터만 로드
+    df_all = pd.read_parquet(dataset_path)
+    df_today = df_all[df_all['date'] == target_date].copy()
 
-    # 3. 필터링 단계별 분석
-    logger.info("\n--- [전략 필터링 단계별 추적] ---")
     
-    # ... [0] ~ [3] 단계는 기존과 동일 ...
-    num_stocks = len(df_today)
-    logger.info(f"  [0] 총 분석 대상 종목 수: {num_stocks} 개")
-    df_step1 = df_today[df_today['signal_spike_hunter'] == 1]
-    logger.info(f"  [1] 'signal_spike_hunter == 1' 필터 후: {len(df_step1)} 개")
-    # ... (상세 분석 로그는 생략) ...
-    df_step2 = df_step1[
-        (df_step1['dist_from_ma20'] < params['max_dist_from_ma']) &
-        (df_step1["avg_value_20"] >= params['min_avg_value'])
-    ]
-    logger.info(f"  [2] 이격도 및 평균 거래대금 필터 후: {len(df_step2)} 개")
-    df_step3 = df_step2[df_step2['daily_ret'] < params['max_daily_ret_entry']]
-    logger.info(f"  [3] 진정 필터(당일 급등 제외) 후: {len(df_step3)} 개")
+    if df_today.empty:
+        logger.error("데이터를 로드했으나 비어있습니다.")
+        return
 
-    # [수정] 4단계: ML 모델 로드 및 스코어 직접 계산
-    if len(df_step3) > 0:
-        model_path = os.path.join(paths["models"], "lgbm_model.joblib")
-        if not os.path.exists(model_path):
-            logger.error("  [4] ML 모델 파일이 없어 스코어 필터를 건너뜁니다.")
-        else:
-            model_clf = joblib.load(model_path)
-            # [수정] .feature_name_ -> .feature_names_in_
-            features_for_ml = df_step3[model_clf.feature_names_in_]
-            pred_probs = model_clf.predict_proba(features_for_ml)[:, 1]
-            df_step3['ml_score'] = pred_probs
-
-            logger.info("\n  --- [ML 스코어 계산 결과 (상위 5개)] ---")
-            logger.info(df_step3[['code', 'ml_score']].sort_values('ml_score', ascending=False).head().to_string())
-            
-            min_ml_score = params['min_ml_score']
-            df_step4 = df_step3[df_step3['ml_score'] >= min_ml_score]
-            logger.info(f"\n  [4] ML 스코어 필터 (>= {min_ml_score}) 후: {len(df_step4)} 개")
-            if len(df_step3) > 0 and len(df_step4) == 0:
-                logger.info("    [최종 진단] 모든 후보 종목의 ML 스코어가 설정된 최소 점수보다 낮아 최종 탈락했습니다.")
+    # 2. 파라미터 로드 (SpikeHunter_R1_BullStable 기준)
+    # v4.0 전략은 Regime 구분 없이 ML Score를 메인으로 사용합니다.
+    strategy_name = "SpikeHunter_R1_BullStable"
+    if 'strategies' in cfg and strategy_name in cfg['strategies']:
+        params = cfg['strategies'][strategy_name]
     else:
-        logger.info("  [4] ML 스코어 필터: 이전 단계에서 살아남은 후보 종목이 없어 건너뜁니다.")
+        logger.warning(f"전략 '{strategy_name}' 설정이 없어 기본값을 사용합니다.")
+        params = {}
+        
+    ml_params = cfg.get("ml_params", {})
+    threshold = params.get('min_ml_score', ml_params.get('classification_threshold', 0.4))
+    
+    logger.info(f"기준 임계값(Threshold): {threshold}") # min_ml_score
+
+    # 3. 모델 로드
+    model_path = os.path.join(paths["models"], "lgbm_model.joblib")
+    if not os.path.exists(model_path):
+        logger.error(f"ML 모델 파일이 없습니다: {model_path}")
+        return
+        
+    try:
+        model_clf = joblib.load(model_path)
+    except Exception as e:
+        logger.error(f"모델 로드 실패: {e}")
+        return
+
+    # 4. ML 스코어 계산
+    # feature_names_in_ 확인
+    if not hasattr(model_clf, 'feature_names_in_'):
+        logger.error("모델에 'feature_names_in_' 속성이 없습니다. 호환되지 않는 모델입니다.")
+        return
+
+    features_needed = model_clf.feature_names_in_
+    missing_cols = [c for c in features_needed if c not in df_today.columns]
+    
+    if missing_cols:
+        logger.warning(f"데이터에 일부 피처가 누락되어 0으로 채웁니다: {missing_cols[:5]}...")
+        for c in missing_cols:
+            df_today[c] = 0
+            
+    X = df_today[features_needed].fillna(0)
+    scores = model_clf.predict_proba(X)[:, 1]
+    df_today['ml_score'] = scores
+    
+    # 5. 결과 분석
+    logger.info("\n--- [ML 스코어 분석 결과] ---")
+    logger.info(f"전체 대상 종목 수: {len(df_today)} 개")
+    logger.info(f"ML Score 평균: {scores.mean():.4f}, 최대: {scores.max():.4f}, 최소: {scores.min():.4f}")
+    
+    passed_candidates = df_today[df_today['ml_score'] >= threshold].sort_values('ml_score', ascending=False)
+    num_passed = len(passed_candidates)
+    
+    logger.info(f"임계값({threshold}) 이상 통과 종목: {num_passed} 개")
+    
+    if num_passed > 0:
+        logger.info("\n[상위 후보 종목 TOP 10]")
+        print(passed_candidates[['code', 'close', 'ml_score']].head(10).to_string(index=False))
+        
+        # 추가 진단: 보유 기간 내 매도되었을 경우 추정 (백테스트 로직 일부 차용)
+        # 여기서는 단순히 목록만 보여줌
+    else:
+        logger.warning("\n[진단] 임계값을 넘는 종목이 하나도 없습니다.")
+        logger.info("  - 시장 상황이 좋지 않거나, 모델이 매우 보수적일 수 있습니다.")
+        logger.info("  - '최적 임계값 탐색(Add-on 7)'을 실행하여 임계값을 조정해보세요.")
+        
+        # 아쉽게 탈락한 종목들
+        logger.info("\n[아쉽게 탈락한 상위 종목 TOP 5]")
+        logger.info(df_today[['code', 'close', 'ml_score']].sort_values('ml_score', ascending=False).head(5).to_string(index=False))
 
     logger.info("="*80)
