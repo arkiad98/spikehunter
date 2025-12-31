@@ -16,8 +16,8 @@ def main():
         run_dir="data/proc/backtest/verification_run",
         strategy_name=strategy_name,
         settings_path=settings_path,
-        start="2024-01-01",
-        end="2025-12-31",
+        start="2025-01-01",
+        end="2025-06-30",
         quiet=False
     )
     

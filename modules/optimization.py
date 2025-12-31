@@ -60,16 +60,24 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             
             # Constraint 1: 승률 < 30% (예측력 부족)
             # Constraint 2: MDD < -20% (리스크 과다, 예: -0.4 < -0.2 => True)
-            if win_rate < 0.3 or mdd < -0.2: 
+            if win_rate < 0.3 or mdd < -0.15:  # [Tightened] MDD -15% 제한으로 강화
+                # [Debug] rejection reason logging
+                # logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
                 score = -999.0 # 탈락
             else:
-                score = sharpe # 통과 시 수익성 추구
+                # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
+                # Score = Sharpe * (승률 가중치) - (MDD 페널티)
+                # MDD가 0에 가까울수록(음수) 좋음. mdd가 낮을수록(더 큰 음수) 페널티.
+                stability_score = sharpe * (1 + win_rate) * (1 + 1/abs(mdd-0.01)) 
+                score = stability_score
         else:
             score = metrics.get(optimize_on, -999.0)
 
         
-        # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지)
-        if metrics.get('총거래횟수', 0) < 10:
+        # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지, WFO 안정성 위해 완화)
+        if metrics.get('총거래횟수', 0) < 3:
+            # [Debug] rejection reason
+            # logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
             return -999.0
             
         return score
@@ -132,6 +140,35 @@ def optimize_strategy_headless(settings_path: str, strategy_name: str,
     if warm_params:
         study.enqueue_trial(warm_params)
         
+    # [Optimization Speedup] Pre-calculate ML Scores for WFO
+    # WFO runs on Train Data (dataset_path), so we can pre-calc scores.
+    # Note: ensure we use the model trained for THIS period (which should be in paths['models'])
+    model_path = os.path.join(paths["models"], "lgbm_model.joblib")
+    if os.path.exists(model_path):
+        import joblib
+        logger.info(f" >> [WFO] ML Score 사전 계산 중... ({model_path})")
+        try:
+            model = joblib.load(model_path)
+            feature_names = getattr(model, 'feature_names_in_', None)
+            
+            if feature_names is not None:
+                missing = [c for c in feature_names if c not in df.columns]
+                if missing:
+                    for c in missing: df[c] = 0
+                
+                # Predict
+                X_temp = df[feature_names].fillna(0)
+                scores = model.predict_proba(X_temp)[:, 1]
+                df['ml_score'] = scores
+                logger.info(f" >> [WFO] ML Score 계산 완료. (Mean: {scores.mean():.4f}, Max: {scores.max():.4f})")
+            else:
+                df['ml_score'] = 0
+        except Exception as e:
+            logger.error(f"[WFO] 모델 로드/예측 오류: {e}")
+            df['ml_score'] = 0
+    else:
+        df['ml_score'] = 0
+
     # Execute
     study.optimize(
         lambda trial: objective(trial, settings_path, strategy_name, start_date, end_date, df),
@@ -229,6 +266,36 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
             if original_len > filtered_len:
                 logger.info(f" >> 통합 필터링 완료: {original_len - filtered_len}건 제거됨.")
     
+    # [Optimization Speedup] Pre-calculate ML Scores ONCE
+    # This prevents running predict_proba in every single trial (massive bottleneck)
+    model_path = os.path.join(paths["models"], "lgbm_model.joblib")
+    if os.path.exists(model_path):
+        import joblib
+        logger.info(" >> [Optimization] ML Score 사전 계산 중... (Speed Optimization)")
+        try:
+            model = joblib.load(model_path)
+            feature_names = getattr(model, 'feature_names_in_', None)
+            
+            if feature_names is not None:
+                # Ensure columns exist
+                missing = [c for c in feature_names if c not in df.columns]
+                if missing:
+                    for c in missing: df[c] = 0
+                
+                # Predict
+                X_temp = df[feature_names].fillna(0)
+                scores = model.predict_proba(X_temp)[:, 1]
+                df['ml_score'] = scores
+                logger.info(f" >> ML Score 계산 완료. (Mean: {scores.mean():.4f}, Max: {scores.max():.4f})")
+            else:
+                df['ml_score'] = 0
+        except Exception as e:
+            logger.error(f"모델 로드/예측 중 오류 (무시됨): {e}")
+            df['ml_score'] = 0 # Fallback
+    else:
+        logger.warning(f"모델 파일이 없어 스코어를 0으로 설정합니다: {model_path}")
+        df['ml_score'] = 0
+
     # Optuna Study 생성
     study_name = f"Opt-Strategy-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
     study = optuna.create_study(direction="maximize", study_name=study_name)

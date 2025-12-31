@@ -32,27 +32,27 @@ paths:
 ml_params:
   # [최적화 결과 반영] Strategy Optimization 최적값 (Sharpe Maximize)
   # AP는 다소 낮아지더라도(0.19), 개별 거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
-  target_surge_rate: 0.0997895973806309
-  stop_loss_rate: -0.03883061172129786
+  target_surge_rate: 0.09990738335325917
+  stop_loss_rate: -0.027337402392375594
   target_hold_period: 5
   regression_sampling_quantile: 0.9
-  classification_train_months: 60
-  classification_threshold: 0.5652724391327357
+  classification_train_months: 36
+  classification_threshold: 0.21000000000000005
 
   # [모델 선택] lgbm / xgb / cat
   active_model: "lgbm" # [복구] 사용자 요청: LightGBM 단일 모델 원복
 
-  # [복구] 최적화된 하이퍼파라미터 (AP 0.19 / Lift 1.9x)
+  # [복구] 최적화된 하이퍼파라미터 (AP ~0.31 / Natural Learning)
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 4.414197138905359
-    n_estimators: 2850
-    learning_rate: 0.030018439041954607
-    num_leaves: 21
-    max_depth: 4
-    colsample_bytree: 0.6745958353197985
-    subsample: 0.6872006145608852
+    scale_pos_weight: 1.0 # [복구] Natural Learning (확률 왜곡 방지)
+    n_estimators: 1884
+    learning_rate: 0.04728483712927642
+    num_leaves: 103
+    max_depth: 7
+    colsample_bytree: 0.9996986402619018
+    subsample: 0.756394445406343
     n_jobs: 4
     verbose: -1
 
@@ -62,11 +62,11 @@ ml_params:
       num_leaves: {type: int, low: 20, high: 200}
       max_depth: {type: int, low: 4, high: 20}
       n_estimators: {type: int, low: 300, high: 3000}
-      scale_pos_weight: {type: float, low: 1.0, high: 5.0}
+      # scale_pos_weight: {type: float, low: 1.0, high: 5.0} # [Fixed] Natural Learning (1.0) 고정
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 72
+    min_child_samples: 100
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -127,7 +127,7 @@ optimization:
     param_space:
       target_r: {type: float, low: 0.05, high: 0.10} # [수정] 예측력 향상을 위해 상한 10% 제한
       stop_r: {type: float, low: -0.05, high: -0.02}
-      min_ml_score: {type: float, low: 0.40, high: 0.80}
+      min_ml_score: {type: float, low: 0.15, high: 0.50} # [수정] Natural Learning 점수 분포 반영 (0.19 포함)
       max_market_vol: {type: float, low: 0.015, high: 0.04}
       vbo_k: {type: float, low: 0.3, high: 0.7}
       min_mfi: {type: float, low: 40.0, high: 60.0}
@@ -136,12 +136,12 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.0997895973806309  # [수정] 예측력 우선 초기값
-    stop_r: -0.03883061172129786 # [수정] 하한 -5%
+    target_r: 0.09990738335325917 # [수정] 예측력 우선 초기값
+    stop_r: -0.027337402392375594 # [수정] 하한 -5%
     max_hold: 5
-    min_ml_score: 0.5652724391327357 # [수정] 무난한 시작값
-    vbo_k: 0.5298599733123456
-    max_market_vol: 0.015443416329699373
-    min_mfi: 40.53415040887901
+    min_ml_score: 0.21000000000000005 # [수정] 무난한 시작값
+    vbo_k: 0.5417664494167612
+    max_market_vol: 0.03024315171837781
+    min_mfi: 46.79727604441189
     min_obv_slope: 0
     top_n: 5

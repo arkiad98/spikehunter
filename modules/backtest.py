@@ -98,9 +98,16 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
         max_hold = param_overrides.get('max_hold', max_hold)
         threshold = param_overrides.get('min_ml_score', threshold) # Map min_ml_score to threshold
     
-    # Load Model
+    # Load Model (Lazy Load)
+    # [Optimization Speedup] Skip loading model if ml_score is already pre-calculated
+    is_opt_mode = preloaded_features is not None
+    has_precalc_score = is_opt_mode and 'ml_score' in preloaded_features.columns
+    
     model_clf_path = os.path.join(paths["models"], "lgbm_model.joblib")
-    model_clf = joblib.load(model_clf_path) if os.path.exists(model_clf_path) else None
+    # Only load model if we don't have scores
+    model_clf = None
+    if not has_precalc_score and os.path.exists(model_clf_path):
+        model_clf = joblib.load(model_clf_path)
     
     ensure_dir(run_dir)
     is_opt_mode = preloaded_features is not None
@@ -183,7 +190,10 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     all_dates = pd.Series(pd.to_datetime(all_features['date'].unique())).sort_values().reset_index(drop=True)
     
     # 3. Predict (Batch Prediction for Speed)
-    if model_clf:
+    if 'ml_score' in all_features.columns:
+        # [Optimization Speedup] Use pre-calculated scores
+        pass
+    elif model_clf:
         feature_names = getattr(model_clf, 'feature_names_in_', None)
         if feature_names is not None:
             # Ensure features exist

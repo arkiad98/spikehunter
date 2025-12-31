@@ -73,6 +73,72 @@ def _get_latest_backtest_run(base_dir):
 # -----------------------------------------------------------------------------
 # Walk-Forward Logic
 # -----------------------------------------------------------------------------
+def _calculate_optimal_threshold(settings_path: str) -> float:
+    """[Headless] 최적 임계값 자동 계산 (for WFO)"""
+    try:
+        from addons import addon_threshold_optimizer
+        # Redirect stdout to suppress print output if needed, or just let it log
+        # But addon assumes interactive user input at the end.
+        # So we better reimplement core logic or genericize the addon.
+        # For safety/speed, let's implement a lightweight version here using the same logic.
+        
+        cfg = read_yaml(settings_path)
+        paths = cfg["paths"]
+        dataset_path = os.path.join(paths["features"], "dataset_v4.parquet") # Use Train-split dataset
+        model_path = os.path.join(paths["models"], "lgbm_model.joblib")
+        
+        if not os.path.exists(dataset_path) or not os.path.exists(model_path):
+            utils_logger.logger.warning("[WFO-Thres] 데이터/모델 없음. 기본값 0.5 반환")
+            return 0.5
+            
+        model = joblib.load(model_path)
+        df = pd.read_parquet(dataset_path)
+        
+        # Prepare Data
+        feature_cols = getattr(model, 'feature_name_', [])
+        if not len(feature_cols): # Fallback
+             # Try to infer from derive
+             from modules.derive import _get_feature_cols
+             feature_cols = _get_feature_cols(df.columns)
+             
+        # Filter available columns
+        feature_cols = [c for c in feature_cols if c in df.columns]
+        X = df[feature_cols].fillna(0)
+        y = df['label_class']
+        
+        # Predict
+        if hasattr(model, "predict_proba"):
+            probs = model.predict_proba(X)[:, 1]
+        else:
+            probs = model.predict(X)
+            
+        # Optimize F1
+        from sklearn.metrics import precision_score, f1_score
+        
+        best_f1 = -1
+        best_thresh = 0.5
+        
+        # Scan 0.20 ~ 0.80
+        for th in np.arange(0.20, 0.80, 0.01):
+            pred = (probs >= th).astype(int)
+            if pred.sum() < 5: continue # Too few trades
+            
+            # Use F1 but prioritize Precision >= 0.3 for stability (SpikeHunter rule)
+            prec = precision_score(y, pred, zero_division=0)
+            f1 = f1_score(y, pred, zero_division=0)
+            
+            if prec >= 0.3: # Valid candidate
+                if f1 > best_f1:
+                    best_f1 = f1
+                    best_thresh = th
+                    
+        utils_logger.logger.info(f" >> [WFO-Thres] 최적 임계값 발견: {best_thresh:.2f} (F1: {best_f1:.4f})")
+        return float(best_thresh)
+        
+    except Exception as e:
+        utils_logger.logger.error(f"[WFO-Thres] 임계값 계산 오류: {e}")
+        return 0.49 # Safe default
+        
 def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
     utils_logger.logger.info(f">>> Walk-Forward 최적화를 시작합니다: '{strategy_name}'")
     
@@ -109,6 +175,10 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
     all_trade_logs = []
     next_initial_cash = original_cfg.get("backtest_defaults", {}).get("initial_cash", 10000000.0)
 
+    # [NEW] Adaptive Parameters Carry-over
+    # 이전 Period에서 찾은 최적 파라미터를 다음 Period의 '라벨링' 및 '초기 탐색'에 반영
+    current_best_ml_params = copy.deepcopy(original_cfg.get('ml_params', {}))
+
     for i, (train_start, train_end, test_start, test_end) in enumerate(tqdm(wf_periods, desc="Walk-Forward Periods")):
         utils_logger.logger.info(f"\n[Period {i+1}] Train: {train_start.date()}~{train_end.date()} | Test: {test_start.date()}~{test_end.date()}")
         
@@ -126,6 +196,21 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
         period_cfg['paths']['ml_dataset'] = period_feat_dir # [Fix] derive.py가 여기로 저장하도록 강제
         period_cfg['data_range'] = {'start': str(train_start.date()), 'end': str(test_end.date())}
         
+        # [NEW] Adaptive Apply: 이전 최적값 적용
+        if i > 0: # 첫 번째 구간은 원본 설정 사용
+            utils_logger.logger.info(f" >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: {current_best_ml_params.get('target_surge_rate', '?'):.4f})")
+            period_cfg['ml_params'].update(current_best_ml_params)
+            
+            # 전략 파라미터 초기값도 업데이트 (Warm Start 효과)
+            if 'target_surge_rate' in current_best_ml_params:
+                # strategy param name is 'target_r'
+                 if strategy_name in period_cfg['strategies']:
+                    period_cfg['strategies'][strategy_name]['target_r'] = current_best_ml_params['target_surge_rate']
+            if 'stop_loss_rate' in current_best_ml_params:
+                 if strategy_name in period_cfg['strategies']:
+                    period_cfg['strategies'][strategy_name]['stop_r'] = current_best_ml_params['stop_loss_rate']
+
+        
         # 임시 설정 파일 저장
         yaml_obj = YAML()
         with open(temp_settings_path, 'w', encoding='utf-8') as f:
@@ -133,6 +218,7 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
             
         # 3. 데이터 생성 (Train + Test 기간)
         try:
+            # derive에서 labeling 수행 시 period_cfg(수정된 ml_params)를 사용함 -> Adaptive Labeling 구현됨
             derive.run_derive(settings_path=temp_settings_path)
         except Exception as e:
             utils_logger.logger.error(f"데이터 생성 실패 (Period {i+1}): {e}")
@@ -163,9 +249,43 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
         utils_logger.logger.info(f" >> 모델 학습 진행 (Train Data Only)...")
         train.run_train_pipeline(settings_path=train_settings_path)
         
+        # [NEW] 6.1 최적 임계값 탐색 (Threshold Optimization)
+        # 학습된 모델을 기반으로 최적 임계값을 찾고, 이를 설정에 반영 (Fix)
+        optimal_threshold = _calculate_optimal_threshold(train_settings_path)
+        utils_logger.logger.info(f" >> [Adaptive] Period {i+1} 최적 임계값 적용: {optimal_threshold:.4f}")
+        
+        # Update settings for optimization
+        train_cfg['ml_params']['classification_threshold'] = optimal_threshold
+        if strategy_name in train_cfg['strategies']:
+            train_cfg['strategies'][strategy_name]['min_ml_score'] = optimal_threshold # Force Update
+            
+        # Save updated settings
+        with open(train_settings_path, 'w', encoding='utf-8') as f:
+            yaml_obj.dump(train_cfg, f)
+        
         # 6.5. 전략 최적화 (Train Data) - WFO 적용
         utils_logger.logger.info(f" >> 전략 파라미터 최적화 (Train Data)...")
         try:
+            # Note: min_ml_score might be re-optimized if it's in param_space.
+            # If user wants to FIX it to this optimal value, we should remove it from param_space dynamically?
+            # User said: "최적값을 찾아 고정하고" -> Yes, we should likely fix it.
+            # Let's verify if we should modify param_space.
+            # Strategy: Let Optuna search AROUND this value? or FIX it?
+            # User request: "최적값을 찾아 고정하고 백테스트 거래를 진행"
+            # So let's FIX it by creating a tight range or removing from space.
+            pass # Logic implemented above updates the BASE value. Optuna range overrides it.
+            
+            # To FIX it in Optuna, we need to modify param_space in the YAML
+            # Remove 'min_ml_score' from param_space if it exists, to treat it as fixed constant.
+            if strategy_name in train_cfg.get('optimization', {}):
+                p_space = train_cfg['optimization'][strategy_name].get('param_space', {})
+                if 'min_ml_score' in p_space:
+                    del train_cfg['optimization'][strategy_name]['param_space']['min_ml_score']
+                    utils_logger.logger.info(f" >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: {optimal_threshold})")
+                    # Save again
+                    with open(train_settings_path, 'w', encoding='utf-8') as f:
+                        yaml_obj.dump(train_cfg, f)
+
             best_params = optimization.optimize_strategy_headless(
                 settings_path=train_settings_path,
                 strategy_name=strategy_name,
@@ -189,8 +309,12 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
                     period_cfg['ml_params']['stop_loss_rate'] = float(best_params['stop_r'])
                 if 'min_ml_score' in best_params:
                     period_cfg['ml_params']['classification_threshold'] = float(best_params['min_ml_score'])
-                    
-                # 임시 설정 파일 재저장
+                
+                # [NEW] Update Current Best for NEXT Period
+                # 다음 루프의 Adaptive Labeling을 위해 저장
+                current_best_ml_params.update(period_cfg['ml_params'])
+
+                # 임시 설정 파일 재저장 (Optimized Params for Test)
                 with open(temp_settings_path, 'w', encoding='utf-8') as f:
                     yaml_obj.dump(period_cfg, f)
         except Exception as e:
