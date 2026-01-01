@@ -1,0 +1,20 @@
+# Trial 57 Candidate Parameters (AP: 0.2091, AUC: 0.6467)
+# Date: 2026-01-01
+# Note: Lower Depth (5 vs 17) for better stability. Higher AP (+0.0011) than baseline.
+
+lgbm_params_classification:
+  objective: binary
+  metric: average_precision
+  
+  # Candidate Params (Trial 57)
+  learning_rate: 0.005710216158576237
+  num_leaves: 150
+  max_depth: 5
+  n_estimators: 591
+  scale_pos_weight: 8.942341498709272
+  colsample_bytree: 0.8526828452795893
+  subsample: 0.7868119721463169
+  min_child_samples: 71
+  
+  n_jobs: 4
+  verbose: -1

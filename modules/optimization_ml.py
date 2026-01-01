@@ -183,6 +183,27 @@ def run_ml_optimization(settings_path: str, n_trials: int = 20):
     study = optuna.create_study(direction="maximize")
     
     logger.info(f">> Running {n_trials} trials...")
+    
+    # [NEW] Warm Start: Inject current settings as the first trial
+    try:
+        cfg = read_yaml(settings_path)
+        lgbm_cfg = cfg.get('ml_params', {}).get('lgbm_params_classification', {})
+        param_space = lgbm_cfg.get('param_space_lgbm', {})
+        
+        warm_params = {}
+        for k, v in lgbm_cfg.items():
+            if k in param_space:
+                # Type casting based on current value type, ensuring compatibility
+                if isinstance(v, (int, float, str)):
+                     warm_params[k] = v
+        
+        if warm_params:
+            logger.info(f" >> Warm Start Enabled: Enqueueing current settings... ({len(warm_params)} params)")
+            study.enqueue_trial(warm_params)
+            
+    except Exception as e:
+        logger.warning(f"Failed to setup Warm Start: {e}")
+
     study.optimize(lambda trial: objective(trial, settings_path), n_trials=n_trials)
     
     logger.info("\n" + "="*60)
