@@ -168,16 +168,8 @@ def add_ma_convergence_features(df: pd.DataFrame, **kwargs) -> pd.DataFrame:
     ma_min = pd.concat([ma5, ma20, ma60], axis=1).min(axis=1)
     df['ma_convergence'] = (ma_max - ma_min) / (ma_min + 1e-9)
     
-    # 2. Golden Cross Score (정배열 강도)
-    # 5 > 20 > 60 이면 1, 아니면 0 (혹은 점수화)
-    is_aligned = (ma5 > ma20) & (ma20 > ma60)
-    df['golden_cross_score'] = is_aligned.astype(int)
-    
-    # 3. MA Alignment Duration (정배열 지속 기간)
-    # 연속된 1의 개수를 셈
-    df['ma_alignment'] = df['golden_cross_score'].groupby((df['golden_cross_score'] != df['golden_cross_score'].shift()).cumsum()).cumcount()
-    # 정배열이 아니면 0으로 초기화
-    df.loc[df['golden_cross_score'] == 0, 'ma_alignment'] = 0
+    # [Deleted] Golden Cross Score (Rank 35/35 - No Utility)
+    # [Deleted] MA Alignment (Rank 33/35 - No Utility)
     
     return df
 

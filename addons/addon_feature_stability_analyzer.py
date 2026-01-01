@@ -43,7 +43,17 @@ def run_stability_analysis(settings_path: str):
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
 
-    feature_cols = _get_feature_cols(df.columns)
+    # [Fix] Use Core features from registry
+    from modules.train import _get_core_features_from_registry
+    core_features = _get_core_features_from_registry("config/feature_registry.yaml")
+    
+    if core_features:
+        feature_cols = [f for f in core_features if f in df.columns]
+        logger.info(f"Feature Registry에서 {len(feature_cols)}개의 Core 피처를 로드했습니다.")
+    else:
+        logger.warning("Feature Registry를 로드할 수 없어 전체 숫자형 컬럼을 사용합니다.")
+        feature_cols = _get_feature_cols(df.columns)
+
     lgbm_params = cfg.get("ml_params", {}).get("lgbm_params_classification", {})
 
     # 2. 롤링 윈도우 기간 설정
@@ -64,9 +74,11 @@ def run_stability_analysis(settings_path: str):
             current_start += pd.DateOffset(months=STEP_SIZE_MONTHS)
             continue
             
-        X_window, y_window = window_df[feature_cols], window_df['target']
+        X_window, y_window = window_df[feature_cols], window_df['label_class']
 
-        model = lgb.LGBMClassifier(**lgbm_params)
+        # [Fix] Filter out param_space keys
+        clean_params = {k: v for k, v in lgbm_params.items() if not k.startswith('param_space_')}
+        model = lgb.LGBMClassifier(**clean_params)
         model.fit(X_window, y_window)
         
         importance_df = pd.DataFrame({

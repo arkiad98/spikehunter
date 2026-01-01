@@ -84,9 +84,13 @@ def run_single_period_wf(settings_path: str):
         if os.path.exists(temp_clf_dataset_path):
             from modules.train import _train_and_evaluate_classification_model
             df_clf_temp = pd.read_parquet(temp_clf_dataset_path)
-            feature_cols = [c for c in df_clf_temp.columns if c not in ['date','code','target']]
-            X, y = df_clf_temp[feature_cols], df_clf_temp['target']
+            feature_cols = [c for c in df_clf_temp.columns if c not in ['date','code','label_class']]
+            X, y = df_clf_temp[feature_cols], df_clf_temp['label_class']
             temp_clf_params = pass1_cfg.get("ml_params", {}).get("lgbm_params_classification", {})
+            
+            # [Fix] Filter param_space
+            temp_clf_params = {k: v for k, v in temp_clf_params.items() if not k.startswith('param_space_')}
+            
             temp_clf_result = _train_and_evaluate_classification_model(temp_clf_params, X, y, X, y)
             joblib.dump(temp_clf_result['model'], pass1_model_path)
             logger.info(f"PASS 1: 순수 임시 분류 모델이 '{pass1_model_path}'에 저장되었습니다.")

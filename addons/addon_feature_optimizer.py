@@ -63,6 +63,8 @@ class FeatureObjective:
 
                 # lgbm_params에 trial에서 제안된 scale_pos_weight를 설정합니다.
                 params_for_trial = self.lgbm_params.copy()
+                # [Fix] Filter param_space
+                params_for_trial = {k: v for k, v in params_for_trial.items() if not k.startswith('param_space_')}
                 params_for_trial['scale_pos_weight'] = scale_pos_weight
                 
                 # 원본 데이터로 바로 학습합니다.
@@ -97,7 +99,7 @@ def run_feature_combination_optimization(
     core_features, registry_candidates, _ = load_feature_registry()
     df = pd.read_parquet(os.path.join(paths["ml_dataset"], "ml_classification_dataset.parquet"))
     df = df.sort_values('date').reset_index(drop=True)
-    X, y = df, df['target']
+    X, y = df, df['label_class']
     lgbm_params = cfg.get("ml_params", {}).get("lgbm_params_classification", {})
 
     if candidate_features_override:

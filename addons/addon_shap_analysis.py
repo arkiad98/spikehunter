@@ -60,6 +60,20 @@ def run_optimization_shap_analysis(study: optuna.study.Study, output_dir: str):
     X.columns = [col.replace('params_', '') for col in X.columns]
     y = df['value']
 
+    # [Fix] Surrogate model uses default params or specific regressor params, 
+    # but strictly ensuring no conflict is good practice. 
+    # Here we are using a fresh regressor, so no 'lgbm_params' from config is used.
+    # But checking if anywhere else 'lgbm_params' is used.
+    # The error was in 'global_classification' using 'joblib.load', which loads a restricted model.
+    # However, 'local' analysis or 'global' might need checking if it re-initializes models.
+    # Actually, proper fix is needed where LGBMClassifier is instantiated.
+    # In run_shap_analysis, we load a pre-trained model via joblib. 
+    # If that model object contains the bad params, it might be an issue, but usually it's fine.
+    # Wait, the log said "Unknown type of parameter". 
+    # If we are loading a model, we don't pass params. 
+    # Let's check where LGBMClassifier is constructed.
+    # Ah, in this file, 'surrogate_model' is a Regressor.
+    
     surrogate_model = lgb.LGBMRegressor(random_state=42, n_jobs=1)
     surrogate_model.fit(X, y)
 
@@ -111,7 +125,7 @@ def run_shap_analysis(settings_path: str, analysis_type: str = 'global_classific
     if analysis_type == 'global_classification':
         model_filename = "lgbm_model.joblib"
         dataset_filename = "ml_classification_dataset.parquet"
-        target_col = 'target'
+        target_col = 'label_class'
         title = "분류 모델 SHAP 전역 피처 중요도"
     elif analysis_type == 'global_regression':
         model_filename = "target_model.joblib"
@@ -143,7 +157,8 @@ def run_shap_analysis(settings_path: str, analysis_type: str = 'global_classific
             logger.error(f"ML 데이터셋({dataset_path})이 없습니다. 데이터셋 생성을 먼저 실행해주세요.")
             return
         df = pd.read_parquet(dataset_path)
-        feature_cols = [col for col in df.columns if col not in ['date', 'code', target_col]]
+        # [Fix] Use features from the loaded model to match dimensions
+        feature_cols = model.feature_name_ # Use exact features from training
         X, y = df[feature_cols], df[target_col]
         from sklearn.model_selection import train_test_split
         _, X_test, _, _ = train_test_split(X, y, test_size=0.2, shuffle=False)

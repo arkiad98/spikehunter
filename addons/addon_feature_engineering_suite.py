@@ -117,7 +117,11 @@ def _process_single_fold(train_index, test_index, X, y, features_to_use, lgbm_pa
 
     fit_start_time = time.time()
     log_messages.append("    - 모델 학습(fit) 시작...")
-    model = lgb.LGBMClassifier(**lgbm_params)
+    
+    # [Fix] Filter param_space
+    clean_params = {k: v for k, v in lgbm_params.items() if not k.startswith('param_space_')}
+    model = lgb.LGBMClassifier(**clean_params)
+    
     model.fit(X_train_sm, y_train_sm, eval_set=[(X_test, y_test)], callbacks=[lgb.early_stopping(50, verbose=False)])
     fit_duration = time.time() - fit_start_time
     log_messages.append(f"    - 모델 학습(fit) 완료. (소요 시간: {fit_duration:.2f}초)")
@@ -216,7 +220,7 @@ def run_individual_feature_analysis():
     cfg = read_yaml('config/settings.yaml')
     lgbm_params = cfg.get("ml_params", {}).get("lgbm_params_classification", {})
 
-    X, y = df, df['target']
+    X, y = df, df['label_class']
 
     # 2. 베이스라인 성능 측정 (Core 피처만 사용)
     logger.info(f"\n[1] 베이스라인 성능을 측정합니다 (Core Features: {len(core_features)}개)...")
