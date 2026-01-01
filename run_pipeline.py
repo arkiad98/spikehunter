@@ -399,11 +399,24 @@ def _menu_training(settings_path):
         print("\n--- [2. 모델 학습 및 최적화] ---")
         print("1. 모델 학습 (Train)")
         print("2. ML 하이퍼파라미터 최적화 (Optuna)")
+        print("3. ML 하이퍼파라미터 최적화 (Advanced) [NEW]")
         print("0. 이전 메뉴로")
         
         sel = get_user_input("선택: ")
         if sel == '1': train.run_train_pipeline(settings_path)
         elif sel == '2': train.run_ml_optimization_pipeline(settings_path)
+        elif sel == '3':
+            # [New] ML Hyperparameter Optimization High-End
+            from modules import optimization_ml
+            
+            print("\n  [ML Model Hyperparameter Optimization (Advanced)]")
+            print("  - Feature: Scale Pos Weight / Tree Depth / Param Importance")
+            print("  - Options: (1) Fast Scan (20 trials)  (2) Deep Search (100 trials)")
+            mode = get_user_input("  Select Mode (1/2): ")
+            n_trials = 100 if mode == '2' else 20
+            
+            optimization_ml.run_ml_optimization(settings_path, n_trials=n_trials)
+            
         elif sel == '0': break
 
 def _menu_strategy(settings_path):

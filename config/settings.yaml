@@ -39,34 +39,35 @@ ml_params:
   classification_train_months: 36
   classification_threshold: 0.21000000000000005
 
-  # [모델 선택] lgbm / xgb / cat
-  active_model: "lgbm" # [복구] 사용자 요청: LightGBM 단일 모델 원복
+  # [복구] 사용자 요청: LightGBM 단일 모델 원복
+  active_model: "lgbm"
 
-  # [복구] 최적화된 하이퍼파라미터 (AP ~0.31 / Natural Learning)
+  # [복구] 최적화된 하이퍼파라미터 (AP 0.25 / Commit 2258a3f)
+  # 5차 수정: 과거 Git 기록에서 추출한 Precision-Recall 최적 밸런스 설정 복원
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 1.0 # [복구] Natural Learning (확률 왜곡 방지)
-    n_estimators: 1884
-    learning_rate: 0.04728483712927642
-    num_leaves: 103
-    max_depth: 7
-    colsample_bytree: 0.9996986402619018
-    subsample: 0.756394445406343
+    scale_pos_weight: 4.414197138905359 # [Restored] Exact Value
+    n_estimators: 2850    # [Restored] High estimators for low LR
+    learning_rate: 0.030018439041954607 # [Restored] Low LR
+    num_leaves: 21        # [Restored] Simple Model
+    max_depth: 4          # [Restored] Shallow Depth
+    colsample_bytree: 0.6745958353197985
+    subsample: 0.6872006145608852
     n_jobs: 4
     verbose: -1
 
-    # [기존] LightGBM용 파라미터 공간
+    # LightGBM용 파라미터 공간
     param_space_lgbm:
       learning_rate: {type: float, low: 0.005, high: 0.15, log: true}
       num_leaves: {type: int, low: 20, high: 200}
       max_depth: {type: int, low: 4, high: 20}
       n_estimators: {type: int, low: 300, high: 3000}
-      # scale_pos_weight: {type: float, low: 1.0, high: 5.0} # [Fixed] Natural Learning (1.0) 고정
+      scale_pos_weight: {type: float, low: 1.0, high: 10.0}
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 100
+    min_child_samples: 25
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -125,9 +126,9 @@ optimization:
     optimize_on: Hybrid_Stability
     n_trials: 100
     param_space:
-      target_r: {type: float, low: 0.05, high: 0.10} # [수정] 예측력 향상을 위해 상한 10% 제한
-      stop_r: {type: float, low: -0.05, high: -0.02}
-      min_ml_score: {type: float, low: 0.15, high: 0.50} # [수정] Natural Learning 점수 분포 반영 (0.19 포함)
+      target_r: {type: float, low: 0.06, high: 0.11} # [Refined] WFO Optimized Range (Center 8-9%)
+      stop_r: {type: float, low: -0.06, high: -0.025} # [Refined] WFO Optimized Range (Include -4~-5%)
+      min_ml_score: {type: float, low: 0.20, high: 0.60} # [Correction] User reported scores > 0.50, expanded range
       max_market_vol: {type: float, low: 0.015, high: 0.04}
       vbo_k: {type: float, low: 0.3, high: 0.7}
       min_mfi: {type: float, low: 40.0, high: 60.0}

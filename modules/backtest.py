@@ -12,7 +12,7 @@ import os
 import joblib
 import numpy as np
 import pandas as pd
-import warnings
+from joblib import Parallel, delayed
 from tqdm import tqdm
 from datetime import datetime
 from typing import Optional
@@ -22,6 +22,7 @@ from .utils_io import read_yaml, to_date, ensure_dir, load_index_data
 from .utils_logger import logger
 from . import utils_db
 
+import warnings
 warnings.simplefilter(action='ignore', category=pd.errors.PerformanceWarning)
 
 def _calculate_full_metrics(equity: pd.DataFrame, tradelog: pd.DataFrame) -> dict:

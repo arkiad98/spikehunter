@@ -12,7 +12,7 @@ features:
         description: "KOSPI 장기 추세 (1=상승장/정배열, 0=하락장/역배열)"
 
     -   name: market_volatility
-        status: unused
+        status: core
         category: market
         description: "KOSPI 20일 변동성 (시장의 공포 지수)"
 
@@ -20,7 +20,7 @@ features:
     # [Group B] RFE 선정 Top Tier (개별 종목)
     # ==========================================================================
     -   name: obv
-        status: unused
+        status: core
         category: fund_flow
         description: "OBV (누적 매집)"
 
@@ -40,7 +40,7 @@ features:
         description: "5일 평균 변동폭"
 
     -   name: lower_band
-        status: unused
+        status: core
         category: volatility
         description: "볼린저 밴드 하단선"
 
@@ -60,7 +60,7 @@ features:
         description: "밴드폭 (수렴)"
 
     -   name: amount_ma5_rank
-        status: unused
+        status: core
         category: liquidity
         description: "[Rank] 거래대금 순위"
 
@@ -75,17 +75,17 @@ features:
         description: "%B (밴드 내 위치)"
 
     -   name: mfi_14_rank
-        status: unused
+        status: core
         category: fund_flow
         description: "[Rank] 자금유입 순위"
 
     -   name: vol_ma5
-        status: unused
+        status: core
         category: volume
         description: "5일 평균 거래량"
 
     -   name: rsi_14_rank
-        status: unused
+        status: core
         category: momentum
         description: "[Rank] RSI 순위"
 
@@ -95,7 +95,7 @@ features:
         description: "-DI (하락압력)"
 
     -   name: obv_slope_5_rank
-        status: unused
+        status: core
         category: fund_flow
         description: "[Rank] 매집강도 순위"
 
@@ -105,12 +105,12 @@ features:
         description: "RSI 절대값"
 
     -   name: std20
-        status: unused
+        status: core
         category: volatility
         description: "20일 표준편차"
 
     -   name: squeeze_energy_rank
-        status: unused
+        status: core
         category: interaction
         description: "[Rank] 에너지 응축 순위"
 
@@ -144,46 +144,46 @@ features:
         description: "20일 거래량 모멘텀"
 
     -   name: slope_20
-        status: unused
+        status: core
         category: trend
         description: "20일 추세 기울기"
 
     -   name: dist_ma60
-        status: unused
+        status: core
         category: volatility
         description: "60일 이격도"
 
     -   name: upper_shadow_20
-        status: unused
+        status: core
         category: pattern
         description: "20일 평균 윗꼬리 비율"
 
     -   name: ma_convergence
-        status: unused
+        status: core
         category: pattern
         description: "이동평균선(5/20/60) 수렴도"
 
     -   name: golden_cross_score
-        status: unused
+        status: core
         category: pattern
         description: "정배열(골든크로스) 점수"
 
     -   name: ma_alignment
-        status: unused
+        status: core
         category: pattern
         description: "정배열 지속 기간"
 
     -   name: price_vs_vwap
-        status: unused
+        status: core
         category: chart_theory
         description: "VWAP 대비 주가 위치"
 
     -   name: macd_hist
-        status: unused
+        status: core
         category: chart_theory
         description: "MACD 히스토그램"
 
     -   name: stoch_k
-        status: unused
+        status: core
         category: chart_theory
         description: "Stochastic Slow %K"
