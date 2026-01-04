@@ -1,0 +1,521 @@
+{"asctime": "2026-01-01 13:42:39,839", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/20260101_134239_pipeline.json"}
+{"asctime": "2026-01-01 13:42:39,859", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_db.py", "lineno": 140, "message": "데이터베이스 테이블이 성공적으로 준비되었습니다. (경로: data/db/spikehunter_log.db)"}
+{"asctime": "2026-01-01 13:42:39,859", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:42:39,860", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-01 13:42:39,860", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:42:39,860", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-01 13:42:39,860", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-01 13:42:39,860", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-01 13:42:39,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-01 13:42:42,200", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"3\""}
+{"asctime": "2026-01-01 13:42:42,200", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [3. 전략 백테스트 및 최적화] ---"}
+{"asctime": "2026-01-01 13:42:42,200", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 전략 백테스트 실행 (Backtest)"}
+{"asctime": "2026-01-01 13:42:42,201", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 전략 파라미터 최적화 (Strategy Optimization)"}
+{"asctime": "2026-01-01 13:42:42,201", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. Walk-Forward 검증 (전진 분석)"}
+{"asctime": "2026-01-01 13:42:42,201", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 13:42:42,202", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 13:42:44,047", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"3\""}
+{"asctime": "2026-01-01 13:42:44,090", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 145, "message": ">>> Walk-Forward 최적화를 시작합니다: 'SpikeHunter_R1_BullStable'"}
+{"asctime": "2026-01-01 13:42:44,125", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 161, "message": "결과 저장 경로: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244"}
+{"asctime": "2026-01-01 13:42:44,134", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 1] Train: 2020-01-01~2021-12-31 | Test: 2022-01-01~2022-06-30"}
+{"asctime": "2026-01-01 13:42:44,221", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2020-01-01 ~ 2022-06-30"}
+{"asctime": "2026-01-01 13:42:45,212", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1449685 행"}
+{"asctime": "2026-01-01 13:42:45,213", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 13:42:45,235", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 13:43:38,988", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 13:43:39,271", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 13:43:41,580", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 9.990738335325917%, 손절: -2.7337402392375596%, 기간: 5일)"}
+{"asctime": "2026-01-01 13:43:49,612", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_1\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 13:43:49,613", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 636322 행"}
+{"asctime": "2026-01-01 13:43:52,250", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 13:43:52,313", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:43:52,314", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 13:43:52,314", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:43:52,315", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_1\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 13:43:52,908", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 222.07 MB -> 118.56 MB (46.6% 감소)"}
+{"asctime": "2026-01-01 13:43:53,519", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 13:43:53,526", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 70093개, 실패(0) 423257개"}
+{"asctime": "2026-01-01 13:43:53,553", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 13:43:53,554", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 13:45:29,253", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2218 (L=0.2218)"}
+{"asctime": "2026-01-01 13:45:29,288", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.1882 (L=0.1882)"}
+{"asctime": "2026-01-01 13:45:29,323", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.1930 (L=0.1930)"}
+{"asctime": "2026-01-01 13:45:29,359", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.1883 (L=0.1883)"}
+{"asctime": "2026-01-01 13:45:29,392", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.2307 (L=0.2307)"}
+{"asctime": "2026-01-01 13:45:29,393", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.2044"}
+{"asctime": "2026-01-01 13:45:29,393", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 13:46:16,661", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_1\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 13:46:38,511", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.66 (F1: 0.3634)"}
+{"asctime": "2026-01-01 13:46:38,532", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 1 최적 임계값 적용: 0.6600"}
+{"asctime": "2026-01-01 13:46:38,562", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 13:46:38,563", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6600000000000004)"}
+{"asctime": "2026-01-01 13:46:38,589", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2020-01-01 ~ 2021-12-31)"}
+{"asctime": "2026-01-01 13:46:39,351", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_1\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 13:46:53,512", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.5194, Max: 0.9384)"}
+{"asctime": "2026-01-01 13:52:17,671", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 1726.1016"}
+{"asctime": "2026-01-01 13:52:17,701", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.09896186842041355, 'stop_r': -0.027012245487888692, 'max_market_vol': 0.027918758730874318, 'vbo_k': 0.6756262946737555, 'min_mfi': 47.97020737130615}"}
+{"asctime": "2026-01-01 13:52:17,732", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 13:52:19,260", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 8 rows."}
+{"asctime": "2026-01-01 13:52:25,161", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 1 종료 자산: 27,808,011원"}
+{"asctime": "2026-01-01 13:52:25,163", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 2] Train: 2020-07-01~2022-06-30 | Test: 2022-07-01~2022-12-31"}
+{"asctime": "2026-01-01 13:52:25,175", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0990)"}
+{"asctime": "2026-01-01 13:52:25,270", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2020-07-01 ~ 2022-12-31"}
+{"asctime": "2026-01-01 13:52:26,548", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1480330 행"}
+{"asctime": "2026-01-01 13:52:26,550", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 13:52:26,582", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 13:53:19,732", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 13:53:19,961", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 13:53:21,779", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 9.896186842041354%, 손절: -2.7012245487888693%, 기간: 5일)"}
+{"asctime": "2026-01-01 13:53:29,594", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_2\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 13:53:29,595", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 574905 행"}
+{"asctime": "2026-01-01 13:53:32,154", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 13:53:32,213", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:53:32,213", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 13:53:32,214", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 13:53:32,214", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_2\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 13:53:32,712", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 198.71 MB -> 106.09 MB (46.6% 감소)"}
+{"asctime": "2026-01-01 13:53:33,384", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 13:53:33,394", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 54188개, 실패(0) 387261개"}
+{"asctime": "2026-01-01 13:53:33,430", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 13:53:33,431", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 13:55:01,925", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.1957 (L=0.1957)"}
+{"asctime": "2026-01-01 13:55:01,968", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.1687 (L=0.1687)"}
+{"asctime": "2026-01-01 13:55:02,006", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2313 (L=0.2313)"}
+{"asctime": "2026-01-01 13:55:02,050", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.2136 (L=0.2136)"}
+{"asctime": "2026-01-01 13:55:02,095", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.1833 (L=0.1833)"}
+{"asctime": "2026-01-01 13:55:02,096", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.1985"}
+{"asctime": "2026-01-01 13:55:02,096", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 13:55:45,617", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_2\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 13:56:07,273", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.64 (F1: 0.3571)"}
+{"asctime": "2026-01-01 13:56:07,292", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 2 최적 임계값 적용: 0.6400"}
+{"asctime": "2026-01-01 13:56:07,317", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 13:56:07,317", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6400000000000003)"}
+{"asctime": "2026-01-01 13:56:07,340", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2020-07-01 ~ 2022-06-30)"}
+{"asctime": "2026-01-01 13:56:07,740", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_2\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 13:56:20,043", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.4704, Max: 0.9433)"}
+{"asctime": "2026-01-01 14:01:23,634", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 1434.9165"}
+{"asctime": "2026-01-01 14:01:23,653", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.0863663968184406, 'stop_r': -0.03843597931969907, 'max_market_vol': 0.025458231302201467, 'vbo_k': 0.38575259090382197, 'min_mfi': 54.87930590982}"}
+{"asctime": "2026-01-01 14:01:23,689", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:01:25,111", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 21 rows."}
+{"asctime": "2026-01-01 14:01:30,625", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 2 종료 자산: 61,448,404원"}
+{"asctime": "2026-01-01 14:01:30,626", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 3] Train: 2021-01-01~2022-12-31 | Test: 2023-01-01~2023-06-30"}
+{"asctime": "2026-01-01 14:01:30,641", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0864)"}
+{"asctime": "2026-01-01 14:01:30,774", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2021-01-01 ~ 2023-06-30"}
+{"asctime": "2026-01-01 14:01:31,975", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1503648 행"}
+{"asctime": "2026-01-01 14:01:31,997", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:01:32,048", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:02:30,248", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:02:30,489", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:02:33,012", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 8.636639681844061%, 손절: -3.843597931969907%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:02:41,797", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_3\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:02:41,798", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 660185 행"}
+{"asctime": "2026-01-01 14:02:44,575", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:02:44,635", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:02:44,635", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:02:44,636", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:02:44,636", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_3\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:02:45,200", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 228.80 MB -> 122.16 MB (46.6% 감소)"}
+{"asctime": "2026-01-01 14:02:45,732", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:02:45,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 82445개, 실패(0) 425857개"}
+{"asctime": "2026-01-01 14:02:45,765", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:02:45,765", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:04:36,432", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2468 (L=0.2468)"}
+{"asctime": "2026-01-01 14:04:36,463", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.2609 (L=0.2609)"}
+{"asctime": "2026-01-01 14:04:36,498", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2583 (L=0.2583)"}
+{"asctime": "2026-01-01 14:04:36,523", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.2250 (L=0.2250)"}
+{"asctime": "2026-01-01 14:04:36,559", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.2859 (L=0.2859)"}
+{"asctime": "2026-01-01 14:04:36,559", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.2554"}
+{"asctime": "2026-01-01 14:04:36,560", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:05:24,105", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_3\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:05:47,993", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.65 (F1: 0.4067)"}
+{"asctime": "2026-01-01 14:05:48,015", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 3 최적 임계값 적용: 0.6500"}
+{"asctime": "2026-01-01 14:05:48,044", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:05:48,045", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6500000000000004)"}
+{"asctime": "2026-01-01 14:05:48,069", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2021-01-01 ~ 2022-12-31)"}
+{"asctime": "2026-01-01 14:05:48,488", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_3\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:06:04,133", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.5491, Max: 0.9476)"}
+{"asctime": "2026-01-01 14:12:03,000", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 636.4188"}
+{"asctime": "2026-01-01 14:12:03,021", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.08024715580628701, 'stop_r': -0.03371342019899252, 'max_market_vol': 0.03974408466774229, 'vbo_k': 0.6232727408203304, 'min_mfi': 40.21621837129415}"}
+{"asctime": "2026-01-01 14:12:03,048", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:12:04,581", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 4 rows."}
+{"asctime": "2026-01-01 14:12:10,644", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 3 종료 자산: 70,526,941원"}
+{"asctime": "2026-01-01 14:12:10,645", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 4] Train: 2021-07-01~2023-06-30 | Test: 2023-07-01~2023-12-31"}
+{"asctime": "2026-01-01 14:12:10,652", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0802)"}
+{"asctime": "2026-01-01 14:12:10,728", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2021-07-01 ~ 2023-12-31"}
+{"asctime": "2026-01-01 14:12:11,686", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1528343 행"}
+{"asctime": "2026-01-01 14:12:11,687", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:12:11,706", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:13:07,037", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:13:07,221", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:13:09,436", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 8.024715580628701%, 손절: -3.371342019899252%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:13:17,526", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_4\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:13:17,527", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 617485 행"}
+{"asctime": "2026-01-01 14:13:20,065", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:13:20,128", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:13:20,129", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:13:20,129", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:13:20,130", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_4\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:13:20,717", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 214.91 MB -> 114.28 MB (46.8% 감소)"}
+{"asctime": "2026-01-01 14:13:21,154", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:13:21,161", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 83644개, 실패(0) 393787개"}
+{"asctime": "2026-01-01 14:13:21,184", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:13:21,185", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:15:11,622", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2447 (L=0.2447)"}
+{"asctime": "2026-01-01 14:15:11,672", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.2375 (L=0.2375)"}
+{"asctime": "2026-01-01 14:15:11,723", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2973 (L=0.2973)"}
+{"asctime": "2026-01-01 14:15:11,775", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.2731 (L=0.2731)"}
+{"asctime": "2026-01-01 14:15:11,827", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.2783 (L=0.2783)"}
+{"asctime": "2026-01-01 14:15:11,827", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.2662"}
+{"asctime": "2026-01-01 14:15:11,828", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:15:57,169", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_4\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:16:20,541", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.67 (F1: 0.4253)"}
+{"asctime": "2026-01-01 14:16:20,560", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 4 최적 임계값 적용: 0.6700"}
+{"asctime": "2026-01-01 14:16:20,591", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:16:20,591", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6700000000000004)"}
+{"asctime": "2026-01-01 14:16:20,614", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2021-07-01 ~ 2023-06-30)"}
+{"asctime": "2026-01-01 14:16:21,082", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_4\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:16:34,691", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.5695, Max: 0.9590)"}
+{"asctime": "2026-01-01 14:23:46,154", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 1317.5205"}
+{"asctime": "2026-01-01 14:23:46,172", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.06652294875038293, 'stop_r': -0.029916648483660636, 'max_market_vol': 0.01618975551387109, 'vbo_k': 0.3566978889886496, 'min_mfi': 56.296092597099886}"}
+{"asctime": "2026-01-01 14:23:46,205", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:23:47,567", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 9 rows."}
+{"asctime": "2026-01-01 14:23:54,898", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 4 종료 자산: 285,610,595원"}
+{"asctime": "2026-01-01 14:23:54,899", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 5] Train: 2022-01-01~2023-12-31 | Test: 2024-01-01~2024-06-30"}
+{"asctime": "2026-01-01 14:23:54,907", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0665)"}
+{"asctime": "2026-01-01 14:23:54,997", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2022-01-01 ~ 2024-06-30"}
+{"asctime": "2026-01-01 14:23:55,894", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1545624 행"}
+{"asctime": "2026-01-01 14:23:55,895", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:23:55,911", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:24:44,185", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:24:44,347", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:24:46,227", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 6.652294875038294%, 손절: -2.9916648483660637%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:24:53,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_5\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:24:53,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 592738 행"}
+{"asctime": "2026-01-01 14:24:55,946", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:24:56,010", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:24:56,010", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:24:56,011", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:24:56,011", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_5\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:24:56,618", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 206.55 MB -> 108.09 MB (47.7% 감소)"}
+{"asctime": "2026-01-01 14:24:57,052", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:24:57,058", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 95743개, 실패(0) 363125개"}
+{"asctime": "2026-01-01 14:24:57,082", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:24:57,082", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:26:07,875", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2938 (L=0.2938)"}
+{"asctime": "2026-01-01 14:26:07,910", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.3158 (L=0.3158)"}
+{"asctime": "2026-01-01 14:26:07,942", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2997 (L=0.2997)"}
+{"asctime": "2026-01-01 14:26:07,972", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.3113 (L=0.3113)"}
+{"asctime": "2026-01-01 14:26:08,003", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.2866 (L=0.2866)"}
+{"asctime": "2026-01-01 14:26:08,003", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.3014"}
+{"asctime": "2026-01-01 14:26:08,004", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:26:47,903", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_5\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:27:07,992", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.70 (F1: 0.4562)"}
+{"asctime": "2026-01-01 14:27:08,011", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 5 최적 임계값 적용: 0.7000"}
+{"asctime": "2026-01-01 14:27:08,035", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:27:08,036", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.7000000000000004)"}
+{"asctime": "2026-01-01 14:27:08,062", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2022-01-01 ~ 2023-12-31)"}
+{"asctime": "2026-01-01 14:27:08,434", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_5\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:27:20,810", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.6250, Max: 0.9663)"}
+{"asctime": "2026-01-01 14:32:18,218", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: -999.0000"}
+{"asctime": "2026-01-01 14:32:18,234", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.09450880264722397, 'stop_r': -0.04425711890311993, 'max_market_vol': 0.015221466358798258, 'vbo_k': 0.36168927867528433, 'min_mfi': 52.85435983645422}"}
+{"asctime": "2026-01-01 14:32:18,259", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:32:19,458", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 3 rows."}
+{"asctime": "2026-01-01 14:32:27,119", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 5 종료 자산: 287,687,113원"}
+{"asctime": "2026-01-01 14:32:27,120", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 6] Train: 2022-07-01~2024-06-30 | Test: 2024-07-01~2024-12-31"}
+{"asctime": "2026-01-01 14:32:27,127", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0945)"}
+{"asctime": "2026-01-01 14:32:27,201", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2022-07-01 ~ 2024-12-31"}
+{"asctime": "2026-01-01 14:32:28,090", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1577646 행"}
+{"asctime": "2026-01-01 14:32:28,090", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:32:28,115", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:33:10,594", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:33:10,772", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:33:12,398", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 9.450880264722397%, 손절: -4.425711890311993%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:33:18,815", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_6\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:33:18,816", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 526856 행"}
+{"asctime": "2026-01-01 14:33:20,993", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:33:21,056", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:33:21,056", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:33:21,057", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:33:21,057", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_6\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:33:21,537", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 183.07 MB -> 95.80 MB (47.7% 감소)"}
+{"asctime": "2026-01-01 14:33:21,893", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:33:21,899", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 62665개, 실패(0) 344038개"}
+{"asctime": "2026-01-01 14:33:21,919", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:33:21,919", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:34:38,506", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2427 (L=0.2427)"}
+{"asctime": "2026-01-01 14:34:38,540", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.2542 (L=0.2542)"}
+{"asctime": "2026-01-01 14:34:38,574", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2589 (L=0.2589)"}
+{"asctime": "2026-01-01 14:34:38,607", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.2568 (L=0.2568)"}
+{"asctime": "2026-01-01 14:34:38,642", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.2594 (L=0.2594)"}
+{"asctime": "2026-01-01 14:34:38,643", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.2544"}
+{"asctime": "2026-01-01 14:34:38,644", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:35:15,383", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_6\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:35:32,623", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.65 (F1: 0.4051)"}
+{"asctime": "2026-01-01 14:35:32,636", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 6 최적 임계값 적용: 0.6500"}
+{"asctime": "2026-01-01 14:35:32,662", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:35:32,663", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6500000000000004)"}
+{"asctime": "2026-01-01 14:35:32,685", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2022-07-01 ~ 2024-06-30)"}
+{"asctime": "2026-01-01 14:35:33,021", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_6\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:35:43,578", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.5245, Max: 0.9106)"}
+{"asctime": "2026-01-01 14:41:31,969", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 645.9171"}
+{"asctime": "2026-01-01 14:41:31,984", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.0776816608363033, 'stop_r': -0.027209665960253846, 'max_market_vol': 0.017558049392660993, 'vbo_k': 0.3404347233583037, 'min_mfi': 52.91786051525226}"}
+{"asctime": "2026-01-01 14:41:32,012", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:41:33,093", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 3 rows."}
+{"asctime": "2026-01-01 14:41:41,733", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 6 종료 자산: 609,146,533원"}
+{"asctime": "2026-01-01 14:41:41,734", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 7] Train: 2023-01-01~2024-12-31 | Test: 2025-01-01~2025-06-30"}
+{"asctime": "2026-01-01 14:41:41,741", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0777)"}
+{"asctime": "2026-01-01 14:41:41,834", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2023-01-01 ~ 2025-06-30"}
+{"asctime": "2026-01-01 14:41:42,790", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1585256 행"}
+{"asctime": "2026-01-01 14:41:42,792", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:41:42,814", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:42:33,302", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:42:33,462", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:42:35,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 7.76816608363033%, 손절: -2.720966596025385%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:42:43,021", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_7\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:42:43,022", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 635361 행"}
+{"asctime": "2026-01-01 14:42:45,460", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:42:45,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:42:45,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:42:45,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:42:45,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_7\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:42:46,123", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 222.02 MB -> 116.18 MB (47.7% 감소)"}
+{"asctime": "2026-01-01 14:42:46,542", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:42:46,548", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 80625개, 실패(0) 412605개"}
+{"asctime": "2026-01-01 14:42:46,573", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:42:46,574", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:44:33,787", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.2569 (L=0.2569)"}
+{"asctime": "2026-01-01 14:44:33,821", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.2095 (L=0.2095)"}
+{"asctime": "2026-01-01 14:44:33,855", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2389 (L=0.2389)"}
+{"asctime": "2026-01-01 14:44:33,893", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.2374 (L=0.2374)"}
+{"asctime": "2026-01-01 14:44:33,929", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.3051 (L=0.3051)"}
+{"asctime": "2026-01-01 14:44:33,929", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.2496"}
+{"asctime": "2026-01-01 14:44:33,930", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:45:15,594", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_7\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:45:37,145", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.66 (F1: 0.4002)"}
+{"asctime": "2026-01-01 14:45:37,163", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 7 최적 임계값 적용: 0.6600"}
+{"asctime": "2026-01-01 14:45:37,192", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:45:37,192", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.6600000000000004)"}
+{"asctime": "2026-01-01 14:45:37,217", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2023-01-01 ~ 2024-12-31)"}
+{"asctime": "2026-01-01 14:45:37,608", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_7\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:45:50,188", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.5518, Max: 0.9840)"}
+{"asctime": "2026-01-01 14:52:21,540", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 673.1975"}
+{"asctime": "2026-01-01 14:52:21,562", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.06672962853667314, 'stop_r': -0.03946832974565828, 'max_market_vol': 0.025955048601261983, 'vbo_k': 0.6129152890368168, 'min_mfi': 45.572369168323846}"}
+{"asctime": "2026-01-01 14:52:21,586", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 14:52:22,884", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 13 rows."}
+{"asctime": "2026-01-01 14:52:33,576", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 7 종료 자산: 1,481,399,637원"}
+{"asctime": "2026-01-01 14:52:33,577", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 185, "message": "\n[Period 8] Train: 2023-07-01~2025-06-30 | Test: 2025-07-01~2025-12-31"}
+{"asctime": "2026-01-01 14:52:33,585", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 203, "message": " >> [Adaptive] 이전 구간 최적 파라미터 적용 (Target: 0.0667)"}
+{"asctime": "2026-01-01 14:52:33,665", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2023-07-01 ~ 2025-12-31"}
+{"asctime": "2026-01-01 14:52:34,556", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 1608752 행"}
+{"asctime": "2026-01-01 14:52:34,557", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-01 14:52:34,568", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-01 14:53:17,922", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-01 14:53:18,134", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-01 14:53:20,223", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 6.672962853667314%, 손절: -3.946832974565828%, 기간: 5일)"}
+{"asctime": "2026-01-01 14:53:27,218", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_8\\features\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 14:53:27,218", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 547539 행"}
+{"asctime": "2026-01-01 14:53:29,360", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 251, "message": " >> 모델 학습 진행 (Train Data Only)..."}
+{"asctime": "2026-01-01 14:53:29,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:53:29,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   [Phase 3] SpikeHunter v5.9 앙상블 모델 학습"}
+{"asctime": "2026-01-01 14:53:29,418", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 14:53:29,418", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> [Data] 학습 전용 데이터셋 로드 (WF Mode): data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_8\\features_train_only\\dataset_v4.parquet"}
+{"asctime": "2026-01-01 14:53:29,895", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 315, "message": "메모리 사용량 최적화 완료: 188.15 MB -> 98.46 MB (47.7% 감소)"}
+{"asctime": "2026-01-01 14:53:30,253", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 학습 피처 수: 35개"}
+{"asctime": "2026-01-01 14:53:30,259", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 타겟 분포: 성공(1) 100435개, 실패(0) 317541개"}
+{"asctime": "2026-01-01 14:53:30,278", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 5-Fold 시계열 교차검증 시작... (Sequential Folds)"}
+{"asctime": "2026-01-01 14:53:30,278", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "    * 앙상블 모델: LGBM"}
+{"asctime": "2026-01-01 14:54:59,038", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 1] Ensemble AP: 0.3115 (L=0.3115)"}
+{"asctime": "2026-01-01 14:54:59,057", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 2] Ensemble AP: 0.2962 (L=0.2962)"}
+{"asctime": "2026-01-01 14:54:59,086", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 3] Ensemble AP: 0.2926 (L=0.2926)"}
+{"asctime": "2026-01-01 14:54:59,114", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 4] Ensemble AP: 0.4051 (L=0.4051)"}
+{"asctime": "2026-01-01 14:54:59,143", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " [Fold 5] Ensemble AP: 0.3575 (L=0.3575)"}
+{"asctime": "2026-01-01 14:54:59,144", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 평균 AP: 0.3326"}
+{"asctime": "2026-01-01 14:54:59,144", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 전체 데이터로 최종 모델 학습 중..."}
+{"asctime": "2026-01-01 14:55:35,815", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> LightGBM 모델 저장 완료: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_8\\models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 14:55:53,627", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 137, "message": " >> [WFO-Thres] 최적 임계값 발견: 0.71 (F1: 0.4917)"}
+{"asctime": "2026-01-01 14:55:53,643", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 257, "message": " >> [Adaptive] Period 8 최적 임계값 적용: 0.7100"}
+{"asctime": "2026-01-01 14:55:53,668", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 269, "message": " >> 전략 파라미터 최적화 (Train Data)..."}
+{"asctime": "2026-01-01 14:55:53,668", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 286, "message": " >> [Optuna] min_ml_score 최적화 제외 (Calculated Fixed Value: 0.7100000000000004)"}
+{"asctime": "2026-01-01 14:55:53,691", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 93, "message": " >> [WFO] 전략 최적화 시작 (2023-07-01 ~ 2025-06-30)"}
+{"asctime": "2026-01-01 14:55:54,044", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 149, "message": " >> [WFO] ML Score 사전 계산 중... (data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\period_8\\models\\lgbm_model.joblib)"}
+{"asctime": "2026-01-01 14:56:05,057", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 163, "message": " >> [WFO] ML Score 계산 완료. (Mean: 0.6627, Max: 0.9794)"}
+{"asctime": "2026-01-01 15:00:48,607", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization.py", "lineno": 180, "message": " >> [WFO] 최적화 완료. Best Score: 445.9952"}
+{"asctime": "2026-01-01 15:00:48,621", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 301, "message": " >> 적용된 최적 파라미터: {'target_r': 0.07071890694067752, 'stop_r': -0.04885850281524365, 'max_market_vol': 0.03596850085356813, 'vbo_k': 0.5751745521971036, 'min_mfi': 54.728291495813714}"}
+{"asctime": "2026-01-01 15:00:48,650", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 326, "message": " >> 백테스트 진행 (Test Period)..."}
+{"asctime": "2026-01-01 15:00:49,776", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 2 rows."}
+{"asctime": "2026-01-01 15:01:01,097", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 348, "message": " >> Period 8 종료 자산: 4,897,859,347원"}
+{"asctime": "2026-01-01 15:01:01,168", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 363, "message": "\n============================================================"}
+{"asctime": "2026-01-01 15:01:01,169", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 364, "message": "   [Walk-Forward 최종 결과] 2020-01-01 ~ 2025-12-30"}
+{"asctime": "2026-01-01 15:01:01,169", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 365, "message": "   - 최종 자산: 4,897,859,347 원"}
+{"asctime": "2026-01-01 15:01:01,170", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 366, "message": "   - 수익률(CAGR): 372.12%"}
+{"asctime": "2026-01-01 15:01:01,170", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 367, "message": "   - MDD: -25.13%"}
+{"asctime": "2026-01-01 15:01:01,170", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 368, "message": "   - 승률: 44.05% (2931회)"}
+{"asctime": "2026-01-01 15:01:01,171", "name": "QuantPipeline", "levelname": "INFO", "filename": "run_pipeline.py", "lineno": 369, "message": "============================================================"}
+{"asctime": "2026-01-01 15:01:01,192", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [3. 전략 백테스트 및 최적화] ---"}
+{"asctime": "2026-01-01 15:01:01,193", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 전략 백테스트 실행 (Backtest)"}
+{"asctime": "2026-01-01 15:01:01,193", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 전략 파라미터 최적화 (Strategy Optimization)"}
+{"asctime": "2026-01-01 15:01:01,193", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. Walk-Forward 검증 (전진 분석)"}
+{"asctime": "2026-01-01 15:01:01,194", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 15:01:01,194", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 16:58:25,636", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"0\""}
+{"asctime": "2026-01-01 16:58:25,672", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 16:58:25,672", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-01 16:58:25,673", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 16:58:25,673", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-01 16:58:25,674", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-01 16:58:25,674", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-01 16:58:25,674", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-01 16:58:25,675", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-01 16:58:25,675", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-01 16:58:25,675", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-01 16:58:25,676", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-01 16:58:25,676", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-01 16:58:31,685", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"5\""}
+{"asctime": "2026-01-01 16:58:31,685", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [5. 유틸리티 (Utils)] ---"}
+{"asctime": "2026-01-01 16:58:31,685", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 수정주가 데이터 정제 (Price Sanitizer)"}
+{"asctime": "2026-01-01 16:58:31,686", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 전략 로직 디버거 (Strategy Debugger)"}
+{"asctime": "2026-01-01 16:58:31,686", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. WF 로그 통합 (Log Aggregator)"}
+{"asctime": "2026-01-01 16:58:31,686", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 로직 검증 (Logic Verifier)"}
+{"asctime": "2026-01-01 16:58:31,686", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 16:58:31,687", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 16:58:36,040", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"3\""}
+{"asctime": "2026-01-01 16:58:36,054", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 55, "message": "\n================================================================================"}
+{"asctime": "2026-01-01 16:58:36,055", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 56, "message": "      <<< Walk-Forward 전체 거래 기록 집계기 시작 >>>"}
+{"asctime": "2026-01-01 16:58:36,055", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 57, "message": "================================================================================"}
+{"asctime": "2026-01-01 16:58:36,093", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 36, "message": "\n발견된 Walk-Forward 실행 기록 (7개):"}
+{"asctime": "2026-01-01 16:58:36,094", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   1. WF-SpikeHunter_R1_BullStable-20260101_134244"}
+{"asctime": "2026-01-01 16:58:36,095", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   2. WF-SpikeHunter_R1_BullStable-20260101_133552"}
+{"asctime": "2026-01-01 16:58:36,095", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   3. WF-SpikeHunter_R1_BullStable-20260101_133440"}
+{"asctime": "2026-01-01 16:58:36,095", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   4. WF-SpikeHunter_R1_BullStable-20260101_113546"}
+{"asctime": "2026-01-01 16:58:36,095", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   5. WF-SpikeHunter_R1_BullStable-20260101_001942"}
+{"asctime": "2026-01-01 16:58:36,096", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   6. WF-SpikeHunter_R1_BullStable-20251231_204537"}
+{"asctime": "2026-01-01 16:58:36,096", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "   7. WF-SpikeHunter_R1_BullStable-20251231_203158"}
+{"asctime": "2026-01-01 16:58:36,096", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"번호를 선택하세요:\""}
+{"asctime": "2026-01-01 16:58:41,741", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"1\""}
+{"asctime": "2026-01-01 16:58:41,742", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 68, "message": "분석 대상 폴더: data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244"}
+{"asctime": "2026-01-01 16:58:46,961", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 2 rows."}
+{"asctime": "2026-01-01 16:58:55,707", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 1 rows."}
+{"asctime": "2026-01-01 16:59:01,002", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 13 rows."}
+{"asctime": "2026-01-01 16:59:06,220", "name": "QuantPipeline", "levelname": "INFO", "filename": "backtest.py", "lineno": 180, "message": " >> Anomaly Exclusion applied: Removed 2 rows."}
+{"asctime": "2026-01-01 16:59:11,334", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 162, "message": "\n================================================================================"}
+{"asctime": "2026-01-01 16:59:11,335", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 163, "message": "      <<< 전체 거래 기록 집계 완료 >>>"}
+{"asctime": "2026-01-01 16:59:11,335", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 164, "message": "총 1762건의 거래 기록을 'data/proc/backtest\\WF-SpikeHunter_R1_BullStable-20260101_134244\\consolidated_tradelog.parquet'에 저장했습니다."}
+{"asctime": "2026-01-01 16:59:11,336", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 165, "message": "이제 '거래내역 상세 분석기'를 이 폴더에 대해 실행하여 전체 기록을 분석할 수 있습니다."}
+{"asctime": "2026-01-01 16:59:11,337", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_wf_log_aggregator.py", "lineno": 166, "message": "================================================================================"}
+{"asctime": "2026-01-01 16:59:11,347", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [5. 유틸리티 (Utils)] ---"}
+{"asctime": "2026-01-01 16:59:11,348", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 수정주가 데이터 정제 (Price Sanitizer)"}
+{"asctime": "2026-01-01 16:59:11,348", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 전략 로직 디버거 (Strategy Debugger)"}
+{"asctime": "2026-01-01 16:59:11,348", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. WF 로그 통합 (Log Aggregator)"}
+{"asctime": "2026-01-01 16:59:11,349", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 로직 검증 (Logic Verifier)"}
+{"asctime": "2026-01-01 16:59:11,349", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 16:59:11,350", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:28:26,194", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"4\""}
+{"asctime": "2026-01-01 17:28:26,356", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": " >> 데이터 로드 중... (2024-01-01 ~ 2024-12-31)"}
+{"asctime": "2026-01-01 17:28:26,371", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "!! 데이터가 없습니다."}
+{"asctime": "2026-01-01 17:28:26,372", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [5. 유틸리티 (Utils)] ---"}
+{"asctime": "2026-01-01 17:28:26,372", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 수정주가 데이터 정제 (Price Sanitizer)"}
+{"asctime": "2026-01-01 17:28:26,373", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 전략 로직 디버거 (Strategy Debugger)"}
+{"asctime": "2026-01-01 17:28:26,374", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. WF 로그 통합 (Log Aggregator)"}
+{"asctime": "2026-01-01 17:28:26,374", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 로직 검증 (Logic Verifier)"}
+{"asctime": "2026-01-01 17:28:26,375", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 17:28:26,375", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:28:31,583", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"0\""}
+{"asctime": "2026-01-01 17:28:31,583", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:31,583", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-01 17:28:31,584", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:31,584", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-01 17:28:31,584", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-01 17:28:31,585", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-01 17:28:31,585", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-01 17:28:31,585", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-01 17:28:31,585", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-01 17:28:31,586", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-01 17:28:31,586", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-01 17:28:31,586", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-01 17:28:33,440", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"4\""}
+{"asctime": "2026-01-01 17:28:33,441", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [4. 진단 및 심층 분석 (Add-ons)] ---"}
+{"asctime": "2026-01-01 17:28:33,441", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 최적 피처 조합 탐색 (RFE Analysis)"}
+{"asctime": "2026-01-01 17:28:33,442", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 안정성 분석 (Stability Analyzer)"}
+{"asctime": "2026-01-01 17:28:33,442", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 급등 전조 현상 분석 (Pre-Spike Analyzer)"}
+{"asctime": "2026-01-01 17:28:33,442", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. SHAP 모델 해석 (Model Explainability)"}
+{"asctime": "2026-01-01 17:28:33,443", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 매매 로그 정밀 분석 (TradeLog Analyzer)"}
+{"asctime": "2026-01-01 17:28:33,443", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 최적 비용 민감도 탐색 (CS Weight Finder)"}
+{"asctime": "2026-01-01 17:28:33,443", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "7. 최적 임계값 탐색 (Threshold Optimizer) [추가]"}
+{"asctime": "2026-01-01 17:28:33,444", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 17:28:33,444", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:28:35,848", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-01 17:28:35,849", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 23, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:35,849", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 24, "message": "      <<< 핵심 피처 안정성 분석 시작 >>>"}
+{"asctime": "2026-01-01 17:28:35,850", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 25, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:35,885", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 34, "message": "분석 설정: 윈도우 크기=12개월, 이동 간격=3개월"}
+{"asctime": "2026-01-01 17:28:35,886", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 41, "message": "전체 ML 분류 데이터셋 로드 중..."}
+{"asctime": "2026-01-01 17:28:40,539", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 60, "message": "  - 기간 분석 중: 2020-03-30 ~ 2021-03-30"}
+{"asctime": "2026-01-01 17:28:40,681", "name": "QuantPipeline", "levelname": "ERROR", "filename": "run_pipeline.py", "lineno": 497, "message": "애드온 실행 중 오류 발생: 'target'"}
+{"asctime": "2026-01-01 17:28:40,682", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "!!! 실행 중 오류가 발생했습니다: 'target'"}
+{"asctime": "2026-01-01 17:28:40,763", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [4. 진단 및 심층 분석 (Add-ons)] ---"}
+{"asctime": "2026-01-01 17:28:40,763", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 최적 피처 조합 탐색 (RFE Analysis)"}
+{"asctime": "2026-01-01 17:28:40,764", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 안정성 분석 (Stability Analyzer)"}
+{"asctime": "2026-01-01 17:28:40,764", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 급등 전조 현상 분석 (Pre-Spike Analyzer)"}
+{"asctime": "2026-01-01 17:28:40,764", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. SHAP 모델 해석 (Model Explainability)"}
+{"asctime": "2026-01-01 17:28:40,765", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 매매 로그 정밀 분석 (TradeLog Analyzer)"}
+{"asctime": "2026-01-01 17:28:40,765", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 최적 비용 민감도 탐색 (CS Weight Finder)"}
+{"asctime": "2026-01-01 17:28:40,765", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "7. 최적 임계값 탐색 (Threshold Optimizer) [추가]"}
+{"asctime": "2026-01-01 17:28:40,766", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 17:28:40,766", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:28:52,753", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"4\""}
+{"asctime": "2026-01-01 17:28:52,757", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_shap_analysis.py", "lineno": 103, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:52,757", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_shap_analysis.py", "lineno": 104, "message": "      <<< SHAP 모델 해석 (global_classification) 시작 >>>"}
+{"asctime": "2026-01-01 17:28:52,757", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_shap_analysis.py", "lineno": 105, "message": "============================================================"}
+{"asctime": "2026-01-01 17:28:52,952", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_shap_analysis.py", "lineno": 133, "message": "ML 모델 로드 완료: data/models\\lgbm_model.joblib"}
+{"asctime": "2026-01-01 17:28:52,953", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_shap_analysis.py", "lineno": 136, "message": "SHAP TreeExplainer를 생성합니다..."}
+{"asctime": "2026-01-01 17:28:57,880", "name": "QuantPipeline", "levelname": "ERROR", "filename": "run_pipeline.py", "lineno": 497, "message": "애드온 실행 중 오류 발생: 'target'"}
+{"asctime": "2026-01-01 17:28:57,881", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "!!! 실행 중 오류가 발생했습니다: 'target'"}
+{"asctime": "2026-01-01 17:28:57,911", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [4. 진단 및 심층 분석 (Add-ons)] ---"}
+{"asctime": "2026-01-01 17:28:57,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 최적 피처 조합 탐색 (RFE Analysis)"}
+{"asctime": "2026-01-01 17:28:57,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 안정성 분석 (Stability Analyzer)"}
+{"asctime": "2026-01-01 17:28:57,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 급등 전조 현상 분석 (Pre-Spike Analyzer)"}
+{"asctime": "2026-01-01 17:28:57,913", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. SHAP 모델 해석 (Model Explainability)"}
+{"asctime": "2026-01-01 17:28:57,913", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 매매 로그 정밀 분석 (TradeLog Analyzer)"}
+{"asctime": "2026-01-01 17:28:57,914", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 최적 비용 민감도 탐색 (CS Weight Finder)"}
+{"asctime": "2026-01-01 17:28:57,914", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "7. 최적 임계값 탐색 (Threshold Optimizer) [추가]"}
+{"asctime": "2026-01-01 17:28:57,914", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 17:28:57,915", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:35:24,495", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-01 17:35:24,496", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 23, "message": "============================================================"}
+{"asctime": "2026-01-01 17:35:24,496", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 24, "message": "      <<< 핵심 피처 안정성 분석 시작 >>>"}
+{"asctime": "2026-01-01 17:35:24,496", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 25, "message": "============================================================"}
+{"asctime": "2026-01-01 17:35:24,536", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 34, "message": "분석 설정: 윈도우 크기=12개월, 이동 간격=3개월"}
+{"asctime": "2026-01-01 17:35:24,537", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 41, "message": "전체 ML 분류 데이터셋 로드 중..."}
+{"asctime": "2026-01-01 17:35:26,740", "name": "QuantPipeline", "levelname": "INFO", "filename": "addon_feature_stability_analyzer.py", "lineno": 60, "message": "  - 기간 분석 중: 2020-03-30 ~ 2021-03-30"}
+{"asctime": "2026-01-01 17:35:26,842", "name": "QuantPipeline", "levelname": "ERROR", "filename": "run_pipeline.py", "lineno": 497, "message": "애드온 실행 중 오류 발생: 'target'"}
+{"asctime": "2026-01-01 17:35:26,842", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "!!! 실행 중 오류가 발생했습니다: 'target'"}
+{"asctime": "2026-01-01 17:35:26,932", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [4. 진단 및 심층 분석 (Add-ons)] ---"}
+{"asctime": "2026-01-01 17:35:26,932", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 최적 피처 조합 탐색 (RFE Analysis)"}
+{"asctime": "2026-01-01 17:35:26,933", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 안정성 분석 (Stability Analyzer)"}
+{"asctime": "2026-01-01 17:35:26,933", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 급등 전조 현상 분석 (Pre-Spike Analyzer)"}
+{"asctime": "2026-01-01 17:35:26,933", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. SHAP 모델 해석 (Model Explainability)"}
+{"asctime": "2026-01-01 17:35:26,934", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 매매 로그 정밀 분석 (TradeLog Analyzer)"}
+{"asctime": "2026-01-01 17:35:26,934", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 최적 비용 민감도 탐색 (CS Weight Finder)"}
+{"asctime": "2026-01-01 17:35:26,934", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "7. 최적 임계값 탐색 (Threshold Optimizer) [추가]"}
+{"asctime": "2026-01-01 17:35:26,935", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 17:35:26,935", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 17:35:28,735", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"0\""}
+{"asctime": "2026-01-01 17:35:28,736", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 17:35:28,736", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-01 17:35:28,737", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 17:35:28,737", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-01 17:35:28,738", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-01 17:35:28,738", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-01 17:35:28,738", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-01 17:35:28,738", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-01 17:35:28,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-01 17:35:28,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-01 17:35:28,739", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-01 17:35:28,740", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-01 17:35:29,263", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"0\""}
+{"asctime": "2026-01-01 17:35:29,265", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "프로그램을 종료합니다."}

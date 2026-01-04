@@ -1,0 +1,117 @@
+{"asctime": "2026-01-01 20:08:42,086", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/20260101_200842_pipeline.json"}
+{"asctime": "2026-01-01 20:08:42,089", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_db.py", "lineno": 140, "message": "데이터베이스 테이블이 성공적으로 준비되었습니다. (경로: data/db/spikehunter_log.db)"}
+{"asctime": "2026-01-01 20:08:42,090", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 20:08:42,091", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-01 20:08:42,091", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-01 20:08:42,091", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-01 20:08:42,091", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-01 20:08:42,092", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-01 20:08:42,092", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-01 20:08:42,092", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-01 20:08:42,092", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-01 20:08:42,092", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-01 20:08:42,093", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-01 20:08:42,093", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-01 20:09:06,332", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-01 20:09:06,332", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [2. 모델 학습 및 최적화] ---"}
+{"asctime": "2026-01-01 20:09:06,332", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 모델 학습 (Train)"}
+{"asctime": "2026-01-01 20:09:06,332", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. ML 하이퍼파라미터 최적화 (Optuna)"}
+{"asctime": "2026-01-01 20:09:06,333", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. ML 하이퍼파라미터 최적화 (Advanced) [NEW]"}
+{"asctime": "2026-01-01 20:09:06,333", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-01 20:09:06,333", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-01 20:09:09,561", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"3\""}
+{"asctime": "2026-01-01 20:09:09,566", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  [ML Model Hyperparameter Optimization (Advanced)]"}
+{"asctime": "2026-01-01 20:09:09,567", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  - Feature: Scale Pos Weight / Tree Depth / Param Importance"}
+{"asctime": "2026-01-01 20:09:09,567", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  - Options: (1) Fast Scan (20 trials)  (2) Deep Search (100 trials)"}
+{"asctime": "2026-01-01 20:09:09,568", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"Select Mode (1/2):\""}
+{"asctime": "2026-01-01 20:09:13,227", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-01 20:09:13,228", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 177, "message": "============================================================"}
+{"asctime": "2026-01-01 20:09:13,228", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 178, "message": "      <<< ML Model Hyperparameter Optimization >>>"}
+{"asctime": "2026-01-01 20:09:13,228", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 179, "message": "      * Analyzing Scale Pos Weight, Tree Depth, etc."}
+{"asctime": "2026-01-01 20:09:13,228", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 180, "message": "============================================================"}
+{"asctime": "2026-01-01 20:09:13,229", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 185, "message": ">> Running 100 trials..."}
+{"asctime": "2026-01-01 20:09:13,265", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 42, "message": "[ML-Opt] Loading dataset from: data/proc/ml_dataset\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-01 20:09:20,913", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 65, "message": "[ML-Opt] Data Loaded. Shape: (370870, 53), Pos Ratio: 0.1289"}
+{"asctime": "2026-01-01 20:11:09,148", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:12:28,152", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:13:38,167", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:22:39,288", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:26:15,681", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:29:12,277", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:34:33,996", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:35:47,887", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:37:09,767", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:40:02,680", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:45:20,546", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:49:07,679", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:51:19,731", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:54:39,870", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:55:29,916", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 20:57:57,249", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:00:48,662", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:09:43,158", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:13:27,139", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:15:59,395", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:20:48,751", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:23:00,596", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:25:29,820", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:27:26,285", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:31:33,443", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:32:23,458", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:33:11,769", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:34:03,499", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:34:55,380", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:36:20,152", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:37:57,353", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:39:41,497", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:41:23,241", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:43:12,125", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:44:43,088", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:46:27,296", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:48:29,441", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:50:19,940", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:51:35,341", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:53:29,464", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:55:50,205", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:57:18,870", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:58:32,904", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 21:59:40,676", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:03:12,517", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:04:56,430", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:06:10,003", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:09:06,919", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:10:36,397", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:12:08,395", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:15:03,649", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:16:15,896", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:19:23,049", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:21:11,198", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:22:58,861", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:26:57,083", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:28:57,780", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:30:14,961", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:31:34,841", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:34:10,830", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:35:07,887", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:36:50,590", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:39:37,859", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:41:35,064", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:42:59,074", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:47:14,825", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:49:36,259", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:56:44,237", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:59:05,175", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 22:59:57,135", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:02:16,309", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:04:00,399", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:05:55,942", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:07:14,285", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:08:35,477", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:10:24,603", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:12:08,583", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:13:06,156", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:15:07,900", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:16:51,876", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:18:21,752", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:19:45,139", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-01 23:21:57,069", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}

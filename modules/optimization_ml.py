@@ -44,9 +44,16 @@ def load_data_cached(settings_path: str, months_back: int = 18) -> Tuple[pd.Data
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
     
-    # Recent data filter
-    cutoff_date = df['date'].max() - pd.DateOffset(months=months_back)
-    df = df[df['date'] >= cutoff_date].copy()
+    # Recent data filter (Config-driven)
+    ml_params = cfg.get("ml_params", {})
+    train_months = ml_params.get("classification_train_months", months_back) # Fallback to arg if missing
+    end_offset = ml_params.get("classification_train_end_offset", 0)
+    
+    effective_end_date = df['date'].max() - pd.DateOffset(months=end_offset)
+    effective_start_date = effective_end_date - pd.DateOffset(months=train_months)
+    
+    logger.info(f"[ML-Opt] Data Slice: {effective_start_date.date()} ~ {effective_end_date.date()} (Train: {train_months}m, Gap: {end_offset}m)")
+    df = df[(df['date'] >= effective_start_date) & (df['date'] <= effective_end_date)].copy()
     
     # Sanitize Columns for LightGBM
     df = df.rename(columns=lambda x: re.sub('[^A-Za-z0-9_]+', '', x))

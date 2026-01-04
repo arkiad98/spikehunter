@@ -37,7 +37,7 @@ ml_params:
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 36
-  classification_train_end_offset: 6 # [New] 6 months gap for validation/test align
+  classification_threshold: 0.21000000000000005
 
   # [복구] 사용자 요청: LightGBM 단일 모델 원복
   active_model: "lgbm"
@@ -47,13 +47,13 @@ ml_params:
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 1.0013125269740435 # [Restored] Exact Value
-    n_estimators: 304     # [Restored] High estimators for low LR
-    learning_rate: 0.0052401345282226406 # [Restored] Low LR
-    num_leaves: 20        # [Restored] Simple Model
-    max_depth: 20         # [Restored] Shallow Depth
-    colsample_bytree: 0.851530315234831
-    subsample: 0.5334838398900733
+    scale_pos_weight: 8.304453082647894 # [Restored] Exact Value
+    n_estimators: 540     # [Restored] High estimators for low LR
+    learning_rate: 0.012763748069217377 # [Restored] Low LR
+    num_leaves: 94        # [Restored] Simple Model
+    max_depth: 17         # [Restored] Shallow Depth
+    colsample_bytree: 0.9125967578720843
+    subsample: 0.8480084483844194
     n_jobs: 4
     verbose: -1
 
@@ -67,7 +67,7 @@ ml_params:
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 12
+    min_child_samples: 99
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:

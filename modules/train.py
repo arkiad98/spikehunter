@@ -110,11 +110,20 @@ def _run_classification_training(cfg: dict, return_results_only: bool = False, b
     df['date'] = pd.to_datetime(df['date'])
     df = df.sort_values('date').reset_index(drop=True)
 
-    # 2. 기간 필터링
+    # 2. 기간 필터링 (Start Offset ~ End Offset)
     train_months = ml_params_cfg.get("classification_train_months", 36)
+    end_offset = ml_params_cfg.get("classification_train_end_offset", 0)
+    
     if train_months > 0:
-        cutoff_date = df['date'].max() - pd.DateOffset(months=train_months)
-        df = df[df['date'] >= cutoff_date].copy()
+        # 기준 종료일: 전체 데이터 끝 - Offset
+        effective_end_date = df['date'].max() - pd.DateOffset(months=end_offset)
+        # 기준 시작일: 기준 종료일 - Train Months
+        effective_start_date = effective_end_date - pd.DateOffset(months=train_months)
+        
+        if not return_results_only:
+            print(f" >> 학습 데이터 구간: {effective_start_date.date()} ~ {effective_end_date.date()} (Train: {train_months}m, Gap: {end_offset}m)")
+            
+        df = df[(df['date'] >= effective_start_date) & (df['date'] <= effective_end_date)].copy()
 
     # 3. 피처 선택
     target_col = 'label_class'
@@ -288,9 +297,15 @@ class Objective:
         self.feature_cols = [f for f in core_features if f in available_cols]
         if not self.feature_cols: self.feature_cols = _get_feature_cols(df.columns)
         
-        train_months = cfg.get("ml_params", {}).get("classification_train_months", 24)
-        cutoff_date = df['date'].max() - pd.DateOffset(months=train_months)
-        df = df[df['date'] >= cutoff_date]
+        ml_params = cfg.get("ml_params", {})
+        train_months = ml_params.get("classification_train_months", 24)
+        end_offset = ml_params.get("classification_train_end_offset", 0)
+        
+        # Calculate Effective Data Range
+        effective_end_date = df['date'].max() - pd.DateOffset(months=end_offset)
+        effective_start_date = effective_end_date - pd.DateOffset(months=train_months)
+        
+        df = df[(df['date'] >= effective_start_date) & (df['date'] <= effective_end_date)]
         
         self.X = df[self.feature_cols]
         self.y = df['label_class']

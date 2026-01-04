@@ -436,6 +436,30 @@ def _menu_strategy(settings_path):
         strategy_name = list(cfg.get('strategies', {}).keys())[0] if cfg.get('strategies') else "SpikeHunter"
 
         if sel == '1': 
+            print("  1. 전체 기간 (Full History)")
+            print("  2. 최근 검증 기간 (Test Period Only: After Training)")
+            sub_sel = get_user_input("  기간 선택 (1/2): ")
+            
+            start_date = None
+            if sub_sel == '2':
+                # Calculate Test Start Date
+                try:
+                    dataset_path = os.path.join(cfg['paths']['ml_dataset'], 'ml_classification_dataset.parquet')
+                    if not os.path.exists(dataset_path): # Fallback
+                         dataset_path = os.path.join(cfg['paths']['features'], 'dataset_v4.parquet')
+                         
+                    if os.path.exists(dataset_path):
+                        df_tmp = pd.read_parquet(dataset_path, columns=['date'])
+                        max_date = pd.to_datetime(df_tmp['date']).max()
+                        end_offset = cfg.get('ml_params', {}).get('classification_train_end_offset', 6)
+                        
+                        # Test Start = MaxDate - Offset
+                        test_start = max_date - pd.DateOffset(months=end_offset)
+                        start_date = test_start.strftime("%Y-%m-%d")
+                        print(f"  >> 검증 기간 자동 설정: {start_date} ~ {max_date.date()}")
+                except Exception as e:
+                    print(f"  >> 날짜 계산 실패 (전체 기간으로 수행): {e}")
+
             run_id = datetime.now().strftime("%Y%m%d_%H%M%S")
             run_dir = f"data/proc/backtest/run_{run_id}"
             print(f" >> 전략 '{strategy_name}' 백테스트 시작...")
@@ -443,6 +467,7 @@ def _menu_strategy(settings_path):
                 run_dir=run_dir,
                 strategy_name=strategy_name,
                 settings_path=settings_path,
+                start=start_date,
                 save_to_db=True
             )
         elif sel == '2': 
