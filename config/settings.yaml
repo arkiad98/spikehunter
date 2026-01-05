@@ -47,16 +47,16 @@ ml_params:
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 1.0013125269740435 # [Restored] Exact Value
-    n_estimators: 304     # [Restored] High estimators for low LR
-    learning_rate: 0.0052401345282226406 # [Restored] Low LR
-    num_leaves: 20        # [Restored] Simple Model
-    max_depth: 20         # [Restored] Shallow Depth
-    colsample_bytree: 0.851530315234831
-    subsample: 0.5334838398900733
+    scale_pos_weight: 8.304453082647894 # [Restored] Exact Value
+    n_estimators: 540     # [Restored] High estimators for low LR
+    learning_rate: 0.012763748069217377 # [Restored] Low LR
+    num_leaves: 94        # [Restored] Simple Model
+    max_depth: 17         # [Restored] Shallow Depth
+    colsample_bytree: 0.9125967578720843
+    subsample: 0.8480084483844194
     n_jobs: 4
     verbose: -1
-
+    
     # LightGBM용 파라미터 공간
     param_space_lgbm:
       learning_rate: {type: float, low: 0.005, high: 0.15, log: true}

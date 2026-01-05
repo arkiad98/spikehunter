@@ -243,6 +243,13 @@ def run_walk_forward_pipeline(settings_path: str, strategy_name: str):
         # 5. 학습용 설정 생성
         train_cfg = copy.deepcopy(period_cfg)
         train_cfg['paths']['features'] = train_feat_dir
+        
+        # [CRITICAL FIX] WFO에서는 이미 날짜별로 잘라서(Train Only) 전달하므로
+        # 내부적인 offset(Gap)을 0으로 강제해야 "Double Offset" 문제를 방지함.
+        # 기존: Train End(12/31) - Offset(6m) = 6/30 (최근 6개월 데이터 누락 발생)
+        # 수정: Train End(12/31) - Offset(0m) = 12/31 (정상 학습)
+        train_cfg['ml_params']['classification_train_end_offset'] = 0
+        
         train_settings_path = os.path.join(period_dir, "settings_train.yaml")
         with open(train_settings_path, 'w', encoding='utf-8') as f:
             yaml_obj.dump(train_cfg, f)

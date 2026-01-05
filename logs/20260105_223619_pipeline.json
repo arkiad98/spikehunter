@@ -1,0 +1,38 @@
+{"asctime": "2026-01-05 22:36:19,504", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/20260105_223619_pipeline.json"}
+{"asctime": "2026-01-05 22:36:19,508", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_db.py", "lineno": 140, "message": "데이터베이스 테이블이 성공적으로 준비되었습니다. (경로: data/db/spikehunter_log.db)"}
+{"asctime": "2026-01-05 22:36:19,509", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-05 22:36:19,513", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-05 22:36:19,513", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-05 22:36:19,514", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-05 22:36:19,514", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-05 22:36:19,514", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-05 22:36:19,515", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-05 22:36:19,515", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-05 22:36:19,515", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-05 22:36:19,516", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-05 22:36:19,516", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-05 22:36:19,517", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-05 22:36:22,774", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-05 22:36:22,775", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [2. 모델 학습 및 최적화] ---"}
+{"asctime": "2026-01-05 22:36:22,775", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 모델 학습 (Train)"}
+{"asctime": "2026-01-05 22:36:22,775", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. ML 하이퍼파라미터 최적화 (Optuna)"}
+{"asctime": "2026-01-05 22:36:22,776", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. ML 하이퍼파라미터 최적화 (Advanced) [NEW]"}
+{"asctime": "2026-01-05 22:36:22,776", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-05 22:36:22,776", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-05 22:36:24,390", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"3\""}
+{"asctime": "2026-01-05 22:36:24,397", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  [ML Model Hyperparameter Optimization (Advanced)]"}
+{"asctime": "2026-01-05 22:36:24,398", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  - Feature: Scale Pos Weight / Tree Depth / Param Importance"}
+{"asctime": "2026-01-05 22:36:24,398", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "  - Options: (1) Fast Scan (20 trials)  (2) Deep Search (100 trials)"}
+{"asctime": "2026-01-05 22:36:24,399", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 260, "message": "User Prompt: \"Select Mode (1/2):\""}
+{"asctime": "2026-01-05 22:36:26,238", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 268, "message": "User Response: \"2\""}
+{"asctime": "2026-01-05 22:36:26,239", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 184, "message": "============================================================"}
+{"asctime": "2026-01-05 22:36:26,239", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 185, "message": "      <<< ML Model Hyperparameter Optimization >>>"}
+{"asctime": "2026-01-05 22:36:26,240", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 186, "message": "      * Analyzing Scale Pos Weight, Tree Depth, etc."}
+{"asctime": "2026-01-05 22:36:26,240", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 187, "message": "============================================================"}
+{"asctime": "2026-01-05 22:36:26,241", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 192, "message": ">> Running 100 trials..."}
+{"asctime": "2026-01-05 22:36:26,287", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 208, "message": " >> Warm Start Enabled: Enqueueing current settings... (8 params)"}
+{"asctime": "2026-01-05 22:36:26,326", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 42, "message": "[ML-Opt] Loading dataset from: data/proc/ml_dataset\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-05 22:36:29,962", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 55, "message": "[ML-Opt] Data Slice: 2022-06-30 ~ 2025-06-30 (Train: 36m, Gap: 6m)"}
+{"asctime": "2026-01-05 22:36:31,043", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 72, "message": "[ML-Opt] Data Loaded. Shape: (710714, 53), Pos Ratio: 0.1165"}
+{"asctime": "2026-01-05 22:37:57,445", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
+{"asctime": "2026-01-05 22:41:30,376", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 27, "message": "[ML-Opt] Using cached dataset."}
