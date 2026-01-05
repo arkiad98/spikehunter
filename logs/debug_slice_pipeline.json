@@ -1,0 +1,8 @@
+{"asctime": "2026-01-04 20:06:56,340", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/debug_slice_pipeline.json"}
+{"asctime": "2026-01-04 20:06:56,341", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">> Verifying load_data_cached with offset..."}
+{"asctime": "2026-01-04 20:06:56,387", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 42, "message": "[ML-Opt] Loading dataset from: data/proc/ml_dataset\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-04 20:07:00,309", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 55, "message": "[ML-Opt] Data Slice: 2022-06-30 ~ 2025-06-30 (Train: 36m, Gap: 6m)"}
+{"asctime": "2026-01-04 20:07:01,451", "name": "QuantPipeline", "levelname": "INFO", "filename": "optimization_ml.py", "lineno": 72, "message": "[ML-Opt] Data Loaded. Shape: (710714, 53), Pos Ratio: 0.1165"}
+{"asctime": "2026-01-04 20:07:01,456", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "Slice Success! X.shape: (710714, 53), y.shape: (710714,)"}
+{"asctime": "2026-01-04 20:07:01,540", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "X NaNs: 0"}
+{"asctime": "2026-01-04 20:07:01,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "y NaNs: 0"}

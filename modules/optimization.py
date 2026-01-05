@@ -51,16 +51,15 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
         optimize_on = opt_cfg.get("optimize_on", "Sharpe_raw")
         
         if optimize_on == "Hybrid_Stability":
-            # [Refined V2] 안정성 + 리스크 관리 (MDD Constraint)
-            # 승률 30% 이상 AND MDD -20% 방어라는 '이중 안전장치' 적용.
-            # 이를 통과한 파라미터 중에서 수익률(Sharpe)이 가장 높은 것을 선택.
+            # [Refined V2] 안정성 + 리스크 관리 (Fixed MDD Constraint)
+            # 동적 판단(Look-ahead Bias) 대신 고정된 완화값(-30%) 사용
             sharpe = metrics.get('Sharpe_raw', -999.0)
             win_rate = metrics.get('win_rate_raw', 0.0)
-            mdd = metrics.get('MDD_raw', -1.0) # MDD는 보통 음수 (예: -0.5)
+            mdd = metrics.get('MDD_raw', -1.0) 
             
-            # Constraint 1: 승률 < 30% (예측력 부족)
-            # Constraint 2: MDD < -20% (리스크 과다, 예: -0.4 < -0.2 => True)
-            if win_rate < 0.3 or mdd < -0.15:  # [Tightened] MDD -15% 제한으로 강화
+            # Constraint 1: 승률 < 20%
+            # Constraint 2: MDD < -30% (Bear Market 수용 가능한 현실적 하한선)
+            if win_rate < 0.2 or mdd < -0.30:
                 # [Debug] rejection reason logging
                 # logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
                 score = -999.0 # 탈락
@@ -168,6 +167,10 @@ def optimize_strategy_headless(settings_path: str, strategy_name: str,
             df['ml_score'] = 0
     else:
         df['ml_score'] = 0
+
+    # [Constraint] 동적 국면 판단(Adaptive Regime) 제거
+    # 이유: 백테스트 시점(Start~End)의 전체 수익률을 보고 제약을 거는 것은 Look-ahead Bias(미래 편향) 소지 있음
+    # 따라서 고정된 완화값(-30%)을 Objective 함수 내에 하드코딩하여 사용함.
 
     # Execute
     study.optimize(

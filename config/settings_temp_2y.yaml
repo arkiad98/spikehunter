@@ -1,0 +1,3273 @@
+!!python/object/apply:ruamel.yaml.comments.CommentedMap
+dictitems:
+  backtest_defaults: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      default_years: 5
+      initial_cash: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - 10000000.0
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 0
+          _m_sign: false
+          _prec: 8
+          _underscore: null
+          _width: 10
+      min_ml_target_return: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - 0.03
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 2
+          _m_sign: false
+          _prec: 1
+          _underscore: null
+          _width: 4
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          default_years:
+          - 9
+          - 2
+          - 9
+          - 17
+          initial_cash:
+          - 8
+          - 2
+          - 8
+          - 16
+          min_ml_target_return:
+          - 10
+          - 2
+          - 10
+          - 24
+        line: 8
+    - _ok: !!set
+        default_years: null
+        initial_cash: null
+        min_ml_target_return: null
+      _ref: []
+      _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+        state: !!python/tuple
+        - null
+        - _items:
+            min_ml_target_return:
+            - null
+            - null
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: '
+
+
+                  '
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 24
+                    index: 221
+                    line: 10
+                    name: config/settings.yaml
+            - null
+          _post: []
+          _pre: null
+          comment: null
+  fee_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+    args:
+    - 0.0015
+    state:
+      _e_sign: null
+      _e_width: null
+      _exp: null
+      _m_lead0: 3
+      _m_sign: false
+      _prec: 1
+      _underscore: null
+      _width: 6
+  min_avg_value: 1000000000
+  ml_params: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      active_model: lgbm
+      cat_params_classification: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+        dictitems:
+          allow_writing_files: false
+          border_count: 159
+          depth: 6
+          eval_metric: AUC
+          iterations: 795
+          l2_leaf_reg: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 2.3706494739674833
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 0
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          learning_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.020107281929641285
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 2
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 20
+          loss_function: Logloss
+          param_space_cat: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+            dictitems:
+              border_count: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 255
+                  low: 32
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 20
+                    data:
+                      high:
+                      - 117
+                      - 41
+                      - 117
+                      - 47
+                      low:
+                      - 117
+                      - 32
+                      - 117
+                      - 37
+                      type:
+                      - 117
+                      - 21
+                      - 117
+                      - 27
+                    line: 117
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              depth: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 10
+                  low: 4
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 13
+                    data:
+                      high:
+                      - 114
+                      - 33
+                      - 114
+                      - 39
+                      low:
+                      - 114
+                      - 25
+                      - 114
+                      - 30
+                      type:
+                      - 114
+                      - 14
+                      - 114
+                      - 20
+                    line: 114
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              iterations: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 2000
+                  low: 500
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 18
+                    data:
+                      high:
+                      - 115
+                      - 40
+                      - 115
+                      - 46
+                      low:
+                      - 115
+                      - 30
+                      - 115
+                      - 35
+                      type:
+                      - 115
+                      - 19
+                      - 115
+                      - 25
+                    line: 115
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              l2_leaf_reg: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 10.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 2
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 19
+                    data:
+                      high:
+                      - 116
+                      - 43
+                      - 116
+                      - 49
+                      low:
+                      - 116
+                      - 33
+                      - 116
+                      - 38
+                      type:
+                      - 116
+                      - 20
+                      - 116
+                      - 26
+                    line: 116
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              learning_rate: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.2
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  log: true
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.01
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 21
+                    data:
+                      high:
+                      - 113
+                      - 46
+                      - 113
+                      - 52
+                      log:
+                      - 113
+                      - 57
+                      - 113
+                      - 62
+                      low:
+                      - 113
+                      - 35
+                      - 113
+                      - 40
+                      type:
+                      - 113
+                      - 22
+                      - 113
+                      - 28
+                    line: 113
+                - _ok: !!set
+                    high: null
+                    log: null
+                    low: null
+                    type: null
+                  _ref: []
+              random_strength: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 10.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 2
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 23
+                    data:
+                      high:
+                      - 118
+                      - 47
+                      - 118
+                      - 53
+                      low:
+                      - 118
+                      - 37
+                      - 118
+                      - 42
+                      type:
+                      - 118
+                      - 24
+                      - 118
+                      - 30
+                    line: 118
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+            state: !!python/tuple
+            - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                state: !!python/tuple
+                - null
+                - _flow_style: false
+              _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                col: 6
+                data:
+                  border_count:
+                  - 117
+                  - 6
+                  - 117
+                  - 20
+                  depth:
+                  - 114
+                  - 6
+                  - 114
+                  - 13
+                  iterations:
+                  - 115
+                  - 6
+                  - 115
+                  - 18
+                  l2_leaf_reg:
+                  - 116
+                  - 6
+                  - 116
+                  - 19
+                  learning_rate:
+                  - 113
+                  - 6
+                  - 113
+                  - 21
+                  random_strength:
+                  - 118
+                  - 6
+                  - 118
+                  - 23
+                line: 113
+            - _ok: !!set
+                border_count: null
+                depth: null
+                iterations: null
+                l2_leaf_reg: null
+                learning_rate: null
+                random_strength: null
+              _ref: []
+          random_seed: 42
+          random_strength: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.5607904698110447
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          thread_count: 4
+          verbose: !!python/object/new:ruamel.yaml.scalarint.ScalarInt
+            args:
+            - 0
+            state:
+              _underscore: null
+              _width: 1
+        state: !!python/tuple
+        - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+            state: !!python/tuple
+            - null
+            - _flow_style: false
+          _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+            col: 4
+            data:
+              allow_writing_files:
+              - 109
+              - 4
+              - 109
+              - 25
+              border_count:
+              - 119
+              - 4
+              - 119
+              - 18
+              depth:
+              - 102
+              - 4
+              - 102
+              - 11
+              eval_metric:
+              - 105
+              - 4
+              - 105
+              - 17
+              iterations:
+              - 100
+              - 4
+              - 100
+              - 16
+              l2_leaf_reg:
+              - 103
+              - 4
+              - 103
+              - 17
+              learning_rate:
+              - 101
+              - 4
+              - 101
+              - 19
+              loss_function:
+              - 104
+              - 4
+              - 104
+              - 19
+              param_space_cat:
+              - 112
+              - 4
+              - 113
+              - 6
+              random_seed:
+              - 106
+              - 4
+              - 106
+              - 17
+              random_strength:
+              - 120
+              - 4
+              - 120
+              - 21
+              thread_count:
+              - 108
+              - 4
+              - 108
+              - 18
+              verbose:
+              - 107
+              - 4
+              - 107
+              - 13
+            line: 100
+        - _ok: !!set
+            allow_writing_files: null
+            border_count: null
+            depth: null
+            eval_metric: null
+            iterations: null
+            l2_leaf_reg: null
+            learning_rate: null
+            loss_function: null
+            param_space_cat: null
+            random_seed: null
+            random_strength: null
+            thread_count: null
+            verbose: null
+          _ref: []
+          _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+            state: !!python/tuple
+            - null
+            - _items:
+                allow_writing_files:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: "\n\n    # [추가] CatBoost용 파라미터 공간\n"
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 4
+                        index: 3455
+                        line: 111
+                        name: config/settings.yaml
+                - null
+                random_strength:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '
+
+
+                      # 4. 전략 최적화 설정
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 0
+                        index: 3893
+                        line: 122
+                        name: config/settings.yaml
+                - null
+              _post: []
+              _pre: null
+              comment: null
+      classification_threshold: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - 0.21000000000000005
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 1
+          _m_sign: false
+          _prec: 1
+          _underscore: null
+          _width: 19
+      classification_train_months: 36
+      lgbm_params_classification: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+        dictitems:
+          colsample_bytree: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.9125967578720843
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          learning_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.012763748069217377
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 2
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 20
+          max_depth: 17
+          metric: average_precision
+          min_child_samples: 99
+          n_estimators: 540
+          n_jobs: 4
+          num_leaves: 94
+          objective: binary
+          param_space_lgbm: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+            dictitems:
+              colsample_bytree: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.5
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 24
+                    data:
+                      high:
+                      - 66
+                      - 48
+                      - 66
+                      - 54
+                      low:
+                      - 66
+                      - 38
+                      - 66
+                      - 43
+                      type:
+                      - 66
+                      - 25
+                      - 66
+                      - 31
+                    line: 66
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              learning_rate: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.15
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  log: true
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.005
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 3
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 5
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 21
+                    data:
+                      high:
+                      - 61
+                      - 47
+                      - 61
+                      - 53
+                      log:
+                      - 61
+                      - 59
+                      - 61
+                      - 64
+                      low:
+                      - 61
+                      - 35
+                      - 61
+                      - 40
+                      type:
+                      - 61
+                      - 22
+                      - 61
+                      - 28
+                    line: 61
+                - _ok: !!set
+                    high: null
+                    log: null
+                    low: null
+                    type: null
+                  _ref: []
+              max_depth: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 20
+                  low: 4
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 17
+                    data:
+                      high:
+                      - 63
+                      - 37
+                      - 63
+                      - 43
+                      low:
+                      - 63
+                      - 29
+                      - 63
+                      - 34
+                      type:
+                      - 63
+                      - 18
+                      - 63
+                      - 24
+                    line: 63
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              min_child_samples: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 100
+                  low: 10
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 25
+                    data:
+                      high:
+                      - 68
+                      - 46
+                      - 68
+                      - 52
+                      low:
+                      - 68
+                      - 37
+                      - 68
+                      - 42
+                      type:
+                      - 68
+                      - 26
+                      - 68
+                      - 32
+                    line: 68
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              n_estimators: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 3000
+                  low: 300
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 20
+                    data:
+                      high:
+                      - 64
+                      - 42
+                      - 64
+                      - 48
+                      low:
+                      - 64
+                      - 32
+                      - 64
+                      - 37
+                      type:
+                      - 64
+                      - 21
+                      - 64
+                      - 27
+                    line: 64
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              num_leaves: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 200
+                  low: 20
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 18
+                    data:
+                      high:
+                      - 62
+                      - 39
+                      - 62
+                      - 45
+                      low:
+                      - 62
+                      - 30
+                      - 62
+                      - 35
+                      type:
+                      - 62
+                      - 19
+                      - 62
+                      - 25
+                    line: 62
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              scale_pos_weight: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 10.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 2
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 24
+                    data:
+                      high:
+                      - 65
+                      - 48
+                      - 65
+                      - 54
+                      low:
+                      - 65
+                      - 38
+                      - 65
+                      - 43
+                      type:
+                      - 65
+                      - 25
+                      - 65
+                      - 31
+                    line: 65
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              subsample: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.5
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 17
+                    data:
+                      high:
+                      - 67
+                      - 41
+                      - 67
+                      - 47
+                      low:
+                      - 67
+                      - 31
+                      - 67
+                      - 36
+                      type:
+                      - 67
+                      - 18
+                      - 67
+                      - 24
+                    line: 67
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+            state: !!python/tuple
+            - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                state: !!python/tuple
+                - null
+                - _flow_style: false
+              _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                col: 6
+                data:
+                  colsample_bytree:
+                  - 66
+                  - 6
+                  - 66
+                  - 24
+                  learning_rate:
+                  - 61
+                  - 6
+                  - 61
+                  - 21
+                  max_depth:
+                  - 63
+                  - 6
+                  - 63
+                  - 17
+                  min_child_samples:
+                  - 68
+                  - 6
+                  - 68
+                  - 25
+                  n_estimators:
+                  - 64
+                  - 6
+                  - 64
+                  - 20
+                  num_leaves:
+                  - 62
+                  - 6
+                  - 62
+                  - 18
+                  scale_pos_weight:
+                  - 65
+                  - 6
+                  - 65
+                  - 24
+                  subsample:
+                  - 67
+                  - 6
+                  - 67
+                  - 17
+                line: 61
+            - _ok: !!set
+                colsample_bytree: null
+                learning_rate: null
+                max_depth: null
+                min_child_samples: null
+                n_estimators: null
+                num_leaves: null
+                scale_pos_weight: null
+                subsample: null
+              _ref: []
+          scale_pos_weight: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 8.304453082647894
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 0
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 17
+          subsample: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.8480084483844194
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          verbose: -1
+        state: !!python/tuple
+        - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+            state: !!python/tuple
+            - null
+            - _flow_style: false
+          _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+            col: 4
+            data:
+              colsample_bytree:
+              - 54
+              - 4
+              - 54
+              - 22
+              learning_rate:
+              - 51
+              - 4
+              - 51
+              - 19
+              max_depth:
+              - 53
+              - 4
+              - 53
+              - 15
+              metric:
+              - 48
+              - 4
+              - 48
+              - 12
+              min_child_samples:
+              - 69
+              - 4
+              - 69
+              - 23
+              n_estimators:
+              - 50
+              - 4
+              - 50
+              - 18
+              n_jobs:
+              - 56
+              - 4
+              - 56
+              - 12
+              num_leaves:
+              - 52
+              - 4
+              - 52
+              - 16
+              objective:
+              - 47
+              - 4
+              - 47
+              - 15
+              param_space_lgbm:
+              - 60
+              - 4
+              - 61
+              - 6
+              scale_pos_weight:
+              - 49
+              - 4
+              - 49
+              - 22
+              subsample:
+              - 55
+              - 4
+              - 55
+              - 15
+              verbose:
+              - 57
+              - 4
+              - 57
+              - 13
+            line: 47
+        - _ok: !!set
+            colsample_bytree: null
+            learning_rate: null
+            max_depth: null
+            metric: null
+            min_child_samples: null
+            n_estimators: null
+            n_jobs: null
+            num_leaves: null
+            objective: null
+            param_space_lgbm: null
+            scale_pos_weight: null
+            subsample: null
+            verbose: null
+          _ref: []
+          _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+            state: !!python/tuple
+            - null
+            - _items:
+                learning_rate:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [Restored] Low LR
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 40
+                        index: 1494
+                        line: 51
+                        name: config/settings.yaml
+                - null
+                max_depth:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [Restored] Shallow Depth
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 26
+                        index: 1592
+                        line: 53
+                        name: config/settings.yaml
+                - null
+                min_child_samples:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: "\n\n  # [NEW] XGBoost 파라미터\n"
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 2
+                        index: 2249
+                        line: 71
+                        name: config/settings.yaml
+                - null
+                n_estimators:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [Restored] High estimators for low LR
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 26
+                        index: 1414
+                        line: 50
+                        name: config/settings.yaml
+                - null
+                num_leaves:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [Restored] Simple Model
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 26
+                        index: 1540
+                        line: 52
+                        name: config/settings.yaml
+                - null
+                scale_pos_weight:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [Restored] Exact Value
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 40
+                        index: 1363
+                        line: 49
+                        name: config/settings.yaml
+                - null
+                verbose:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: "\n\n    # LightGBM용 파라미터 공간\n"
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 4
+                        index: 1729
+                        line: 59
+                        name: config/settings.yaml
+                - null
+              _post: []
+              _pre: null
+              comment: null
+      regression_sampling_quantile: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - 0.9
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 1
+          _m_sign: false
+          _prec: 1
+          _underscore: null
+          _width: 3
+      stop_loss_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - -0.027337402392375594
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 0
+          _m_sign: '-'
+          _prec: 2
+          _underscore: null
+          _width: 21
+      target_hold_period: 5
+      target_surge_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+        args:
+        - 0.09990738335325917
+        state:
+          _e_sign: null
+          _e_width: null
+          _exp: null
+          _m_lead0: 2
+          _m_sign: false
+          _prec: 1
+          _underscore: null
+          _width: 19
+      xgb_params_classification: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+        dictitems:
+          colsample_bytree: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.8082325218691137
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          eval_metric: logloss
+          gamma: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.19007214421560437
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 19
+          learning_rate: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.012649564995901032
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 2
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 20
+          max_depth: 6
+          min_child_weight: 10
+          n_estimators: 603
+          n_jobs: 4
+          objective: binary:logistic
+          param_space_xgb: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+            dictitems:
+              colsample_bytree: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.6
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 24
+                    data:
+                      high:
+                      - 96
+                      - 48
+                      - 96
+                      - 54
+                      low:
+                      - 96
+                      - 38
+                      - 96
+                      - 43
+                      type:
+                      - 96
+                      - 25
+                      - 96
+                      - 31
+                    line: 96
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              gamma: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.5
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 13
+                    data:
+                      high:
+                      - 94
+                      - 37
+                      - 94
+                      - 43
+                      low:
+                      - 94
+                      - 27
+                      - 94
+                      - 32
+                      type:
+                      - 94
+                      - 14
+                      - 94
+                      - 20
+                    line: 94
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              learning_rate: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.2
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  log: true
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.01
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 21
+                    data:
+                      high:
+                      - 89
+                      - 46
+                      - 89
+                      - 52
+                      log:
+                      - 89
+                      - 57
+                      - 89
+                      - 62
+                      low:
+                      - 89
+                      - 35
+                      - 89
+                      - 40
+                      type:
+                      - 89
+                      - 22
+                      - 89
+                      - 28
+                    line: 89
+                - _ok: !!set
+                    high: null
+                    log: null
+                    low: null
+                    type: null
+                  _ref: []
+              max_depth: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 12
+                  low: 4
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 17
+                    data:
+                      high:
+                      - 90
+                      - 37
+                      - 90
+                      - 43
+                      low:
+                      - 90
+                      - 29
+                      - 90
+                      - 34
+                      type:
+                      - 90
+                      - 18
+                      - 90
+                      - 24
+                    line: 90
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              min_child_weight: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 10
+                  low: 1
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 24
+                    data:
+                      high:
+                      - 93
+                      - 44
+                      - 93
+                      - 50
+                      low:
+                      - 93
+                      - 36
+                      - 93
+                      - 41
+                      type:
+                      - 93
+                      - 25
+                      - 93
+                      - 31
+                    line: 93
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              n_estimators: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: 2000
+                  low: 500
+                  type: int
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 20
+                    data:
+                      high:
+                      - 91
+                      - 42
+                      - 91
+                      - 48
+                      low:
+                      - 91
+                      - 32
+                      - 91
+                      - 37
+                      type:
+                      - 91
+                      - 21
+                      - 91
+                      - 27
+                    line: 91
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              scale_pos_weight: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 4.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 24
+                    data:
+                      high:
+                      - 92
+                      - 48
+                      - 92
+                      - 54
+                      low:
+                      - 92
+                      - 38
+                      - 92
+                      - 43
+                      type:
+                      - 92
+                      - 25
+                      - 92
+                      - 31
+                    line: 92
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              subsample: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 1.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.6
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 17
+                    data:
+                      high:
+                      - 95
+                      - 41
+                      - 95
+                      - 47
+                      low:
+                      - 95
+                      - 31
+                      - 95
+                      - 36
+                      type:
+                      - 95
+                      - 18
+                      - 95
+                      - 24
+                    line: 95
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+            state: !!python/tuple
+            - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                state: !!python/tuple
+                - null
+                - _flow_style: false
+              _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                col: 6
+                data:
+                  colsample_bytree:
+                  - 96
+                  - 6
+                  - 96
+                  - 24
+                  gamma:
+                  - 94
+                  - 6
+                  - 94
+                  - 13
+                  learning_rate:
+                  - 89
+                  - 6
+                  - 89
+                  - 21
+                  max_depth:
+                  - 90
+                  - 6
+                  - 90
+                  - 17
+                  min_child_weight:
+                  - 93
+                  - 6
+                  - 93
+                  - 24
+                  n_estimators:
+                  - 91
+                  - 6
+                  - 91
+                  - 20
+                  scale_pos_weight:
+                  - 92
+                  - 6
+                  - 92
+                  - 24
+                  subsample:
+                  - 95
+                  - 6
+                  - 95
+                  - 17
+                line: 89
+            - _ok: !!set
+                colsample_bytree: null
+                gamma: null
+                learning_rate: null
+                max_depth: null
+                min_child_weight: null
+                n_estimators: null
+                scale_pos_weight: null
+                subsample: null
+              _ref: []
+          random_state: 42
+          scale_pos_weight: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 2.190777004972905
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 0
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 17
+          subsample: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.9790590277960377
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+          tree_method: hist
+        state: !!python/tuple
+        - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+            state: !!python/tuple
+            - null
+            - _flow_style: false
+          _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+            col: 4
+            data:
+              colsample_bytree:
+              - 79
+              - 4
+              - 79
+              - 22
+              eval_metric:
+              - 74
+              - 4
+              - 74
+              - 17
+              gamma:
+              - 85
+              - 4
+              - 85
+              - 11
+              learning_rate:
+              - 76
+              - 4
+              - 76
+              - 19
+              max_depth:
+              - 77
+              - 4
+              - 77
+              - 15
+              min_child_weight:
+              - 84
+              - 4
+              - 84
+              - 22
+              n_estimators:
+              - 75
+              - 4
+              - 75
+              - 18
+              n_jobs:
+              - 81
+              - 4
+              - 81
+              - 12
+              objective:
+              - 73
+              - 4
+              - 73
+              - 15
+              param_space_xgb:
+              - 88
+              - 4
+              - 89
+              - 6
+              random_state:
+              - 82
+              - 4
+              - 82
+              - 18
+              scale_pos_weight:
+              - 80
+              - 4
+              - 80
+              - 22
+              subsample:
+              - 78
+              - 4
+              - 78
+              - 15
+              tree_method:
+              - 83
+              - 4
+              - 83
+              - 17
+            line: 73
+        - _ok: !!set
+            colsample_bytree: null
+            eval_metric: null
+            gamma: null
+            learning_rate: null
+            max_depth: null
+            min_child_weight: null
+            n_estimators: null
+            n_jobs: null
+            objective: null
+            param_space_xgb: null
+            random_state: null
+            scale_pos_weight: null
+            subsample: null
+            tree_method: null
+          _ref: []
+          _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+            state: !!python/tuple
+            - null
+            - _items:
+                gamma:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: "\n\n    # [추가] XGBoost용 파라미터 공간\n"
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 4
+                        index: 2667
+                        line: 87
+                        name: config/settings.yaml
+                - null
+              _post: []
+              _pre: null
+              comment: null
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          active_model:
+          - 42
+          - 2
+          - 42
+          - 16
+          cat_params_classification:
+          - 99
+          - 2
+          - 100
+          - 4
+          classification_threshold:
+          - 39
+          - 2
+          - 39
+          - 28
+          classification_train_months:
+          - 38
+          - 2
+          - 38
+          - 31
+          lgbm_params_classification:
+          - 46
+          - 2
+          - 47
+          - 4
+          regression_sampling_quantile:
+          - 37
+          - 2
+          - 37
+          - 32
+          stop_loss_rate:
+          - 35
+          - 2
+          - 35
+          - 18
+          target_hold_period:
+          - 36
+          - 2
+          - 36
+          - 22
+          target_surge_rate:
+          - 34
+          - 2
+          - 34
+          - 21
+          xgb_params_classification:
+          - 72
+          - 2
+          - 73
+          - 4
+        line: 34
+    - _ok: !!set
+        active_model: null
+        cat_params_classification: null
+        classification_threshold: null
+        classification_train_months: null
+        lgbm_params_classification: null
+        regression_sampling_quantile: null
+        stop_loss_rate: null
+        target_hold_period: null
+        target_surge_rate: null
+        xgb_params_classification: null
+      _ref: []
+      _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+        state: !!python/tuple
+        - null
+        - _items:
+            active_model:
+            - null
+            - null
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: "\n\n  # [복구] 최적화된 하이퍼파라미터 (AP 0.25 / Commit 2258a3f)\n  #\
+                  \ 5차 수정: 과거 Git 기록에서 추출한 Precision-Recall 최적 밸런스 설정 복원\n"
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 0
+                    index: 1134
+                    line: 43
+                    name: config/settings.yaml
+            - null
+            cat_params_classification:
+            - null
+            - - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                state: !!python/tuple
+                - null
+                - _value: '
+
+                    '
+                  end_mark: null
+                  start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                    state: !!python/tuple
+                    - null
+                    - column: 0
+                      index: 3153
+                      line: 97
+                      name: config/settings.yaml
+              - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                state: !!python/tuple
+                - null
+                - _value: '# [NEW] CatBoost 파라미터
+
+                    '
+                  end_mark: null
+                  start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                    state: !!python/tuple
+                    - null
+                    - column: 2
+                      index: 3156
+                      line: 98
+                      name: config/settings.yaml
+            - null
+            - null
+            classification_threshold:
+            - null
+            - null
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: "\n\n  # [복구] 사용자 요청: LightGBM 단일 모델 원복\n"
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 2
+                    index: 1078
+                    line: 41
+                    name: config/settings.yaml
+            - null
+          _post: []
+          _pre: null
+          comment:
+          - null
+          - &id004
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: '# [최적화 결과 반영] Strategy Optimization 최적값 (Sharpe Maximize)
+
+                  '
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 2
+                    index: 732
+                    line: 32
+                    name: config/settings.yaml
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: '# AP는 다소 낮아지더라도(0.19), 개별 거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
+
+                  '
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 2
+                    index: 792
+                    line: 33
+                    name: config/settings.yaml
+  optimization: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      SpikeHunter_R1_BullStable: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+        dictitems:
+          n_trials: 100
+          optimize_on: Hybrid_Stability
+          param_space: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+            dictitems:
+              max_market_vol: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.04
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.015
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 5
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 22
+                    data:
+                      high:
+                      - 131
+                      - 48
+                      - 131
+                      - 54
+                      low:
+                      - 131
+                      - 36
+                      - 131
+                      - 41
+                      type:
+                      - 131
+                      - 23
+                      - 131
+                      - 29
+                    line: 131
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              min_mfi: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 60.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 2
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 40.0
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: false
+                      _prec: 2
+                      _underscore: null
+                      _width: 4
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 15
+                    data:
+                      high:
+                      - 133
+                      - 40
+                      - 133
+                      - 46
+                      low:
+                      - 133
+                      - 29
+                      - 133
+                      - 34
+                      type:
+                      - 133
+                      - 16
+                      - 133
+                      - 22
+                    line: 133
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+              min_ml_score: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.6
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.2
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 20
+                    data:
+                      high:
+                      - 130
+                      - 45
+                      - 130
+                      - 51
+                      low:
+                      - 130
+                      - 34
+                      - 130
+                      - 39
+                      type:
+                      - 130
+                      - 21
+                      - 130
+                      - 27
+                    line: 130
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+                  _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+                    state: !!python/tuple
+                    - null
+                    - _items: {}
+                      _post: []
+                      _pre: null
+                      comment:
+                      - &id001 !!python/object/new:ruamel.yaml.tokens.CommentToken
+                        state: !!python/tuple
+                        - null
+                        - _value: '# [Correction] User reported scores > 0.50, expanded
+                            range
+
+                            '
+                          end_mark: null
+                          start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                            state: !!python/tuple
+                            - null
+                            - column: 57
+                              index: 4279
+                              line: 130
+                              name: config/settings.yaml
+                      - null
+              stop_r: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - -0.025
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: '-'
+                      _prec: 2
+                      _underscore: null
+                      _width: 6
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - -0.05
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 0
+                      _m_sign: '-'
+                      _prec: 2
+                      _underscore: null
+                      _width: 5
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 14
+                    data:
+                      high:
+                      - 129
+                      - 40
+                      - 129
+                      - 46
+                      low:
+                      - 129
+                      - 28
+                      - 129
+                      - 33
+                      type:
+                      - 129
+                      - 15
+                      - 129
+                      - 21
+                    line: 129
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+                  _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+                    state: !!python/tuple
+                    - null
+                    - _items: {}
+                      _post: []
+                      _pre: null
+                      comment:
+                      - &id002 !!python/object/new:ruamel.yaml.tokens.CommentToken
+                        state: !!python/tuple
+                        - null
+                        - _value: '# [Refined] WFO Optimized Range (Include -4~-5%)
+
+                            '
+                          end_mark: null
+                          start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                            state: !!python/tuple
+                            - null
+                            - column: 54
+                              index: 4173
+                              line: 129
+                              name: config/settings.yaml
+                      - null
+              target_r: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.1
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.06
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 2
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 4
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 16
+                    data:
+                      high:
+                      - 128
+                      - 41
+                      - 128
+                      - 47
+                      low:
+                      - 128
+                      - 30
+                      - 128
+                      - 35
+                      type:
+                      - 128
+                      - 17
+                      - 128
+                      - 23
+                    line: 128
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+                  _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+                    state: !!python/tuple
+                    - null
+                    - _items: {}
+                      _post: []
+                      _pre: null
+                      comment:
+                      - &id003 !!python/object/new:ruamel.yaml.tokens.CommentToken
+                        state: !!python/tuple
+                        - null
+                        - _value: '# [Refined] WFO Optimized Range (Center 8-9%)
+
+                            '
+                          end_mark: null
+                          start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                            state: !!python/tuple
+                            - null
+                            - column: 53
+                              index: 4073
+                              line: 128
+                              name: config/settings.yaml
+                      - null
+              vbo_k: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+                dictitems:
+                  high: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.7
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  low: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+                    args:
+                    - 0.3
+                    state:
+                      _e_sign: null
+                      _e_width: null
+                      _exp: null
+                      _m_lead0: 1
+                      _m_sign: false
+                      _prec: 1
+                      _underscore: null
+                      _width: 3
+                  type: float
+                state: !!python/tuple
+                - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                    state: !!python/tuple
+                    - null
+                    - _flow_style: true
+                  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                    col: 13
+                    data:
+                      high:
+                      - 132
+                      - 37
+                      - 132
+                      - 43
+                      low:
+                      - 132
+                      - 27
+                      - 132
+                      - 32
+                      type:
+                      - 132
+                      - 14
+                      - 132
+                      - 20
+                    line: 132
+                - _ok: !!set
+                    high: null
+                    low: null
+                    type: null
+                  _ref: []
+            state: !!python/tuple
+            - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+                state: !!python/tuple
+                - null
+                - _flow_style: false
+              _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+                col: 6
+                data:
+                  max_market_vol:
+                  - 131
+                  - 6
+                  - 131
+                  - 22
+                  min_mfi:
+                  - 133
+                  - 6
+                  - 133
+                  - 15
+                  min_ml_score:
+                  - 130
+                  - 6
+                  - 130
+                  - 20
+                  stop_r:
+                  - 129
+                  - 6
+                  - 129
+                  - 14
+                  target_r:
+                  - 128
+                  - 6
+                  - 128
+                  - 16
+                  vbo_k:
+                  - 132
+                  - 6
+                  - 132
+                  - 13
+                line: 128
+            - _ok: !!set
+                max_market_vol: null
+                min_mfi: null
+                min_ml_score: null
+                stop_r: null
+                target_r: null
+                vbo_k: null
+              _ref: []
+              _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+                state: !!python/tuple
+                - null
+                - _items:
+                    min_ml_score:
+                    - null
+                    - null
+                    - *id001
+                    - null
+                    stop_r:
+                    - null
+                    - null
+                    - *id002
+                    - null
+                    target_r:
+                    - null
+                    - null
+                    - *id003
+                    - null
+                  _post: []
+                  _pre: null
+                  comment: null
+        state: !!python/tuple
+        - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+            state: !!python/tuple
+            - null
+            - _flow_style: false
+          _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+            col: 4
+            data:
+              n_trials:
+              - 126
+              - 4
+              - 126
+              - 14
+              optimize_on:
+              - 125
+              - 4
+              - 125
+              - 17
+              param_space:
+              - 127
+              - 4
+              - 128
+              - 6
+            line: 125
+        - _ok: !!set
+            n_trials: null
+            optimize_on: null
+            param_space: null
+          _ref: []
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          SpikeHunter_R1_BullStable:
+          - 124
+          - 2
+          - 125
+          - 4
+        line: 124
+    - _ok: !!set
+        SpikeHunter_R1_BullStable: null
+      _ref: []
+  paths: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      backtest: data/proc/backtest
+      cache: data/cache
+      features: data/proc/features
+      merged: d:/spikehunter/data/proc/merged
+      meta: data/meta
+      ml_dataset: data/proc/ml_dataset
+      models: data/models
+      predictions: data/proc/predictions
+      raw_fundflow: d:/spikehunter/data/raw/fundflow
+      raw_index: d:/spikehunter/data/raw/index
+      raw_prices: d:/spikehunter/data/raw/prices
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          backtest:
+          - 23
+          - 2
+          - 23
+          - 12
+          cache:
+          - 28
+          - 2
+          - 28
+          - 9
+          features:
+          - 22
+          - 2
+          - 22
+          - 12
+          merged:
+          - 21
+          - 2
+          - 21
+          - 10
+          meta:
+          - 27
+          - 2
+          - 27
+          - 8
+          ml_dataset:
+          - 25
+          - 2
+          - 25
+          - 14
+          models:
+          - 26
+          - 2
+          - 26
+          - 10
+          predictions:
+          - 24
+          - 2
+          - 24
+          - 15
+          raw_fundflow:
+          - 19
+          - 2
+          - 19
+          - 16
+          raw_index:
+          - 20
+          - 2
+          - 20
+          - 13
+          raw_prices:
+          - 18
+          - 2
+          - 18
+          - 14
+        line: 18
+    - _ok: !!set
+        backtest: null
+        cache: null
+        features: null
+        merged: null
+        meta: null
+        ml_dataset: null
+        models: null
+        predictions: null
+        raw_fundflow: null
+        raw_index: null
+        raw_prices: null
+      _ref: []
+      _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+        state: !!python/tuple
+        - null
+        - _items:
+            cache:
+            - null
+            - null
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: '
+
+
+                  # 2. 머신러닝 파라미터 (이 부분이 중요!)
+
+                  '
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 0
+                    index: 692
+                    line: 30
+                    name: config/settings.yaml
+            - null
+          _post: []
+          _pre: null
+          comment: null
+  strategies: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      SpikeHunter_R1_BullStable: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+        dictitems:
+          max_hold: 5
+          max_market_vol: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.03024315171837781
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 2
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 19
+          min_mfi: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 46.79727604441189
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 0
+              _m_sign: false
+              _prec: 2
+              _underscore: null
+              _width: 17
+          min_ml_score: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.21000000000000005
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 19
+          min_obv_slope: !!python/object/new:ruamel.yaml.scalarint.ScalarInt
+            args:
+            - 0
+            state:
+              _underscore: null
+              _width: 1
+          name: SpikeHunter_R1_BullStable
+          stop_r: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - -0.027337402392375594
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 0
+              _m_sign: '-'
+              _prec: 2
+              _underscore: null
+              _width: 21
+          target_r: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.09990738335325917
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 2
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 19
+          top_n: 5
+          vbo_k: !!python/object/new:ruamel.yaml.scalarfloat.ScalarFloat
+            args:
+            - 0.5417664494167612
+            state:
+              _e_sign: null
+              _e_width: null
+              _exp: null
+              _m_lead0: 1
+              _m_sign: false
+              _prec: 1
+              _underscore: null
+              _width: 18
+        state: !!python/tuple
+        - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+            state: !!python/tuple
+            - null
+            - _flow_style: false
+          _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+            col: 4
+            data:
+              max_hold:
+              - 141
+              - 4
+              - 141
+              - 14
+              max_market_vol:
+              - 144
+              - 4
+              - 144
+              - 20
+              min_mfi:
+              - 145
+              - 4
+              - 145
+              - 13
+              min_ml_score:
+              - 142
+              - 4
+              - 142
+              - 18
+              min_obv_slope:
+              - 146
+              - 4
+              - 146
+              - 19
+              name:
+              - 138
+              - 4
+              - 138
+              - 10
+              stop_r:
+              - 140
+              - 4
+              - 140
+              - 12
+              target_r:
+              - 139
+              - 4
+              - 139
+              - 14
+              top_n:
+              - 147
+              - 4
+              - 147
+              - 11
+              vbo_k:
+              - 143
+              - 4
+              - 143
+              - 11
+            line: 138
+        - _ok: !!set
+            max_hold: null
+            max_market_vol: null
+            min_mfi: null
+            min_ml_score: null
+            min_obv_slope: null
+            name: null
+            stop_r: null
+            target_r: null
+            top_n: null
+            vbo_k: null
+          _ref: []
+          _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+            state: !!python/tuple
+            - null
+            - _items:
+                min_ml_score:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [수정] 무난한 시작값
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 38
+                        index: 4741
+                        line: 142
+                        name: config/settings.yaml
+                - null
+                stop_r:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [수정] 하한 -5%
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 34
+                        index: 4673
+                        line: 140
+                        name: config/settings.yaml
+                - null
+                target_r:
+                - null
+                - null
+                - !!python/object/new:ruamel.yaml.tokens.CommentToken
+                  state: !!python/tuple
+                  - null
+                  - _value: '# [수정] 예측력 우선 초기값
+
+                      '
+                    end_mark: null
+                    start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                      state: !!python/tuple
+                      - null
+                      - column: 34
+                        index: 4621
+                        line: 139
+                        name: config/settings.yaml
+                - null
+              _post: []
+              _pre: null
+              comment: null
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          SpikeHunter_R1_BullStable:
+          - 137
+          - 2
+          - 138
+          - 4
+        line: 137
+    - _ok: !!set
+        SpikeHunter_R1_BullStable: null
+      _ref: []
+  top_n: 5
+  walk_forward: !!python/object/apply:ruamel.yaml.comments.CommentedMap
+    dictitems:
+      test_months: 6
+      total_start_date: '2020-01-01'
+      train_months: 24
+    state: !!python/tuple
+    - _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+        state: !!python/tuple
+        - null
+        - _flow_style: false
+      _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+        col: 2
+        data:
+          test_months:
+          - 15
+          - 2
+          - 15
+          - 15
+          total_start_date:
+          - 13
+          - 2
+          - 13
+          - 20
+          train_months:
+          - 14
+          - 2
+          - 14
+          - 16
+        line: 13
+    - _ok: !!set
+        test_months: null
+        total_start_date: null
+        train_months: null
+      _ref: []
+      _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+        state: !!python/tuple
+        - null
+        - _items:
+            test_months:
+            - null
+            - null
+            - !!python/object/new:ruamel.yaml.tokens.CommentToken
+              state: !!python/tuple
+              - null
+              - _value: '
+
+
+                  '
+                end_mark: null
+                start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                  state: !!python/tuple
+                  - null
+                  - column: 15
+                    index: 308
+                    line: 15
+                    name: config/settings.yaml
+            - null
+          _post: []
+          _pre: null
+          comment: null
+state: !!python/tuple
+- _yaml_format: !!python/object/new:ruamel.yaml.comments.Format
+    state: !!python/tuple
+    - null
+    - _flow_style: false
+  _yaml_line_col: !!python/object:ruamel.yaml.comments.LineCol
+    col: 0
+    data:
+      backtest_defaults:
+      - 7
+      - 0
+      - 8
+      - 2
+      fee_rate:
+      - 5
+      - 0
+      - 5
+      - 10
+      min_avg_value:
+      - 4
+      - 0
+      - 4
+      - 15
+      ml_params:
+      - 31
+      - 0
+      - 34
+      - 2
+      optimization:
+      - 123
+      - 0
+      - 124
+      - 2
+      paths:
+      - 17
+      - 0
+      - 18
+      - 2
+      strategies:
+      - 136
+      - 0
+      - 137
+      - 2
+      top_n:
+      - 3
+      - 0
+      - 3
+      - 7
+      walk_forward:
+      - 12
+      - 0
+      - 13
+      - 2
+    line: 3
+- _ok: !!set
+    backtest_defaults: null
+    fee_rate: null
+    min_avg_value: null
+    ml_params: null
+    optimization: null
+    paths: null
+    strategies: null
+    top_n: null
+    walk_forward: null
+  _ref: []
+  _yaml_comment: !!python/object/new:ruamel.yaml.comments.Comment
+    state: !!python/tuple
+    - null
+    - _items:
+        fee_rate:
+        - null
+        - null
+        - !!python/object/new:ruamel.yaml.tokens.CommentToken
+          state: !!python/tuple
+          - null
+          - _value: '
+
+
+              '
+            end_mark: null
+            start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+              state: !!python/tuple
+              - null
+              - column: 10
+                index: 124
+                line: 5
+                name: config/settings.yaml
+        - null
+        ml_params:
+        - null
+        - null
+        - null
+        - *id004
+        strategies:
+        - null
+        - - !!python/object/new:ruamel.yaml.tokens.CommentToken
+            state: !!python/tuple
+            - null
+            - _value: '
+
+                '
+              end_mark: null
+              start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                state: !!python/tuple
+                - null
+                - column: 0
+                  index: 4498
+                  line: 134
+                  name: config/settings.yaml
+          - !!python/object/new:ruamel.yaml.tokens.CommentToken
+            state: !!python/tuple
+            - null
+            - _value: '# 5. 전략 설정
+
+                '
+              end_mark: null
+              start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+                state: !!python/tuple
+                - null
+                - column: 0
+                  index: 4499
+                  line: 135
+                  name: config/settings.yaml
+        - null
+        - null
+      _post: []
+      _pre: null
+      comment:
+      - null
+      - - !!python/object/new:ruamel.yaml.tokens.CommentToken
+          state: !!python/tuple
+          - null
+          - _value: '# config/settings.yaml (Restore Point: AP 0.18 Version + CatBoost)
+
+
+              '
+            end_mark: null
+            start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+              state: !!python/tuple
+              - null
+              - column: 0
+                index: 0
+                line: 0
+                name: config/settings.yaml
+        - !!python/object/new:ruamel.yaml.tokens.CommentToken
+          state: !!python/tuple
+          - null
+          - _value: '# 1. 기본 설정
+
+              '
+            end_mark: null
+            start_mark: !!python/object/new:ruamel.yaml.error.FileMark
+              state: !!python/tuple
+              - null
+              - column: 0
+                index: 68
+                line: 2
+                name: config/settings.yaml
