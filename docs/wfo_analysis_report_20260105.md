@@ -1,54 +1,54 @@
-# WFO Performance Analysis & Fix Report (2026-01-05)
+# WFO 성능 분석 및 수정 보고서 (2026-01-05)
 
-## 1. Issue Summary
-- **Observation:** 
-  - Global Model (Menu 3-1): **CAGR 6374%** (Recent period)
-  - Walk-Forward Optimization (Menu 3-3): **CAGR -0.27% ~ -4.0%** (Same recent period)
-- **Problem:** Significant performance discrepancy between the global "Sniper" model and the rolling WFO validation, despite covering similar recent timelines.
+## 1. 문제 요약
+- **관찰 내용:**
+  - 전역 모델 (Menu 3-1): **연평균 수익률(CAGR) 6374%** (최근 구간)
+  - 전진 분석 (WFO, Menu 3-3): **CAGR -0.27% ~ -4.0%** (동일한 최근 구간)
+- **문제점:** 비슷한 최근 기간을 다루고 있음에도 불구하고, 전역 "스나이퍼" 모델과 롤링 WFO 검증 간에 심각한 성능 차이가 발생함.
 
-## 2. Root Cause Analysis
+## 2. 원인 분석
 
-### A. The "Double Offset" Bug (Critical Logic Error)
-- **Mechanism:** 
-  - WFO logic correctly slices data up to the training end date (e.g., `2025-06-30`).
-  - However, `train.py` (and `settings.yaml`) had `classification_train_end_offset: 6` enabled.
-  - This caused the training module to **remove an additional 6 months** from the already sliced data.
-- **Impact:** 
-  - The model for the Period 8 test (2025.07 ~ 2025.12) was effectively trained only up to `2024.12.31`, missing the entire `2025.01 ~ 2025.06` bull run.
-  - **Correction:** Modified `run_pipeline.py` to force `classification_train_end_offset = 0` during WFO execution.
+### A. "이중 오프셋(Double Offset)" 버그 (치명적 논리 오류)
+- **발생 메커니즘:**
+  - WFO 로직은 훈련 종료일(예: `2025-06-30`)에 맞춰 데이터를 정확하게 잘라서 전달함.
+  - 그러나 `train.py` (및 `settings.yaml`) 내부 설정에 `classification_train_end_offset: 6` (6개월 갭)이 활성화되어 있었음.
+  - 이로 인해 학습 모듈이 이미 잘린 데이터에서 **추가로 6개월을 더 제외**하는 현상이 발생함.
+- **영향:**
+  - Period 8 테스트(2025.07 ~ 2025.12)를 위한 모델이 실제로는 `2024.12.31`까지만 학습하게 되어, `2025.01 ~ 2025.06`의 결정적인 상승장 데이터를 완전히 놓침.
+  - **수정:** WFO 실행 시 `run_pipeline.py`에서 강제로 `classification_train_end_offset = 0`으로 설정하도록 수정함.
 
-### B. Model Specialization vs. Generalization
-- **Global Model (Sniper):**
-  - Settings: `scale_pos_weight: 1.0` (Precision-focused).
-  - Context: Trained on the full recent history (including the bull run).
-  - Result: Extremely high precision for the current market regime.
-- **WFO (Generalist):**
-  - Settings: Same `scale_pos_weight: 1.0`.
-  - Context: Trained on historical windows (e.g., 2022-2023 Bear Market).
-  - Result: The "Precision-focused" setting was too strict for volatile/bearish past regimes. The model failed to identify enough trade signals during training, resulting in underfitted models that performed poorly in testing.
+### B. 모델의 전문화(Specialization) vs 일반화(Generalization)
+- **전역 모델 (스나이퍼):**
+  - 설정: `scale_pos_weight: 1.0` (정밀도/Precision 중심).
+  - 맥락: 최근 상승장을 포함한 전체 데이터를 통째로 학습함.
+  - 결과: 현재 시장 체제(Regime)에 대해 극도로 높은 적중률을 보임.
+- **WFO (제너럴리스트):**
+  - 설정: 동일한 `scale_pos_weight: 1.0`.
+  - 맥락: 과거의 특정 구간(예: 2022-2023 하락장)을 시뮬레이션하며 학습함.
+  - 결과: "정밀도 중심" 설정은 변동성이 크거나 하락세인 과거 시장에서는 너무 엄격했음. 모델이 학습 과정에서 충분한 매매 신호를 포착하지 못해 과소적합(Underfitting)되었고, 테스트 성능 저하로 이어짐.
 
-## 3. Applied Solutions
+## 3. 적용된 해결책
 
-### A. Code Fix
-- **File:** `run_pipeline.py`
-- **Fix:** In WFO mode, explicitly override the offset parameter:
+### A. 코드 수정 (데이터 정합성 확보)
+- **파일:** `run_pipeline.py`
+- **수정 내용:** WFO 모드 진입 시 오프셋 파라미터를 강제로 덮어씌움:
 ```python
 train_cfg['ml_params']['classification_train_end_offset'] = 0
 ```
-- **Effect:** Ensures WFO models utilize the full training window provided, up to the day before the test period starts.
+- **효과:** WFO 모델이 테스트 시작 직전일까지의 모든 가용 데이터를 온전히 학습에 활용하도록 보장함.
 
-### B. Parameter Restoration (Balanced Model)
-- **User Decision:** Restore historical optimal parameters that provided better balance (Recall vs Precision).
-- **Restored Settings (`settings.yaml`):**
-  - `scale_pos_weight`: **8.3044** (Shift from Precision 1.0 -> Balance/Recall ~8.3)
+### B. 파라미터 복원 (균형 잡힌 모델)
+- **사용자 결정:** 과거에 균형 잡힌 성능(Recall vs Precision)을 보여주었던 최적 파라미터로 복원.
+- **복원된 설정 (`settings.yaml`):**
+  - `scale_pos_weight`: **8.3044** (정밀도 1.0 -> 균형/재현율 ~8.3로 변경)
   - `n_estimators`: **540**
   - `learning_rate`: **0.01276**
   - `num_leaves`: **94**
   - `max_depth`: **17**
   - `colsample_bytree`: **0.9126**
   - `subsample`: **0.8480**
-- **Expected Outcome:** 
-  - The higher `scale_pos_weight` (Recall-focused) ensures the model remains robust and identifiable across various WFO periods (including past bear markets), preventing the "silence" observed with the strict setting.
+- **기대 효과:**
+  - `scale_pos_weight`를 높임으로써(재현율 중심), 모델이 다양한 WFO 구간(과거 하락장 포함)에서도 침묵하지 않고 매매 기회를 식별할 수 있게 됨. 이를 통해 WFO의 강건성(Robustness)이 향상될 것임.
 
-## 4. Conclusion
-The system has been updated to combine **correct data logic** (Double-Offset fix) with **robust historical parameters** (Balanced LGBM). This configuration is expected to bridge the gap between backtest reliability and real-world performance robustness.
+## 4. 결론
+현재 시스템은 **올바른 데이터 로직**(이중 오프셋 수정)과 **검증된 과거 파라미터**(균형 잡힌 LGBM 설정)가 결합된 상태임. 이 구성은 백테스트의 신뢰성과 실전 성과 사이의 간극을 줄이고, 다양한 시장 상황에서 안정적인 성과를 낼 것으로 기대됨.
