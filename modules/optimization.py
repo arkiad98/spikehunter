@@ -61,7 +61,7 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             # Constraint 2: MDD < -30% (Bear Market 수용 가능한 현실적 하한선)
             if win_rate < 0.2 or mdd < -0.30:
                 # [Debug] rejection reason logging
-                # logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
+                logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
                 score = -999.0 # 탈락
             else:
                 # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
@@ -76,13 +76,13 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
         # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지, WFO 안정성 위해 완화)
         if metrics.get('총거래횟수', 0) < 3:
             # [Debug] rejection reason
-            # logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
+            logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
             return -999.0
             
         return score
         
     except Exception as e:
-        # logger.warning(f"Trial {trial.number} failed: {e}")
+        logger.warning(f"Trial {trial.number} failed: {e}")
         return -999.0
 
 def optimize_strategy_headless(settings_path: str, strategy_name: str, 

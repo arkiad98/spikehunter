@@ -98,7 +98,13 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
         stop_r = param_overrides.get('stop_r', stop_r)
         max_hold = param_overrides.get('max_hold', max_hold)
         threshold = param_overrides.get('min_ml_score', threshold) # Map min_ml_score to threshold
-    
+        
+        # [New] Add Volatility Filter
+        max_market_vol = param_overrides.get('max_market_vol', 1.0) # Default open if not specified
+    else:
+        # If no override, try to get from strategy config (or default loose)
+        max_market_vol = cfg.get('strategies', {}).get(strategy_name, {}).get('max_market_vol', 1.0)
+
     # Load Model (Lazy Load)
     # [Optimization Speedup] Skip loading model if ml_score is already pre-calculated
     is_opt_mode = preloaded_features is not None
@@ -139,11 +145,9 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     if all_features.empty: return None
 
     # [NEW] Apply Date-Specific Exclusion
-    # [NEW] Apply Date-Specific Exclusion
     if not skip_exclusion:
         exclude_path = os.path.join(os.path.dirname(settings_path) if settings_path else "config", "exclude_dates.yaml")
         if os.path.exists(exclude_path):
-            # from modules.utils_io import read_yaml # [Removed] Shadowing fix
             ex_cfg = read_yaml(exclude_path)
             exclusions = ex_cfg.get('exclusions', [])
             
@@ -219,6 +223,14 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     for date in iterator:
         today_data = all_features[all_features['date'] == date].set_index('code')
         
+        # [New] Global Market Volatility Check (Before Sell/Buy)
+        # Assuming all rows for 'date' have same market_volatility. Take the first one.
+        is_volatile = False
+        if 'market_volatility' in today_data.columns:
+            current_vol = today_data['market_volatility'].iloc[0]
+            if pd.notna(current_vol) and current_vol > max_market_vol:
+                is_volatile = True
+        
         # --- Sell Logic ---
         sold_codes = []
         for code, pos in portfolio.items():
@@ -236,7 +248,6 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
             target_price = pos['entry_price'] * (1 + target_r)
             stop_price = pos['entry_price'] * (1 + stop_r)
             
-            # Gap Check
             # Gap Check
             if open_p >= target_price:
                 exit_price = open_p
@@ -272,26 +283,32 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
             del portfolio[code]
             
         # --- Buy Logic (T Close) ---
-        candidates = today_data[today_data['ml_score'] >= threshold].sort_values('ml_score', ascending=False)
-        
-        available_slots = top_n - len(portfolio)
-        if available_slots > 0 and not candidates.empty:
-            slot_cash = cash / available_slots if available_slots > 0 else 0
+        # [New] Skip buying if market is too volatile
+        if is_volatile:
+            # We still record equity (cash + held stocks) but do NOT open new positions
+            pass
+        else:
+            candidates = today_data[today_data['ml_score'] >= threshold].sort_values('ml_score', ascending=False)
             
-            for code, row in candidates.iterrows():
-                if available_slots <= 0: break
-                if code in portfolio: continue
+            available_slots = top_n - len(portfolio)
+            if available_slots > 0 and not candidates.empty:
+                slot_cash = cash / available_slots if available_slots > 0 else 0
                 
-                price = row['close']
-                if price <= 0: continue
-                
-                shares = int(slot_cash // price)
-                if shares > 0:
-                    cost = shares * price * (1 + fee)
-                    if cash >= cost:
-                        cash -= cost
-                        portfolio[code] = {'entry_price': price, 'shares': shares, 'entry_date': date}
-                        available_slots -= 1
+                for code, row in candidates.iterrows():
+                    if available_slots <= 0: break
+                    if code in portfolio: continue
+                    
+                    price = row['close']
+                    if price <= 0: continue
+                    
+                    shares = int(slot_cash // price)
+                    if shares > 0:
+                        cost = shares * price * (1 + fee)
+                        if cash >= cost:
+                            cash -= cost
+                            portfolio[code] = {'entry_price': price, 'shares': shares, 'entry_date': date}
+                            available_slots -= 1
+
         
         # --- Equity Calculation ---
         current_equity = cash
