@@ -6,6 +6,7 @@ from ruamel.yaml import YAML
 
 from modules.utils_logger import logger
 from modules.utils_io import read_yaml, update_yaml, get_user_input
+from modules.utils_system import get_optimal_cpu_count # [New]
 from modules.backtest import run_backtest
 
 def objective(trial, settings_path, strategy_name, start_date, end_date, preloaded_features=None):
@@ -192,11 +193,15 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     logger.info("="*60)
     
     # 사용자 입력으로 병렬 작업 수 설정
-    n_jobs_input = get_user_input("병렬 작업 수(n_jobs)를 입력하세요 (엔터: 1, -1: 전체): ")
+    # Strategy Backtest is single-core, so we parallelize TRIALS.
+    # Default: Use 75% of Cores.
+    default_jobs = get_optimal_cpu_count(0.75)
+    
+    n_jobs_input = get_user_input(f"병렬 작업 수(n_jobs) (엔터: {default_jobs} [75%], -1: 전체): ")
     try:
-        n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
+        n_jobs = int(n_jobs_input) if n_jobs_input.strip() else default_jobs
     except ValueError:
-        n_jobs = 1
+        n_jobs = default_jobs
         
     logger.info(f" >> 설정: n_jobs={n_jobs}")
     

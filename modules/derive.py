@@ -98,6 +98,10 @@ def run_derive(settings_path="config/settings.yaml"):
         # 시장 데이터 결측치는 전날 값으로 채움
         df_features['market_bullish'] = df_features['market_bullish'].fillna(method='ffill').fillna(0)
         df_features['market_volatility'] = df_features['market_volatility'].fillna(method='ffill').fillna(0)
+    else:
+        logger.warning("KOSPI 데이터 없음: 시장 피처를 0(기본값)으로 설정합니다.")
+        df_features['market_bullish'] = 0
+        df_features['market_volatility'] = 0
 
     # 7. [NEW] Cross-Sectional Rank 피처 생성
     logger.info("[Derive] 시장 대비 순위(Rank) 피처 생성 중...")

@@ -25,6 +25,7 @@ from sklearn.metrics import (roc_auc_score, f1_score, precision_score, recall_sc
 
 from .utils_io import read_yaml, optimize_memory_usage, get_user_input, update_yaml
 from .utils_logger import logger
+from .utils_system import get_optimal_cpu_count # [New] CPU Utility
 from .derive import _get_feature_cols
 
 # 앙상블 클래스 임포트
@@ -380,14 +381,29 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
     
     # 병렬 설정
     if n_jobs is None:
-        n_jobs_input = get_user_input("병렬 작업 수(n_jobs) (엔터: 1, -1: 전체): ")
+        # User explicitly requested 75% logic for optimization
+        # ML Optimization: Trials are heavy (Training), so run trials serially (Optuna=1)
+        # but allocate High CPU to the model (Model=75%)
+        # But wait, user input prompt was asking for n_jobs. 
+        # Let's change default behavior: if no arg provided, assume optimized default.
+        
+        # Ask user but default to 1 (Serial Optuna) to allow Model parallelism
+        n_jobs_input = get_user_input("병렬 작업 수(Optuna Trials) (엔터: 1 [권장], -1: 전체): ")
         try:
             optuna_n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
         except: optuna_n_jobs = 1
     else:
         optuna_n_jobs = n_jobs
 
-    model_n_jobs = 1 if optuna_n_jobs != 1 else -1
+    # Model Parallelism Calculation
+    if optuna_n_jobs == 1:
+        # Serial Trials -> Maximize Model Parallelism (75% of Cores)
+        model_n_jobs = get_optimal_cpu_count(0.75)
+        logger.info(f" >> [CPU] Serial Optimization Mode: Model n_jobs set to {model_n_jobs} (75% Cores)")
+    else:
+        # Parallel Trials -> Minimize Model Parallelism to avoid congestion
+        model_n_jobs = 1
+        logger.info(f" >> [CPU] Parallel Optimization Mode: Model n_jobs set to 1")
     
     cfg = read_yaml(settings_path)
     

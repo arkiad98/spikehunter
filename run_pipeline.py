@@ -7,6 +7,15 @@
 
 import os
 import sys
+import os
+import sys
+# [Fix] Apply Pykrx Patch (PR #249)
+try:
+    from modules.patch_pykrx import patch_pykrx_referer
+    patch_pykrx_referer()
+except ImportError:
+    pass
+
 import argparse
 import glob
 import copy
