@@ -228,8 +228,14 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
         logger.error(f"데이터셋이 없습니다: {dataset_path}")
         return
 
-    df = pd.read_parquet(dataset_path)
-    df['date'] = pd.to_datetime(df['date'])
+    try:
+        df = pd.read_parquet(dataset_path)
+        df['date'] = pd.to_datetime(df['date'])
+    except Exception as e:
+        logger.error(f"데이터셋 파일을 읽을 수 없습니다 (손상됨): {dataset_path}")
+        logger.error(f"오류 내용: {e}")
+        logger.info(">> 해결 방법: 메인 메뉴 '1. 데이터 관리' -> '2. 피처 생성 (Derive)'를 실행하여 데이터셋을 재생성해주세요.")
+        return
     
     # 컬럼명 통일 (안전장치)
     rename_map = {

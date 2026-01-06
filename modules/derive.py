@@ -39,8 +39,9 @@ def run_derive(settings_path="config/settings.yaml"):
     ml_params = cfg.get('ml_params', {})
     
     # 2. 기간 설정
+    today_str = pd.Timestamp.now().strftime('%Y-%m-%d')
     start_date = to_date(cfg.get('data_range', {}).get('start', '2020-01-01'))
-    end_date = to_date(cfg.get('data_range', {}).get('end', '2025-12-31'))
+    end_date = to_date(cfg.get('data_range', {}).get('end', today_str))
     
     logger.info(f"[Derive] 데이터 로드 시작: {start_date.date()} ~ {end_date.date()}")
     

@@ -73,3 +73,32 @@
   - `optimization_ml.py`: 하드코딩된 `n_jobs: 4`를 제거하고, `utils_system.get_optimal_cpu_count(0.75)`를 호출하여 동적으로 할당하도록 수정.
 - **결과**: 사용자의 코어 수에 맞춰 최적의 병렬 처리가 수행됨.
 - **교훈/조치**: 별도 모듈로 분리된 기능(`optimization_ml`)도 공통 유틸리티 정책을 따르는지 꼼꼼히 체크해야 함.
+
+### 2026-01-06 데이터 수집 및 최적화 파이프라인 버그 수정
+- **목표**: 데이터 수집 실패(컬럼명 불일치, API Key 인식 불가) 및 최적화 중단(파일 손상) 문제를 해결하여 파이프라인의 안정성을 확보함.
+- **시도 내용**:
+  1. **Pykrx Patch 적용 (`run_pipeline.py`)**: 프로그램 시작 시 `patch_pykrx_referer`를 강제 실행하여 영문/한글 컬럼명 불일치 문제 해결.
+  2. **API Key 로드 수정 (`collect.py`)**: `settings.yaml`의 `ml_params` 섹션 하위에 있는 `krx_api_key`를 올바르게 읽어오도록 수정 (OpenAPI 모드 활성화).
+  3. **Proxy 로직 수정 (`predict.py`)**: 삼성전자 주가로 영업일을 확인할 때 잘못된 함수(`get_market_ohlcv_by_ticker`)를 사용하던 것을 `get_market_ohlcv`로 수정.
+  4. **파일 손상 대응 (`optimization.py`)**: `ml_classification_dataset.parquet` 읽기 실패(ArrowInvalid) 시 크래시 대신 재생성 가이드를 출력하도록 예외 처리 추가.
+- **결과**:
+  - 수집 로직이 정상 작동하며 "None of [...] columns" 에러가 사라짐.
+  - 최적화 시 손상된 파일에 대해 적절한 안내 메시지가 출력됨.
+  - OpenAPI 모드가 정상적으로 활성화됨.
+- **교훈/조치**: 외부 라이브러리(Pykrx) 패치는 실행 최우선 순위로 둬야 하며, 설정 파일 구조 변경 시 관련 로드 로직도 꼼꼼히 동기화해야 함.
+
+### 2026-01-06 KRX 데이터 수집 차단 해결 (Pykrx Patch V2)
+- **목표**: Pykrx 패치 적용 후에도 지속되는 데이터 수집 실패(빈 응답) 문제를 해결함.
+- **시도 내용**:
+  - `debug_pykrx_patch.py` 스크립트를 작성하여 패치 적용 여부와 실제 응답을 검증.
+  - GitHub Upstream PR(#249) 재분석 결과, 초기 적용한 Referer URL(`http://.../mdiLoader/...`)이 유효하지 않음을 확인.
+  - Referer를 `https://data.krx.co.kr/contents/MDC/MDI/outerLoader/index.cmd` (HTTPS + outerLoader)로 수정하여 재적용.
+- **결과**: `debug_pykrx_patch.py`에서 삼성전자 등 종목 데이터가 정상적으로 수신됨을 확인. 이후 메인 파이프라인 수집 성공.
+- **교훈/조치**: 외부 API 패치 시에는 URL 경로와 프로토콜(HTTP/HTTPS)의 정확성이 매우 중요하며, 문제 발생 시 독립적인 디버깅 스크립트로 검증하는 절차가 유효함.
+
+### 2026-01-06 피처 생성(Derive) 기간 자동화
+- **목표**: 데이터 수집은 2026년까지 완료되었으나, 피처 생성(`Derive`) 단계에서 하드코딩된 종료일(`2025-12-31`)로 인해 최신 데이터가 반영되지 않는 문제 해결.
+- **시도 내용**:
+  - `modules/derive.py`: `data_range.end` 설정값이 없을 경우의 기본값을 고정된 날짜에서 `pd.Timestamp.now()`(오늘)로 변경.
+- **결과**: 별도의 설정 변경 없이도 수집된 최신 데이터까지 자동으로 피처 생성이 수행됨.
+- **교훈/조치**: 유지보수 편의를 위해 시간과 관련된 기본값은 항상 동적인 값(Now/Today)을 사용하는 것이 좋음.

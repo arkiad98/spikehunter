@@ -110,6 +110,10 @@ def collect_openapi_index(start_date, end_date, api_key):
     }
     df_all = df_all.rename(columns=col_map)
     
+    # [Fix] Convert date to datetime to match existing parquet schema (Timestamp)
+    if 'date' in df_all.columns:
+        df_all['date'] = pd.to_datetime(df_all['date'])
+    
     # Filter for KOSPI (1001) using Data Logic
     # 1. Convert numeric columns, coerce errors (removes header/invalid rows like Row 0)
     num_cols = ['close', 'open', 'high', 'low', 'volume', 'value', 'MKTCAP']

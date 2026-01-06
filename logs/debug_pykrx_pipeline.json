@@ -1,0 +1,53 @@
+{"asctime": "2026-01-06 23:02:29,424", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/debug_pykrx_pipeline.json"}
+{"asctime": "2026-01-06 23:02:29,437", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 1. Importing modules..."}
+{"asctime": "2026-01-06 23:02:41,624", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 2. Applying Patch..."}
+{"asctime": "2026-01-06 23:02:41,636", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 35, "message": "pykrx patched: Post.read updated with Referer."}
+{"asctime": "2026-01-06 23:02:41,639", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 83, "message": "pykrx patched: stock.get_market_ohlcv_by_ticker replaced (including sys.modules)."}
+{"asctime": "2026-01-06 23:02:41,639", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 3. Fetching KOSPI data for 20260102..."}
+{"asctime": "2026-01-06 23:02:41,763", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 10, "message": "Unformattable message: msg=('20260102', 'KOSPI'), args=({},)"}
+{"asctime": "2026-01-06 23:02:41,764", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 11, "message": "Expecting value: line 1 column 1 (char 0)"}
+{"asctime": "2026-01-06 23:02:41,768", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame Shape: (0, 0)"}
+{"asctime": "2026-01-06 23:02:41,804", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame is EMPTY."}
+{"asctime": "2026-01-06 23:02:41,805", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[FAILURE] Required columns missing. Patch might NOT be working."}
+{"asctime": "2026-01-06 23:03:02,323", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/debug_pykrx_pipeline.json"}
+{"asctime": "2026-01-06 23:03:02,343", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 1. Importing modules..."}
+{"asctime": "2026-01-06 23:03:08,823", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 2. Applying Patch..."}
+{"asctime": "2026-01-06 23:03:08,823", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 35, "message": "pykrx patched: Post.read updated with Referer."}
+{"asctime": "2026-01-06 23:03:08,823", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 83, "message": "pykrx patched: stock.get_market_ohlcv_by_ticker replaced (including sys.modules)."}
+{"asctime": "2026-01-06 23:03:08,823", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 3. Fetching KOSPI data for 20260102..."}
+{"asctime": "2026-01-06 23:03:08,918", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 10, "message": "Unformattable message: msg=('20260102', 'KOSPI'), args=({},)"}
+{"asctime": "2026-01-06 23:03:08,919", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 11, "message": "Expecting value: line 1 column 1 (char 0)"}
+{"asctime": "2026-01-06 23:03:08,922", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame Shape: (0, 0)"}
+{"asctime": "2026-01-06 23:03:08,922", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame is EMPTY."}
+{"asctime": "2026-01-06 23:03:08,922", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[FAILURE] Required columns missing. Patch might NOT be working."}
+{"asctime": "2026-01-06 23:03:42,556", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/debug_pykrx_pipeline.json"}
+{"asctime": "2026-01-06 23:03:42,557", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 1. Importing modules..."}
+{"asctime": "2026-01-06 23:03:45,322", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 2. Applying Patch..."}
+{"asctime": "2026-01-06 23:03:45,323", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 35, "message": "pykrx patched: Post.read updated with Referer."}
+{"asctime": "2026-01-06 23:03:45,323", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 83, "message": "pykrx patched: stock.get_market_ohlcv_by_ticker replaced (including sys.modules)."}
+{"asctime": "2026-01-06 23:03:45,323", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 3. Fetching KOSPI data for 20260102..."}
+{"asctime": "2026-01-06 23:03:45,383", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 10, "message": "Unformattable message: msg=('20260102', 'KOSPI'), args=({},)"}
+{"asctime": "2026-01-06 23:03:45,383", "name": "root", "levelname": "INFO", "filename": "util.py", "lineno": 11, "message": "Expecting value: line 1 column 1 (char 0)"}
+{"asctime": "2026-01-06 23:03:45,386", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260102 Raw columns: []"}
+{"asctime": "2026-01-06 23:03:45,387", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260102 Renamed columns: []"}
+{"asctime": "2026-01-06 23:03:45,388", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame Shape: (0, 0)"}
+{"asctime": "2026-01-06 23:03:45,388", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame is EMPTY."}
+{"asctime": "2026-01-06 23:03:45,389", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[FAILURE] Required columns missing. Patch might NOT be working."}
+{"asctime": "2026-01-06 23:05:59,752", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/debug_pykrx_pipeline.json"}
+{"asctime": "2026-01-06 23:05:59,753", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 1. Importing modules..."}
+{"asctime": "2026-01-06 23:06:03,103", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 2. Applying Patch..."}
+{"asctime": "2026-01-06 23:06:03,104", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 35, "message": "pykrx patched: Post.read updated with Referer."}
+{"asctime": "2026-01-06 23:06:03,105", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 83, "message": "pykrx patched: stock.get_market_ohlcv_by_ticker replaced (including sys.modules)."}
+{"asctime": "2026-01-06 23:06:03,105", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": ">>> 3. Fetching KOSPI data for 20260102..."}
+{"asctime": "2026-01-06 23:06:03,392", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260102 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:03,392", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260102 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:03,395", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] DataFrame Shape: (958, 8)"}
+{"asctime": "2026-01-06 23:06:03,396", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] Columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:03,396", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[Result] Head(3):"}
+{"asctime": "2026-01-06 23:06:03,416", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "          시가    고가    저가  ...       거래대금   등락률          시가총액"}
+{"asctime": "2026-01-06 23:06:03,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "티커                        ..."}
+{"asctime": "2026-01-06 23:06:03,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "095570  4660  4700  4555  ...  780756536 -1.39  207936427605"}
+{"asctime": "2026-01-06 23:06:03,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "006840  8710  8710  8570  ...  201324130 -1.15  114061500210"}
+{"asctime": "2026-01-06 23:06:03,417", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "027410  3930  3945  3825  ...  553339399 -1.53  369466813260"}
+{"asctime": "2026-01-06 23:06:03,418", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[3 rows x 8 columns]"}
+{"asctime": "2026-01-06 23:06:03,418", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "[SUCCESS] Column renaming successful. Patch IS working."}
