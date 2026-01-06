@@ -31,7 +31,11 @@ paths:
 # 2. 머신러닝 파라미터 (이 부분이 중요!)
 ml_params:
   # [최적화 결과 반영] Strategy Optimization 최적값 (Sharpe Maximize)
-  # AP는 다소 낮아지더라도(0.19), 개별 거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
+  # [NEW] KRX OpenAPI 인증키 (발급 후 여기에 입력)
+  # 키가 있으면 OpenAPI로 지수 데이터를 수집하고, 없으면 수집을 건너뛰니다.
+  krx_api_key: "9366E92B67004AC7889ED857B0A2C589C8A69D1B"
+
+  # 데이터 수집 (2025.12.31까지 실제 데이터, 이후 예측/시뮬레이션)거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
   target_surge_rate: 0.09990738335325917
   stop_loss_rate: -0.027337402392375594
   target_hold_period: 5
@@ -47,16 +51,17 @@ ml_params:
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 8.304453082647894 # [Restored] Exact Value
-    n_estimators: 540     # [Restored] High estimators for low LR
-    learning_rate: 0.012763748069217377 # [Restored] Low LR
-    num_leaves: 94        # [Restored] Simple Model
-    max_depth: 17         # [Restored] Shallow Depth
-    colsample_bytree: 0.9125967578720843
-    subsample: 0.8480084483844194
-    n_jobs: 4
+    scale_pos_weight: 6.226676861394577 # [Restored] Exact Value
+    n_estimators: 374     # [Restored] High estimators for low LR
+    learning_rate: 0.005430421294993796 # [Restored] Low LR
+    num_leaves: 145       # [Restored] Simple Model
+    max_depth: 4          # [Restored] Shallow Depth
+    colsample_bytree: 0.6065270968347103
+    subsample: 0.6170449042571511
+
+    n_jobs: -1 # [Dynamic] Handled by code
     verbose: -1
-    
+
     # LightGBM용 파라미터 공간
     param_space_lgbm:
       learning_rate: {type: float, low: 0.005, high: 0.15, log: true}
@@ -67,7 +72,7 @@ ml_params:
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 12
+    min_child_samples: 43
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -79,7 +84,8 @@ ml_params:
     subsample: 0.9790590277960377
     colsample_bytree: 0.8082325218691137
     scale_pos_weight: 2.190777004972905
-    n_jobs: 4
+
+    n_jobs: -1 # [Dynamic] Handled by code
     random_state: 42
     tree_method: hist
     min_child_weight: 10
@@ -146,3 +152,5 @@ strategies:
     min_mfi: 46.79727604441189
     min_obv_slope: 0
     top_n: 5
+
+

@@ -28,6 +28,9 @@ from typing import List, Tuple
 from tqdm import tqdm
 from pykrx import stock
 
+# [NEW] OpenAPI Collector
+from modules.collect_openapi import collect_openapi_index
+
 # 프로젝트 유틸리티 모듈 임포트
 from modules.utils_io import (
     ensure_dir, read_yaml, to_date, yyyymmdd, retry_request,
@@ -103,8 +106,8 @@ def _fetch_and_merge_daily_data(d: pd.Timestamp, required_cols: list) -> pd.Data
 
     # 1. 가격 데이터(OHLCV) 수집
     try:
-        df_kospi_px = retry_request(stock.get_market_ohlcv, date=day_str, market="KOSPI")
-        df_kosdaq_px = retry_request(stock.get_market_ohlcv, date=day_str, market="KOSDAQ")
+        df_kospi_px = retry_request(stock.get_market_ohlcv_by_ticker, date=day_str, market="KOSPI")
+        df_kosdaq_px = retry_request(stock.get_market_ohlcv_by_ticker, date=day_str, market="KOSDAQ")
         df_px = pd.concat([df_kospi_px, df_kosdaq_px])
         
         if df_px.empty:
@@ -176,8 +179,8 @@ def _fetch_and_merge_daily_data(d: pd.Timestamp, required_cols: list) -> pd.Data
     
     #df_final = df_final.dropna(subset=["date", "code", "open", "close", "value"])
     
-# [추가] KOSPI 지수 데이터를 수집하고 저장하는 내부 함수
-def _collect_and_save_index_data(start_d: pd.Timestamp, end_d: pd.Timestamp, index_path: str):
+# [수정] KOSPI 지수 데이터를 수집하고 저장하는 내부 함수 (Hybrid: Scraping + OpenAPI)
+def _collect_and_save_index_data(start_d: pd.Timestamp, end_d: pd.Timestamp, index_path: str, api_key: str = None):
     """KOSPI 지수 데이터를 증분 방식으로 수집하여 단일 Parquet 파일로 저장합니다."""
     ensure_dir(index_path)
     index_file = os.path.join(index_path, "kospi.parquet")
@@ -196,22 +199,45 @@ def _collect_and_save_index_data(start_d: pd.Timestamp, end_d: pd.Timestamp, ind
         return
 
     logger.info(f"KOSPI 지수 데이터 수집: {fetch_start_d.date()} ~ {end_d.date()}")
-    try:
-        # 넉넉하게 이전 데이터를 포함하여 요청 후 필터링 (MA 계산 등을 위해)
-        s_date_str = (fetch_start_d - pd.DateOffset(days=365)).strftime('%Y%m%d')
-        e_date_str = end_d.strftime('%Y%m%d')
-        
-        new_df = retry_request(stock.get_index_ohlcv, s_date_str, e_date_str, "1001").reset_index()
-        new_df = _rename_ohlcv_cols(new_df)
-        new_df['date'] = pd.to_datetime(new_df['date'])
+    
+    # [Hybrid Logic]
+    if api_key:
+        logger.info(f"[Mode] OpenAPI 사용 (Key: {api_key[:4]}****)")
+        try:
+             df_new = collect_openapi_index(fetch_start_d, end_d, api_key)
+             if df_new.empty:
+                 logger.warning("OpenAPI 수집 결과가 없습니다.")
+        except Exception as e:
+             logger.error(f"OpenAPI 수집 중 오류: {e}")
+             df_new = pd.DataFrame()
+    else:
+        logger.info("[Mode] Pykrx Scraping 사용 (Default)")
+        try:
+            # 넉넉하게 이전 데이터를 포함하여 요청 후 필터링 (MA 계산 등을 위해)
+            s_date_str = (fetch_start_d - pd.DateOffset(days=365)).strftime('%Y%m%d')
+            e_date_str = end_d.strftime('%Y%m%d')
+            
+            # [Patch Check]
+            if hasattr(stock, 'get_index_ohlcv_by_ticker') and "patched" in str(stock.get_index_ohlcv_by_ticker):
+                 logger.info("Using Patched Index Fetcher") # Just a marker
+            
+            df_new = retry_request(stock.get_index_ohlcv, s_date_str, e_date_str, "1001")
+            
+            if not df_new.empty:
+               df_new['date'] = df_new.index
+               df_new = _rename_ohlcv_cols(df_new)
+            
+        except Exception as e:
+            logger.warning(f"Pykrx Scraping Fail: {e}")
+            df_new = pd.DataFrame()
 
+    if not df_new.empty:
         # 기존 데이터와 병합 후 중복 제거
-        combined_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['date'], keep='last').sort_values('date')
+        combined_df = pd.concat([existing_df, df_new]).drop_duplicates(subset=['date'], keep='last').sort_values('date')
         combined_df.to_parquet(index_file, index=False, compression="zstd")
         logger.info(f"KOSPI 지수 데이터가 '{index_file}'에 저장되었습니다.")
 
-    except Exception as e:
-        logger.error(f"KOSPI 지수 데이터 수집/저장 중 오류 발생: {e}", exc_info=True)
+
 
 # [수정] run_collect 함수를 아래 코드로 전체 교체합니다.
 # modules/collect.py
@@ -246,8 +272,9 @@ def run_collect(settings_path: str, start: str = None, end: str = None, use_meta
     logger.info(f"데이터 수집 시작: {start_d.date()} ~ {end_d.date()}")
     
     try:
-        logger.info("전체 수집 기간의 실제 영업일 목록을 조회합니다...")
-        all_trading_days_full_period = stock.get_index_ohlcv('20200101', end_d.strftime('%Y%m%d'), "1001").index
+        logger.info("전체 수집 기간의 실제 영업일 목록을 조회합니다 (Index 실패로 삼성전자 대용)...")
+        # [Patch] Index fetch fails, so use Samsung Electronics (005930) as a proxy for trading days
+        all_trading_days_full_period = stock.get_market_ohlcv('20200101', end_d.strftime('%Y%m%d'), "005930").index
     except Exception as e:
         logger.error(f"영업일 목록 조회 중 오류 발생: {e}. 데이터 수집을 중단합니다.")
         return False
@@ -307,7 +334,15 @@ def run_collect(settings_path: str, start: str = None, end: str = None, use_meta
     logger.info("="*50)
     logger.info("      <<< KOSPI 지수 데이터 수집 시작 >>>")
     logger.info("="*50)
-    _collect_and_save_index_data(to_date('2020-01-01'), end_d, paths["raw_index"])
+    
+    # Check for API Key
+    api_key = cfg.get('krx_api_key')
+    if api_key and str(api_key).strip() == "": api_key = None
+    
+    try:
+        _collect_and_save_index_data(to_date('2020-01-01'), end_d, paths["raw_index"], api_key=api_key)
+    except Exception as e:
+        logger.warning(f"KOSPI 지수 데이터 수집 실패 (무시하고 진행): {e}")
 
     try:
         df_check = load_partition_day(paths["merged"], start_d, end_d)

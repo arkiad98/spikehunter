@@ -223,8 +223,10 @@ def get_target_business_day() -> Optional[pd.Timestamp]:
     start_str = (now - timedelta(days=14)).strftime("%Y%m%d")
     
     try:
-        # KOSPI 지수 데이터를 이용해 영업일 리스트 확인 (티커 '1001'은 코스피)
-        df_index = stock.get_index_ohlcv(start_str, end_str, "1001")
+        # [수정] KOSPI 지수 데이터 수집(get_index_ohlcv) 오류 우회 (2026년 issue)
+        # 삼성전자(005930)를 Proxy로 사용하여 영업일 확인
+        df_index = stock.get_market_ohlcv_by_ticker(start_str, end_str, "005930")
+        
         if df_index.empty:
             logger.error("영업일 목록을 가져올 수 없습니다.")
             return None
@@ -385,25 +387,38 @@ def generate_and_save_recommendations(settings_path: str):
     # 2. 실시간 시장 상황 판단
     # [수정] KOSPI 데이터를 불러오는 함수를 load_index_data로 변경
     kospi = load_index_data(start_of_period, today, paths["raw_index"])
-    kospi_past_and_today = kospi[kospi['date'] <= latest_date]
     
-    if len(kospi_past_and_today) < 200:
-        logger.error("시장 국면을 판단하기에 KOSPI 데이터가 부족합니다.")
-        return
+    # [Safety] KOSPI 데이터 부재 시 기본값 처리
+    if kospi.empty:
+        logger.warning("KOSPI 데이터가 없어 시장 국면을 'R4_BearVolatile'로 가정합니다.")
+        is_bull_market = False
+        is_stable_market = False
+    else:
+        kospi_past_and_today = kospi[kospi['date'] <= latest_date]
         
-    current_kospi_close = kospi_past_and_today['kospi_close'].iloc[-1]
-    current_ma200 = kospi_past_and_today['kospi_close'].rolling(200).mean().iloc[-1]
-    current_kospi_vol_20d = kospi_past_and_today['kospi_close'].pct_change().rolling(20).std().iloc[-1]
-    
-    base_vol_threshold_params = cfg["strategies"].get("SpikeHunter_R1_BullStable", {})
-    vol_threshold = base_vol_threshold_params.get("max_market_vol", 0.02)
-    is_bull_market = current_kospi_close > current_ma200
-    is_stable_market = current_kospi_vol_20d < vol_threshold
+        if len(kospi_past_and_today) < 200:
+            logger.warning("시장 국면을 판단하기에 KOSPI 데이터가 부족합니다 (<200). 'R4_BearVolatile'로 가정합니다.")
+            is_bull_market = False
+            is_stable_market = False
+        else:
+            current_kospi_close = kospi_past_and_today['kospi_close'].iloc[-1]
+            current_ma200 = kospi_past_and_today['kospi_close'].rolling(200).mean().iloc[-1]
+            current_kospi_vol_20d = kospi_past_and_today['kospi_close'].pct_change().rolling(20).std().iloc[-1]
+            
+            base_vol_threshold_params = cfg["strategies"].get("SpikeHunter_R1_BullStable", {})
+            vol_threshold = base_vol_threshold_params.get("max_market_vol", 0.02)
+            
+            is_bull_market = current_kospi_close > current_ma200
+            is_stable_market = current_kospi_vol_20d < vol_threshold
+
     
     current_regime = _determine_regime(is_bull_market, is_stable_market)
     logger.info(f"시장 진단 결과: {current_regime} (강세장={is_bull_market}, 안정장={is_stable_market})")
-
-    strategy_key = f"SpikeHunter_{current_regime}"
+    
+    # [수정] R2~R4 미사용 정책 반영 (Single Strategy Mode)
+    # 시장 국면과 관계없이 메인 전략(R1)을 강제 적용합니다.
+    strategy_key = "SpikeHunter_R1_BullStable" 
+    logger.info(f"[System] Single Strategy Mode Enforced. Using '{strategy_key}'")
     logger.info(f"'{strategy_key}' 전략으로 추천 종목을 생성합니다...")
 
     # 3. 모델 로드 및 추천 종목 생성

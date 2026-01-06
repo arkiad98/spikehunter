@@ -14,6 +14,7 @@ from sklearn.metrics import average_precision_score, precision_score
 
 from modules.utils_io import read_yaml, update_yaml, get_user_input
 from modules.utils_logger import logger
+from modules.utils_system import get_optimal_cpu_count # [New] CPU Utility
 
 # Global Data Cache
 _DATA_CACHE: Dict[str, Any] = None
@@ -94,7 +95,7 @@ def calculate_top_n_precision(y_true, y_scores, n=5):
     except:
         return 0.0
 
-def objective(trial, settings_path: str):
+def objective(trial, settings_path: str, n_jobs_model: int = 1):
     X, y = load_data_cached(settings_path)
     if X is None: return -1.0
     
@@ -108,7 +109,7 @@ def objective(trial, settings_path: str):
         'objective': 'binary',
         'metric': 'average_precision',
         'verbosity': -1,
-        'n_jobs': 4,
+        'n_jobs': n_jobs_model,
         'boosting_type': 'gbdt',
         'random_state': 42
     }
@@ -211,7 +212,11 @@ def run_ml_optimization(settings_path: str, n_trials: int = 20):
     except Exception as e:
         logger.warning(f"Failed to setup Warm Start: {e}")
 
-    study.optimize(lambda trial: objective(trial, settings_path), n_trials=n_trials)
+    # [CPU] Calculate Optimal Cores (75%)
+    model_n_jobs = get_optimal_cpu_count(0.75)
+    logger.info(f">> [CPU] Advanced Optimization Mode: Model n_jobs set to {model_n_jobs} (75% Cores)")
+    
+    study.optimize(lambda trial: objective(trial, settings_path, model_n_jobs), n_trials=n_trials)
     
     logger.info("\n" + "="*60)
     logger.info(f" [Optimization Result]")

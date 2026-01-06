@@ -144,6 +144,9 @@ def load_index_data(start_d: pd.Timestamp, end_d: pd.Timestamp, index_dir: str) 
 
     try:
         df = pd.read_parquet(index_file)
+        # 만약 date가 컬럼에 없고 인덱스에 있다면 컬럼으로 복원
+        if 'date' not in df.columns:
+            df['date'] = df.index
         df['date'] = pd.to_datetime(df['date'])
         
         # 날짜 필터링
