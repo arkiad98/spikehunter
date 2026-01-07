@@ -466,6 +466,13 @@ def generate_and_save_recommendations(settings_path: str):
         try:
             from modules.utils_db import create_tables, insert_daily_signals
             create_tables() # ensure table exists
-            insert_daily_signals(recommendations, strategy_key)
+            
+            # [수정] 전략 파라미터(Target/Stop) 전달
+            # strategy_key="SpikeHunter_R1_BullStable" (Single Mode)
+            strategy_params = cfg.get("strategies", {}).get(strategy_key, {})
+            target_r = strategy_params.get("target_r", 0.10)
+            stop_r = strategy_params.get("stop_r", -0.05)
+            
+            insert_daily_signals(recommendations, strategy_key, target_rate=target_r, stop_rate=stop_r)
         except Exception as e:
             logger.warning(f"추천 종목 DB 저장 실패: {e}")

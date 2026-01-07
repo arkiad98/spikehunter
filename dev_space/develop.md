@@ -172,3 +172,18 @@
   - `config/settings.yaml`: `max_market_vol` 상한을 `0.50`으로 대폭 상향.
   - `modules/optimization.py`: WFO 등 최적화 과정에서 각 Trial의 파라미터가 로그에 출력되지 않던 문제 수정 (`Params: {...}` 추가).
 
+
+### 2026-01-07 검증 로직 동적화 및 리포트 고도화 (Verification Logic Dynamic Parameter & Report Improvement)
+- **목표**: 전략 파라미터 변경 시 과거 신호에 대한 검증 결과도 동적으로 반영되도록 개선하고, 리포트의 정보량과 가독성을 높임.
+- **시도 내용**:
+  1. **DB 스키마 확장 (`utils_db.py`)**: `daily_signals` 테이블에 `target_rate`, `stop_rate` 컬럼을 추가하여 신호 발생 시점의 기준을 기록.
+  2. **검증 로직 재설계 (`verify_daily_signals.py`)**:
+     - `simulate_trade` 함수로 트레이딩 로직 분리 (필드 테스트 모듈 재사용 대비).
+     - 검증 시 `settings.yaml`의 최신 파라미터를 적용하여 승패를 재계산하는 동적 로직 구현.
+     - 수수료(`fee_rate`) 차감 로직 추가.
+  3. **리포트 개선**:
+     - '조건' 컬럼(`+10.00% / -5.00%`)을 추가하여 적용된 파라미터 명시.
+     - 5일간의 주가 흐름, ML 점수, 최고가 도달률 등 상세 지표 추가.
+     - 터미널 출력은 가독성을 위해 `+3일`까지만 표시하고, CSV 파일에는 전체 데이터 저장.
+- **결과**: `test_dynamic_verification.py` 테스트 통과. 리포트를 통해 전략 변경에 따른 성과 변화를 즉각적으로 확인할 수 있게 됨.
+- **교훈/조치**: 검증 모듈은 단순 기록용이 아니라 '전략 튜닝의 피드백 루프'로 활용되어야 함. 향후 가상 계좌(Field Test) 기능도 `simulate_trade` 함수를 기반으로 구축할 예정.

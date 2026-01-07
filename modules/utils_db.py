@@ -88,6 +88,8 @@ TABLE_DEFINITIONS = {
             entry_price REAL, -- 추천일 종가 (기준가)
             target_price REAL,
             stop_price REAL,
+            target_rate REAL, -- [추가] 목표 수익률 (0.10 등)
+            stop_rate REAL,   -- [추가] 손절률 (-0.05 등)
             max_hold_days INTEGER,
             
             -- 상태 추적
@@ -238,7 +240,7 @@ def insert_shap_results(run_id: str, analysis_type: str, shap_df: pd.DataFrame):
 
 # 🔴 [추가] 추천 종목(Signal) 관리 함수들
 
-def insert_daily_signals(signals: pd.DataFrame, strategy_name: str):
+def insert_daily_signals(signals: pd.DataFrame, strategy_name: str, target_rate: float = 0.10, stop_rate: float = -0.05):
     """오늘의 추천 종목들을 DB에 등록합니다."""
     if signals.empty: return
     
@@ -249,12 +251,10 @@ def insert_daily_signals(signals: pd.DataFrame, strategy_name: str):
         # 기본 정보
         close_price = float(row['close'])
         
-        # 전략 파라미터가 있다면 사용, 없으면 기본값 (나중에 predict.py에서 넘겨받도록 개선 가능)
-        # 현재는 DB 기록용이므로 대략적인 타겟만 설정 (10% / -5%) - 실제 검증 시에는 verify 모듈에서 동적으로 계산할 수도 있음
-        # 여기서는 predict.py에서 계산된 값을 받거나, 기본값을 사용
+        # [수정] 외부에서 주입받은 전략 파라미터 사용
         entry_price = close_price
-        target_price = entry_price * 1.10
-        stop_price = entry_price * 0.95
+        target_price = entry_price * (1 + target_rate)
+        stop_price = entry_price * (1 + stop_rate)
         max_hold = 5
         
         record = {
@@ -267,6 +267,8 @@ def insert_daily_signals(signals: pd.DataFrame, strategy_name: str):
             'entry_price': entry_price,
             'target_price': target_price,
             'stop_price': stop_price,
+            'target_rate': target_rate, # [Add]
+            'stop_rate': stop_rate,     # [Add]
             'max_hold_days': max_hold,
             'status': 'PENDING',
             'highest_price': entry_price,
