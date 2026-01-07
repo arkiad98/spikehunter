@@ -128,12 +128,18 @@ def _fetch_and_merge_daily_data(d: pd.Timestamp, required_cols: list) -> pd.Data
             df_foreign = retry_request(
                 stock.get_market_net_purchases_of_equities, day_str, day_str, market, "외국인"
             )
-            df_foreign = df_foreign[['순매수거래대금']].rename(columns={'순매수거래대금': 'foreign_net_val'})
+            if '순매수거래대금' in df_foreign.columns:
+                df_foreign = df_foreign[['순매수거래대금']].rename(columns={'순매수거래대금': 'foreign_net_val'})
+            else:
+                df_foreign = pd.DataFrame()
 
             df_inst = retry_request(
                 stock.get_market_net_purchases_of_equities, day_str, day_str, market, "기관합계"
             )
-            df_inst = df_inst[['순매수거래대금']].rename(columns={'순매수거래대금': 'inst_net_val'})
+            if '순매수거래대금' in df_inst.columns:
+                df_inst = df_inst[['순매수거래대금']].rename(columns={'순매수거래대금': 'inst_net_val'})
+            else:
+                df_inst = pd.DataFrame()
             
             df_market_ff = pd.merge(df_foreign, df_inst, left_index=True, right_index=True, how='outer')
             all_fund_flow_data.append(df_market_ff)
@@ -260,6 +266,12 @@ def run_collect(settings_path: str, start: str = None, end: str = None, use_meta
     today = pd.Timestamp.today().normalize()
     start_d = to_date(start) if start else to_date('2020-01-01')
     end_d = to_date(end) if end else today
+
+    # [NEW] 17시 이전 당일 데이터 수집 제한 (장 마감 후 확정 데이터 수집 보장)
+    now = pd.Timestamp.now()
+    if now.hour < 17 and end_d >= today:
+        logger.info(f"현재 시간({now.strftime('%H:%M')})이 17시 이전입니다. 금일({today.date()}) 데이터를 제외하고 전일자까지만 수집합니다.")
+        end_d = min(end_d, today - pd.Timedelta(days=1))
 
     if use_meta and not overwrite:
         last = read_meta(paths["meta"], "last_collected_date")

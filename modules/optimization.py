@@ -59,12 +59,15 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             mdd = metrics.get('MDD_raw', -1.0) 
             
             # Constraint 1: 승률 < 20%
-            # Constraint 2: MDD < -30% (Bear Market 수용 가능한 현실적 하한선)
+            # Constraint 2: MDD < -30% (Reverted to original strict constraint for 2023-2025 Bull/Chop market)
             if win_rate < 0.2 or mdd < -0.30:
-                # [Debug] rejection reason logging
-                logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
+                # [Debug] rejection reason logging -> INFO for visibility
+                logger.info(f" >> [Rejected] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Limit: WR<20% or MDD<-30%)")
                 score = -999.0 # 탈락
             else:
+                # [Success] 통과한 경우에도 수치 기록 (User Request)
+                logger.info(f" >> [Passed] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Score Base)")
+                
                 # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
                 # Score = Sharpe * (승률 가중치) - (MDD 페널티)
                 # MDD가 0에 가까울수록(음수) 좋음. mdd가 낮을수록(더 큰 음수) 페널티.
@@ -186,7 +189,7 @@ def optimize_strategy_headless(settings_path: str, strategy_name: str,
 
 def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHunter", 
                               use_ml_target: bool = True, regime_to_optimize: str = None, 
-                              warm_start: bool = True):
+                              warm_start: bool = True, n_jobs: int = None, auto_approve: bool = False):
     """전략 최적화 메인 파이프라인"""
     logger.info("\n" + "="*60)
     logger.info("      <<< 전략 파라미터 최적화 (Strategy Optimization) >>>")
@@ -197,11 +200,12 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     # Default: Use 75% of Cores.
     default_jobs = get_optimal_cpu_count(0.75)
     
-    n_jobs_input = get_user_input(f"병렬 작업 수(n_jobs) (엔터: {default_jobs} [75%], -1: 전체): ")
-    try:
-        n_jobs = int(n_jobs_input) if n_jobs_input.strip() else default_jobs
-    except ValueError:
-        n_jobs = default_jobs
+    if n_jobs is None:
+        n_jobs_input = get_user_input(f"병렬 작업 수(n_jobs) (엔터: {default_jobs} [75%], -1: 전체): ")
+        try:
+            n_jobs = int(n_jobs_input) if n_jobs_input.strip() else default_jobs
+        except ValueError:
+            n_jobs = default_jobs
         
     logger.info(f" >> 설정: n_jobs={n_jobs}")
     
@@ -217,9 +221,19 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
         else:
             logger.warning("전략 설정이 없어 기본값 'SpikeHunter'를 사용합니다.")
     
-    # 최적화 기간 설정
-    start_date = "2020-01-01"
-    end_date = datetime.now().strftime('%Y-%m-%d')
+    # [Modified] Dynamic Optimization Period (42 Months Window)
+    # User Request: "42 months ago ~ 6 months ago" aligned with ML training config
+    # Logic: End = Now - Offset(6m), Start = End - Train(36m)
+    now = datetime.now()
+    ml_params = cfg.get("ml_params", {})
+    train_months = ml_params.get("classification_train_months", 36)
+    offset_months = ml_params.get("classification_train_end_offset", 6)
+    
+    end_dt = now - pd.DateOffset(months=offset_months)
+    start_dt = end_dt - pd.DateOffset(months=train_months)
+    
+    start_date = start_dt.strftime('%Y-%m-%d')
+    end_date = end_dt.strftime('%Y-%m-%d')
     
     logger.info(f"최적화 데이터 로드 중... ({start_date} ~ {end_date})")
     
@@ -372,12 +386,17 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     logger.info("="*60)
     
     # 결과 저장 여부
-    if is_improved:
-        prompt_msg = "최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): "
+    if auto_approve:
+        logger.info(" >> [Auto-Approve] 결과를 자동으로 저장합니다.")
+        choice = 'y'
     else:
-        prompt_msg = "성능 개선이 없거나 미미합니다. 그래도 저장하시겠습니까? (y/n): "
-        
-    choice = get_user_input(prompt_msg)
+        if is_improved:
+            prompt_msg = "최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): "
+        else:
+            prompt_msg = "성능 개선이 없거나 미미합니다. 그래도 저장하시겠습니까? (y/n): "
+            
+        choice = get_user_input(prompt_msg)
+
     if choice.lower() == 'y':
         update_yaml(settings_path, "strategies", strategy_name, study.best_params)
         

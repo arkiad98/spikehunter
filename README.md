@@ -1,5 +1,9 @@
 # SpikeHunter 🏹
 
+> [!IMPORTANT]
+> **AI Agent 필독**: 작업 전 `.cursorrules`를 반드시 확인하고 준수하세요.
+
+
 SpikeHunter는 급등하는 주식을 포착하여 단기 매매 기회를 식별하는 머신러닝 기반 주식 분석 프로젝트입니다.
 
 ## 🚀 주요 기능

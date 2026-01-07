@@ -28,10 +28,12 @@ def collect_openapi_index(start_date, end_date, api_key):
     all_data = []
     current_date = s_date
     
-    # Iterate dates
-    while current_date <= e_date:
+    from tqdm import tqdm
+    all_dates = pd.date_range(s_date, e_date)
+    
+    # Iterate dates with Progress Bar
+    for current_date in tqdm(all_dates, desc="[OpenAPI] Fetching KOSPI"):
         if current_date.weekday() >= 5: # Skip weekend locally to save calls, though API handles it
-            current_date += timedelta(days=1)
             continue
             
         day_str = current_date.strftime("%Y%m%d")
@@ -51,7 +53,6 @@ def collect_openapi_index(start_date, end_date, api_key):
             
             if response.status_code != 200:
                  logger.debug(f"[OpenAPI] {day_str} Skip (Status {response.status_code})")
-                 current_date += timedelta(days=1)
                  continue
                  
             data = response.json()
@@ -79,17 +80,31 @@ def collect_openapi_index(start_date, end_date, api_key):
                 if 'BAS_DD' not in df_day.columns and 'date' not in df_day.columns:
                      df_day['date'] = current_date
                 
-                # Filter for KOSPI (Assuming 'IDX_NM' or 'IDX_IND_CD' exists)
-                # We want standard KOSPI (1001). 
-                # Let's keep all for now and filter later using map.
-                all_data.append(df_day)
+                # [Fix] Filter for KOSPI (1001) per day here
+                # 1. Convert numeric columns
+                num_cols = ['CLSPRC_IDX', 'OPNPRC_IDX', 'HGPRC_IDX', 'LWPRC_IDX', 'ACC_TRDVOL', 'ACC_TRDVAL', 'MKTCAP']
+                for c in num_cols:
+                    if c in df_day.columns:
+                        df_day[c] = pd.to_numeric(df_day[c].astype(str).str.replace(',', ''), errors='coerce')
+
+                # 2. Filter by Name (if available) - "코스피" or "KOSPI"
+                # 2. Drop rows with invalid Price (Index Value)
+                if 'CLSPRC_IDX' in df_day.columns:
+                    df_day = df_day.dropna(subset=['CLSPRC_IDX'])
+
+                # 3. Sort by MKTCAP descending -> Top 1 is KOSPI Main (Total Market)
+                if 'MKTCAP' in df_day.columns and not df_day.empty:
+                     df_day = df_day.sort_values(by='MKTCAP', ascending=False)
+                     df_day = df_day.iloc[:1] # Take top 1 per day
+                
+                if not df_day.empty:
+                    all_data.append(df_day)
                 
         except Exception as e:
             logger.warning(f"[OpenAPI] Error on {day_str}: {e}")
             
         # Respect rate limit
-        time.sleep(0.1) 
-        current_date += timedelta(days=1)
+        time.sleep(0.1)
         
     if not all_data:
         return pd.DataFrame()
@@ -97,7 +112,6 @@ def collect_openapi_index(start_date, end_date, api_key):
     df_all = pd.concat(all_data, ignore_index=True)
     
     # Standardize Columns (Based on Actual API Response)
-    # Response: date, IDX_CLSS, CLSPRC_IDX, OPNPRC_IDX, ...
     col_map = {
         'BAS_DD': 'date',
         'CLSPRC_IDX': 'close',
@@ -110,39 +124,12 @@ def collect_openapi_index(start_date, end_date, api_key):
     }
     df_all = df_all.rename(columns=col_map)
     
-    # [Fix] Convert date to datetime to match existing parquet schema (Timestamp)
+    # [Fix] Convert date to datetime
     if 'date' in df_all.columns:
         df_all['date'] = pd.to_datetime(df_all['date'])
-    
-    # Filter for KOSPI (1001) using Data Logic
-    # 1. Convert numeric columns, coerce errors (removes header/invalid rows like Row 0)
-    num_cols = ['close', 'open', 'high', 'low', 'volume', 'value', 'MKTCAP']
-    for c in num_cols:
-        if c in df_all.columns:
-            df_all[c] = pd.to_numeric(df_all[c].astype(str).str.replace(',', ''), errors='coerce')
-            
-    # 2. Drop rows where Close is NaN (Invalid data)
-    df_all = df_all.dropna(subset=['close'])
-    
-    # 3. Filter by Name (if available) or Sort by Market Cap
-    # "코스피" main index has the largest Market Cap usually (or 2nd after Total?)
-    # We want the Representative Index.
-    if 'name' in df_all.columns:
-         # Rough filter for KOSPI family first
-         mask = df_all['name'].str.contains('코스피|KOSPI', na=False)
-         df_all = df_all[mask]
-         
-    # 4. Sort by MKTCAP descending -> Top 1 is likely KOSPI Main
-    if 'MKTCAP' in df_all.columns and not df_all.empty:
-         df_all = df_all.sort_values(by='MKTCAP', ascending=False)
-         # Pick top 1
-         # But verify it's not "KOSPI 200" if Top 1 is KOSPI 200?
-         # KOSPI (Index) ~ 1996T Cap. KOSPI 200 ~ 1756T.
-         # So KOSPI > KOSPI 200. Correct.
-         df_all = df_all.iloc[:1]
     
     # Drop usage columns
     drop_cols = ['name', 'MKTCAP', 'IDX_CLSS', 'CMPPREVDD_IDX', 'FLUC_RT']
     df_all = df_all.drop(columns=[c for c in drop_cols if c in df_all.columns])
-         
+          
     return df_all
