@@ -30,6 +30,14 @@ from ruamel.yaml import YAML
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(PROJECT_ROOT)
 
+# [System] Apply Pykrx Patch (Critical for 2026+ Data)
+try:
+    from modules.patch_pykrx import patch_pykrx_referer
+    patch_pykrx_referer()
+    print("[System] Pykrx Patched Successfully.")
+except Exception as e:
+    print(f"[Warning] Pykrx Patch Failed: {e}")
+
 # -----------------------------------------------------------------------------
 # Core Modules Import
 # -----------------------------------------------------------------------------

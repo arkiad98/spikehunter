@@ -1,0 +1,103 @@
+{"asctime": "2026-01-06 23:06:36,551", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 131, "message": "Logger initialized. All logs for this run will be saved to: logs/20260106_230636_pipeline.json"}
+{"asctime": "2026-01-06 23:06:36,556", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_db.py", "lineno": 140, "message": "데이터베이스 테이블이 성공적으로 준비되었습니다. (경로: data/db/spikehunter_log.db)"}
+{"asctime": "2026-01-06 23:06:36,558", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-06 23:06:36,562", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-06 23:06:36,563", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-06 23:06:36,563", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-06 23:06:36,565", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-06 23:06:36,567", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-06 23:06:36,568", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-06 23:06:36,572", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-06 23:06:36,574", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-06 23:06:36,574", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-06 23:06:36,574", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-06 23:06:36,575", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-06 23:06:37,722", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"1\""}
+{"asctime": "2026-01-06 23:06:37,722", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [1. 데이터 관리] ---"}
+{"asctime": "2026-01-06 23:06:37,723", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 수집 (Collect)"}
+{"asctime": "2026-01-06 23:06:37,723", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 생성 및 라벨링 (Derive)"}
+{"asctime": "2026-01-06 23:06:37,723", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 데이터 무결성 점검 (Check)"}
+{"asctime": "2026-01-06 23:06:37,724", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 정제 및 이상치 보정 (Clean) [NEW]"}
+{"asctime": "2026-01-06 23:06:37,724", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-06 23:06:37,724", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-06 23:06:40,944", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"1\""}
+{"asctime": "2026-01-06 23:06:40,988", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 272, "message": "데이터 수집 시작: 2025-12-31 ~ 2026-01-06"}
+{"asctime": "2026-01-06 23:06:40,988", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 275, "message": "전체 수집 기간의 실제 영업일 목록을 조회합니다 (Index 실패로 삼성전자 대용)..."}
+{"asctime": "2026-01-06 23:06:41,073", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 290, "message": "=================================================="}
+{"asctime": "2026-01-06 23:06:41,074", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 291, "message": "      <<< 월별 데이터 완결성 검사 시작 >>>"}
+{"asctime": "2026-01-06 23:06:41,074", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 292, "message": "=================================================="}
+{"asctime": "2026-01-06 23:06:41,078", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 317, "message": "총 3일의 영업일 데이터를 수집합니다."}
+{"asctime": "2026-01-06 23:06:41,297", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260102 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:41,298", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260102 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:41,730", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260102 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:41,730", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260102 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:43,300", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260105 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:43,300", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260105 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:43,640", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260105 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:43,641", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260105 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:45,223", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260106 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:45,223", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260106 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:45,540", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 50, "message": "[Patch] 20260106 Raw columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:45,540", "name": "modules.patch_pykrx", "levelname": "INFO", "filename": "patch_pykrx.py", "lineno": 62, "message": "[Patch] 20260106 Renamed columns: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률', '시가총액']"}
+{"asctime": "2026-01-06 23:06:47,347", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 334, "message": "=================================================="}
+{"asctime": "2026-01-06 23:06:47,348", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 335, "message": "      <<< KOSPI 지수 데이터 수집 시작 >>>"}
+{"asctime": "2026-01-06 23:06:47,348", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 336, "message": "=================================================="}
+{"asctime": "2026-01-06 23:06:47,357", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 201, "message": "KOSPI 지수 데이터 수집: 2026-01-06 ~ 2026-01-06"}
+{"asctime": "2026-01-06 23:06:47,357", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 205, "message": "[Mode] OpenAPI 사용 (Key: 9366****)"}
+{"asctime": "2026-01-06 23:06:47,357", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect_openapi.py", "lineno": 19, "message": "[OpenAPI] Fetching KOSPI Data: 2026-01-06 ~ 2026-01-06"}
+{"asctime": "2026-01-06 23:06:47,586", "name": "QuantPipeline", "levelname": "WARNING", "filename": "collect.py", "lineno": 209, "message": "OpenAPI 수집 결과가 없습니다."}
+{"asctime": "2026-01-06 23:06:47,647", "name": "QuantPipeline", "levelname": "INFO", "filename": "collect.py", "lineno": 364, "message": "데이터 수집 완료. last_collected_date = 2026-01-06"}
+{"asctime": "2026-01-06 23:06:47,648", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [1. 데이터 관리] ---"}
+{"asctime": "2026-01-06 23:06:47,648", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 수집 (Collect)"}
+{"asctime": "2026-01-06 23:06:47,648", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 생성 및 라벨링 (Derive)"}
+{"asctime": "2026-01-06 23:06:47,649", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 데이터 무결성 점검 (Check)"}
+{"asctime": "2026-01-06 23:06:47,649", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 정제 및 이상치 보정 (Clean) [NEW]"}
+{"asctime": "2026-01-06 23:06:47,649", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-06 23:06:47,649", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-06 23:07:56,109", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"2\""}
+{"asctime": "2026-01-06 23:07:56,141", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 45, "message": "[Derive] 데이터 로드 시작: 2020-01-01 ~ 2025-12-31"}
+{"asctime": "2026-01-06 23:07:58,288", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 56, "message": "로드된 종목 데이터: 3679289 행"}
+{"asctime": "2026-01-06 23:07:58,289", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 59, "message": "[Derive] KOSPI 시장 지표 생성 중..."}
+{"asctime": "2026-01-06 23:07:58,307", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 73, "message": "[Derive] 개별 종목 피처 생성 중..."}
+{"asctime": "2026-01-06 23:08:49,075", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 96, "message": "[Derive] 시장 피처(Trend/Vol) 병합 중..."}
+{"asctime": "2026-01-06 23:08:49,767", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 103, "message": "[Derive] 시장 대비 순위(Rank) 피처 생성 중..."}
+{"asctime": "2026-01-06 23:08:56,633", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 111, "message": "[Derive] 라벨링 생성 중... (익절: 9.990738335325917%, 손절: -2.7337402392375596%, 기간: 5일)"}
+{"asctime": "2026-01-06 23:09:12,554", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 127, "message": "[Derive] 데이터셋 저장 완료: data/proc/ml_dataset\\ml_classification_dataset.parquet"}
+{"asctime": "2026-01-06 23:09:12,556", "name": "QuantPipeline", "levelname": "INFO", "filename": "derive.py", "lineno": 128, "message": "총 데이터 수: 1332390 행"}
+{"asctime": "2026-01-06 23:09:12,910", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [1. 데이터 관리] ---"}
+{"asctime": "2026-01-06 23:09:12,911", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 수집 (Collect)"}
+{"asctime": "2026-01-06 23:09:12,911", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 생성 및 라벨링 (Derive)"}
+{"asctime": "2026-01-06 23:09:12,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 데이터 무결성 점검 (Check)"}
+{"asctime": "2026-01-06 23:09:12,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 정제 및 이상치 보정 (Clean) [NEW]"}
+{"asctime": "2026-01-06 23:09:12,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-06 23:09:12,912", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-06 23:09:29,369", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"4\""}
+{"asctime": "2026-01-06 23:09:29,382", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 57, "message": "=== [Data Cleaning] 데이터 정제 및 이상치 보정 시작 ==="}
+{"asctime": "2026-01-06 23:09:29,427", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 74, "message": " >> 전체 데이터 스캔 중... (Anomaly Detection)"}
+{"asctime": "2026-01-06 23:09:34,696", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 124, "message": " >> 감지된 이상 종목 수: 6개"}
+{"asctime": "2026-01-06 23:09:35,120", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 169, "message": " >> 데이터 업데이트 및 병합 저장 중..."}
+{"asctime": "2026-01-06 23:09:44,591", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 211, "message": " >> 정제 후에도 이상치 잔존: 6건 -> 제외 목록에 추가"}
+{"asctime": "2026-01-06 23:09:44,768", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 258, "message": " >> 'exclude_dates.yaml' 업데이트 완료 (145개 종목)"}
+{"asctime": "2026-01-06 23:09:44,769", "name": "QuantPipeline", "levelname": "INFO", "filename": "clean.py", "lineno": 260, "message": "=== 데이터 정제 완료 ==="}
+{"asctime": "2026-01-06 23:09:44,804", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "--- [1. 데이터 관리] ---"}
+{"asctime": "2026-01-06 23:09:44,805", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 수집 (Collect)"}
+{"asctime": "2026-01-06 23:09:44,805", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 피처 생성 및 라벨링 (Derive)"}
+{"asctime": "2026-01-06 23:09:44,805", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 데이터 무결성 점검 (Check)"}
+{"asctime": "2026-01-06 23:09:44,806", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 데이터 정제 및 이상치 보정 (Clean) [NEW]"}
+{"asctime": "2026-01-06 23:09:44,806", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 이전 메뉴로"}
+{"asctime": "2026-01-06 23:09:44,806", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"선택:\""}
+{"asctime": "2026-01-06 23:11:12,542", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"0\""}
+{"asctime": "2026-01-06 23:11:12,542", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-06 23:11:12,542", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "      <<< SpikeHunter v5.2 Integrated Pipeline >>>"}
+{"asctime": "2026-01-06 23:11:12,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "============================================================"}
+{"asctime": "2026-01-06 23:11:12,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "1. 데이터 관리 (수집/생성/점검)"}
+{"asctime": "2026-01-06 23:11:12,543", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "2. 모델 학습 및 ML 최적화"}
+{"asctime": "2026-01-06 23:11:12,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "3. 전략 백테스트 / 최적화 / WF검증"}
+{"asctime": "2026-01-06 23:11:12,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "4. 분석 메뉴 (Feature Analysis)"}
+{"asctime": "2026-01-06 23:11:12,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "5. 유틸리티 (Utils)"}
+{"asctime": "2026-01-06 23:11:12,544", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "6. 실전 검증 (Field Test)"}
+{"asctime": "2026-01-06 23:11:12,545", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "9. 유지보수 및 데이터 관리 (Maintenance)"}
+{"asctime": "2026-01-06 23:11:12,545", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "0. 종료"}
+{"asctime": "2026-01-06 23:11:12,545", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 263, "message": "User Prompt: \"메뉴를 선택하세요:\""}
+{"asctime": "2026-01-06 23:11:13,357", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_io.py", "lineno": 271, "message": "User Response: \"0\""}
+{"asctime": "2026-01-06 23:11:13,358", "name": "QuantPipeline", "levelname": "INFO", "filename": "utils_logger.py", "lineno": 72, "message": "프로그램을 종료합니다."}

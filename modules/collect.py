@@ -335,8 +335,10 @@ def run_collect(settings_path: str, start: str = None, end: str = None, use_meta
     logger.info("      <<< KOSPI 지수 데이터 수집 시작 >>>")
     logger.info("="*50)
     
-    # Check for API Key
+    # Check for API Key (Support both root and ml_params)
     api_key = cfg.get('krx_api_key')
+    if not api_key:
+        api_key = cfg.get('ml_params', {}).get('krx_api_key')
     if api_key and str(api_key).strip() == "": api_key = None
     
     try:

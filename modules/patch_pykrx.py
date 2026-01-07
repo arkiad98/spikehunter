@@ -24,7 +24,7 @@ def patch_pykrx_referer():
             
             # Add Referer (PR #249 Solution)
             self.headers.update({
-                "Referer": "http://data.krx.co.kr/contents/MDC/MDI/mdiLoader/index.cmd?menuId=MDC0201",
+                "Referer": "https://data.krx.co.kr/contents/MDC/MDI/outerLoader/index.cmd",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
             })
             
@@ -46,6 +46,9 @@ def patch_pykrx_referer():
         # Call backend
         df = krx.get_market_ohlcv_by_ticker(date, market)
         
+        # [Debug] Log columns to see what we are getting
+        logger.info(f"[Patch] {date} Raw columns: {df.columns.tolist()}")
+
         # Check and Fix Columns if needed
         # Expected: ['시가', '고가', '저가', '종가', '거래량', '거래대금', '등락률']
         rename_map = {
@@ -55,12 +58,19 @@ def patch_pykrx_referer():
         }
         df = df.rename(columns=rename_map)
         
+        # [Debug] Log columns after rename
+        logger.info(f"[Patch] {date} Renamed columns: {df.columns.tolist()}")
+        
         # Original logic: Check holiday (if all 0)
         # We modify this to be safe - only check if columns exist
         required = ['시가', '고가', '저가', '종가']
         if all(col in df.columns for col in required):
              holiday = (df[required] == 0).all(axis=None)
              # Logic skip for safety
+        else:
+             # If required columns are missing, it implies renaming failed or empty data
+             if not df.empty:
+                 logging.warning(f"[Patch] {date} Missing required columns. Available: {df.columns.tolist()}")
         
         return df
 

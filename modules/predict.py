@@ -225,7 +225,7 @@ def get_target_business_day() -> Optional[pd.Timestamp]:
     try:
         # [수정] KOSPI 지수 데이터 수집(get_index_ohlcv) 오류 우회 (2026년 issue)
         # 삼성전자(005930)를 Proxy로 사용하여 영업일 확인
-        df_index = stock.get_market_ohlcv_by_ticker(start_str, end_str, "005930")
+        df_index = stock.get_market_ohlcv(start_str, end_str, "005930")
         
         if df_index.empty:
             logger.error("영업일 목록을 가져올 수 없습니다.")

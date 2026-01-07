@@ -62,7 +62,7 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             # Constraint 2: MDD < -30% (Bear Market 수용 가능한 현실적 하한선)
             if win_rate < 0.2 or mdd < -0.30:
                 # [Debug] rejection reason logging
-                # logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
+                logger.debug(f"Trial {trial.number} Rejected: WR={win_rate:.2f}, MDD={mdd:.2f}")
                 score = -999.0 # 탈락
             else:
                 # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
@@ -77,13 +77,13 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
         # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지, WFO 안정성 위해 완화)
         if metrics.get('총거래횟수', 0) < 3:
             # [Debug] rejection reason
-            # logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
+            logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
             return -999.0
             
         return score
         
     except Exception as e:
-        # logger.warning(f"Trial {trial.number} failed: {e}")
+        logger.warning(f"Trial {trial.number} failed: {e}")
         return -999.0
 
 def optimize_strategy_headless(settings_path: str, strategy_name: str, 
@@ -233,8 +233,14 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
         logger.error(f"데이터셋이 없습니다: {dataset_path}")
         return
 
-    df = pd.read_parquet(dataset_path)
-    df['date'] = pd.to_datetime(df['date'])
+    try:
+        df = pd.read_parquet(dataset_path)
+        df['date'] = pd.to_datetime(df['date'])
+    except Exception as e:
+        logger.error(f"데이터셋 파일을 읽을 수 없습니다 (손상됨): {dataset_path}")
+        logger.error(f"오류 내용: {e}")
+        logger.info(">> 해결 방법: 메인 메뉴 '1. 데이터 관리' -> '2. 피처 생성 (Derive)'를 실행하여 데이터셋을 재생성해주세요.")
+        return
     
     # 컬럼명 통일 (안전장치)
     rename_map = {
