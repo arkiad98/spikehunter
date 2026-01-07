@@ -36,8 +36,8 @@ ml_params:
   krx_api_key: "9366E92B67004AC7889ED857B0A2C589C8A69D1B"
 
   # 데이터 수집 (2025.12.31까지 실제 데이터, 이후 예측/시뮬레이션)거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
-  target_surge_rate: 0.06977039174197706
-  stop_loss_rate: -0.025894790231361674
+  target_surge_rate: 0.08587243610257259
+  stop_loss_rate: -0.029991976903694335
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 24  # [Update] 27 months ago ~ 3 months ago (24m training + 3m offset)
@@ -127,7 +127,7 @@ ml_params:
     random_strength: 0.5607904698110447
 
 # 4. 전략 최적화 설정
-  classification_threshold: 0.29148933887406403
+  classification_threshold: 0.42391134251039286
 optimization:
   SpikeHunter_R1_BullStable:
     optimize_on: Hybrid_Stability
@@ -136,7 +136,7 @@ optimization:
       target_r: {type: float, low: 0.06, high: 0.10} # [Refined] WFO Optimized Range (Center 8-9%)
       stop_r: {type: float, low: -0.05, high: -0.025} # [Refined] WFO Optimized Range (Include -4~-5%)
       min_ml_score: {type: float, low: 0.20, high: 0.60} # [Correction] User reported scores > 0.50, expanded range
-      max_market_vol: {type: float, low: 0.015, high: 0.04}
+      max_market_vol: {type: float, low: 0.015, high: 0.50} # [Modified] Comparing: Effectively Removed (High=0.5)
       vbo_k: {type: float, low: 0.3, high: 0.7}
       min_mfi: {type: float, low: 40.0, high: 60.0}
 
@@ -144,13 +144,13 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.06977039174197706 # [수정] 예측력 우선 초기값
-    stop_r: -0.025894790231361674 # [수정] 하한 -5%
+    target_r: 0.08587243610257259 # [수정] 예측력 우선 초기값
+    stop_r: -0.029991976903694335 # [수정] 하한 -5%
     max_hold: 5
-    min_ml_score: 0.29148933887406403 # [수정] 무난한 시작값
-    vbo_k: 0.44546026507313446
-    max_market_vol: 0.016067488935397216
-    min_mfi: 56.19434719373056
+    min_ml_score: 0.42391134251039286 # [수정] 무난한 시작값
+    vbo_k: 0.4295391530231883
+    max_market_vol: 0.21206306731869534
+    min_mfi: 58.569323551081204
     min_obv_slope: 0
     top_n: 5
 

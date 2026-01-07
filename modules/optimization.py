@@ -62,11 +62,11 @@ def objective(trial, settings_path, strategy_name, start_date, end_date, preload
             # Constraint 2: MDD < -30% (Reverted to original strict constraint for 2023-2025 Bull/Chop market)
             if win_rate < 0.2 or mdd < -0.30:
                 # [Debug] rejection reason logging -> INFO for visibility
-                logger.info(f" >> [Rejected] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Limit: WR<20% or MDD<-30%)")
+                logger.info(f" >> [Rejected] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Limit: WR<20% or MDD<-30%) | Params: {params}")
                 score = -999.0 # 탈락
             else:
                 # [Success] 통과한 경우에도 수치 기록 (User Request)
-                logger.info(f" >> [Passed] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Score Base)")
+                logger.info(f" >> [Passed] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Score Base) | Params: {params}")
                 
                 # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
                 # Score = Sharpe * (승률 가중치) - (MDD 페널티)
