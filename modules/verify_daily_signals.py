@@ -363,7 +363,8 @@ def print_detailed_verification_report(settings_path: str):
         # 기본 정보
         item = {
             '추천일': signal_date.strftime('%Y-%m-%d'),
-            '조건': f"+{target_rate*100:.2f}% / {stop_rate*100:.2f}%", # [수정] 소수점 2자리 표기
+            '수익조건': f"{target_rate*100:+.2f}%", # [수정] 컬럼 분리
+            '손절조건': f"{stop_rate*100:+.2f}%",   # [수정] 컬럼 분리
             '종목명': row['name'] if row['name'] else name_map.get(code, code),
             'ML점수': f"{float(row.get('ml_score', 0.0)):.4f}",
             '추천가': entry_price,
@@ -385,8 +386,9 @@ def print_detailed_verification_report(settings_path: str):
                 p_close = p_row['close']
                 p_ret = (p_close - entry_price) / entry_price * 100
                 
-                # 터미널 공간을 위해 등락률 위주 표시
-                item[col_name] = f"{p_ret:+.2f}%"
+                # 터미널 공간을 위해 등락률 위주 표시 -> 사용자 요청: 가격 표기
+                # "10,500 (+5.0%)" 포맷 사용
+                item[col_name] = f"{int(p_close):,} ({p_ret:+.1f}%)"
             else:
                 item[col_name] = "-"
         
@@ -418,15 +420,16 @@ def print_detailed_verification_report(settings_path: str):
     # 5. 터미널 출력 (Column Selection & Formatting)
     # 핵심 컬럼만 추려서 출력
     # [수정] 터미널에는 3일까지만 표시 (가독성 확보)
-    display_cols = ['추천일', '조건', '종목명', 'ML점수', '추천가', '목표가', '손절가', '+1일', '+2일', '+3일', '최고가', '수익률', '상태']
+    # [수정] 조건 -> 수익조건, 손절조건 분리
+    display_cols = ['추천일', '수익조건', '손절조건', '종목명', 'ML점수', '추천가', '목표가', '손절가', '+1일', '+2일', '+3일', '최고가', '수익률', '상태']
     
     # 추천가 천단위 포맷팅을 위해 df_display 별도 생성
     df_disp = df_report[display_cols].copy()
     df_disp['추천가'] = df_disp['추천가'].apply(lambda x: f"{int(x):,}")
     
-    print("\n" + "="*140)
+    print("\n" + "="*150)
     print("                                      <<< 추천 종목 상세 일별 추이 (3일 단축 표시) >>>")
-    print("="*140)
+    print("="*150)
     print(df_disp.to_string(index=False))
-    print("="*140 + "\n")
+    print("="*150 + "\n")
 
