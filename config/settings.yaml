@@ -36,8 +36,8 @@ ml_params:
   krx_api_key: "9366E92B67004AC7889ED857B0A2C589C8A69D1B"
 
   # 데이터 수집 (2025.12.31까지 실제 데이터, 이후 예측/시뮬레이션)거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
-  target_surge_rate: 0.07126389898469383
-  stop_loss_rate: -0.0451340286610204
+  target_surge_rate: 0.06438400612569851
+  stop_loss_rate: -0.04570015613459495
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 24  # [Update] 27 months ago ~ 3 months ago (24m training + 3m offset)
@@ -127,7 +127,7 @@ ml_params:
     random_strength: 0.5607904698110447
 
 # 4. 전략 최적화 설정
-  classification_threshold: 0.382437920804562
+  classification_threshold: 0.5267801051556564
 optimization:
   SpikeHunter_R1_BullStable:
     optimize_on: Hybrid_Stability
@@ -144,13 +144,13 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.07126389898469383 # [수정] 예측력 우선 초기값
-    stop_r: -0.0451340286610204   # [수정] 하한 -5%
+    target_r: 0.06438400612569851 # [수정] 예측력 우선 초기값
+    stop_r: -0.04570015613459495  # [수정] 하한 -5%
     max_hold: 5
-    min_ml_score: 0.382437920804562   # [수정] 무난한 시작값
-    vbo_k: 0.3391131745658625
-    max_market_vol: 0.2918688927909167
-    min_mfi: 46.845375834259634
+    min_ml_score: 0.5267801051556564  # [수정] 무난한 시작값
+    vbo_k: 0.3679056932195563
+    max_market_vol: 0.2098230247166528
+    min_mfi: 44.08925455282127
     min_obv_slope: 0
     top_n: 5
 
