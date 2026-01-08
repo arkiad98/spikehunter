@@ -36,8 +36,8 @@ ml_params:
   krx_api_key: "9366E92B67004AC7889ED857B0A2C589C8A69D1B"
 
   # 데이터 수집 (2025.12.31까지 실제 데이터, 이후 예측/시뮬레이션)거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
-  target_surge_rate: 0.08587243610257259
-  stop_loss_rate: -0.029991976903694335
+  target_surge_rate: 0.06845011798506281
+  stop_loss_rate: -0.026545477283436394
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 24  # [Update] 27 months ago ~ 3 months ago (24m training + 3m offset)
@@ -51,13 +51,13 @@ ml_params:
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 7.51197378358929  # [Restored] Exact Value
-    n_estimators: 877     # [Restored] High estimators for low LR
-    learning_rate: 0.0010007961159442004 # [Restored] Low LR
-    num_leaves: 64       # [Restored] Simple Model
-    max_depth: 30          # [Restored] Shallow Depth
-    colsample_bytree: 0.557974002437051
-    subsample: 0.5031358420339449
+    scale_pos_weight: 5.314731756464871 # [Restored] Exact Value
+    n_estimators: 602     # [Restored] High estimators for low LR
+    learning_rate: 0.004483644884687222  # [Restored] Low LR
+    num_leaves: 249      # [Restored] Simple Model
+    max_depth: 10          # [Restored] Shallow Depth
+    colsample_bytree: 0.5148344778223497
+    subsample: 0.7481413548066166
 
     n_jobs: -1 # [Dynamic] Handled by code
     verbose: -1
@@ -72,7 +72,7 @@ ml_params:
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 25
+    min_child_samples: 89
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -127,7 +127,7 @@ ml_params:
     random_strength: 0.5607904698110447
 
 # 4. 전략 최적화 설정
-  classification_threshold: 0.42391134251039286
+  classification_threshold: 0.5572449271330928
 optimization:
   SpikeHunter_R1_BullStable:
     optimize_on: Hybrid_Stability
@@ -144,13 +144,13 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.08587243610257259 # [수정] 예측력 우선 초기값
-    stop_r: -0.029991976903694335 # [수정] 하한 -5%
+    target_r: 0.06845011798506281 # [수정] 예측력 우선 초기값
+    stop_r: -0.026545477283436394 # [수정] 하한 -5%
     max_hold: 5
-    min_ml_score: 0.42391134251039286 # [수정] 무난한 시작값
-    vbo_k: 0.4295391530231883
-    max_market_vol: 0.21206306731869534
-    min_mfi: 58.569323551081204
+    min_ml_score: 0.5572449271330928  # [수정] 무난한 시작값
+    vbo_k: 0.38840726597537745
+    max_market_vol: 0.44170913756091373
+    min_mfi: 44.793841104120396
     min_obv_slope: 0
     top_n: 5
 

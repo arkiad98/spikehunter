@@ -407,7 +407,24 @@ def _menu_data_management(settings_path):
         print("0. 이전 메뉴로")
         
         sel = get_user_input("선택: ")
-        if sel == '1': collect.run_collect(settings_path)
+        if sel == '1': 
+            print("  [데이터 수집 옵션]")
+            print("  1. 자동 (최근 수집일 이후 ~ 오늘)")
+            print("  2. 전체 초기화 및 재수집 (2020-01-01 ~ 오늘)")
+            print("  3. 기간 지정 (직접 입력)")
+            sub_sel = get_user_input("  선택 (1/2/3): ")
+
+            if sub_sel == '1':
+                collect.run_collect(settings_path)
+            elif sub_sel == '2':
+                confirm = get_user_input("  정말 전체 데이터를 삭제하고 다시 수집하시겠습니까? (y/n): ")
+                if confirm.lower() == 'y':
+                    collect.run_collect(settings_path, overwrite=True)
+            elif sub_sel == '3':
+                s_date = get_user_input("  시작일 (YYYY-MM-DD): ")
+                e_date = get_user_input("  종료일 (YYYY-MM-DD): ")
+                collect.run_collect(settings_path, start=s_date, end=e_date, use_meta=False)
+
         elif sel == '2': derive.run_derive(settings_path)
         elif sel == '3': 
             try:
