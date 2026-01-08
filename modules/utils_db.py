@@ -267,12 +267,15 @@ def insert_shap_results(run_id: str, analysis_type: str, shap_df: pd.DataFrame):
 # 🔴 [추가] 추천 종목(Signal) 관리 함수들
 
 def insert_daily_signals(signals: pd.DataFrame, strategy_name: str, target_rate: float = 0.10, stop_rate: float = -0.05):
-    """오늘의 추천 종목들을 DB에 등록합니다."""
+    """오늘의 추천 종목들을 DB에 등록합니다. (해당 일자의 기존 기록은 제거 - 최신본 유지)"""
     if signals.empty: return
     
     current_time = datetime.now().isoformat()
     signals_to_insert = []
     
+    # [수정] 날짜별로 기존 데이터를 삭제하기 위해 처리 대상 날짜를 수집
+    target_dates = set()
+
     for _, row in signals.iterrows():
         # 기본 정보
         close_price = float(row['close'])
@@ -283,8 +286,11 @@ def insert_daily_signals(signals: pd.DataFrame, strategy_name: str, target_rate:
         stop_price = entry_price * (1 + stop_rate)
         max_hold = 5
         
+        date_str = row['date'].strftime('%Y-%m-%d') if isinstance(row['date'], pd.Timestamp) else str(row['date'])[:10]
+        target_dates.add(date_str)
+
         record = {
-            'date': row['date'].strftime('%Y-%m-%d') if isinstance(row['date'], pd.Timestamp) else str(row['date']),
+            'date': date_str,
             'code': str(row['code']),
             'name': row.get('name', ''),
             'strategy_name': strategy_name,
@@ -293,8 +299,8 @@ def insert_daily_signals(signals: pd.DataFrame, strategy_name: str, target_rate:
             'entry_price': entry_price,
             'target_price': target_price,
             'stop_price': stop_price,
-            'target_rate': target_rate, # [Add]
-            'stop_rate': stop_rate,     # [Add]
+            'target_rate': target_rate,
+            'stop_rate': stop_rate,
             'max_hold_days': max_hold,
             'status': 'PENDING',
             'highest_price': entry_price,
@@ -305,28 +311,22 @@ def insert_daily_signals(signals: pd.DataFrame, strategy_name: str, target_rate:
         
     try:
         with get_db_connection() as conn:
-            # 중복 방지 (같은 날짜, 같은 종목이면 스킵하거나 업데이트)
-            # 여기서는 간단히 INSERT OR IGNORE 로 처리하거나, 비즈니스 로직에 따라 다름
-            # sqlite에서는 unique constraint가 없으면 계속 들어감. 테이블 생성 시 제약조건을 안 걸었으므로 
-            # 코드 레벨에서 중복 체크
             cursor = conn.cursor()
             
+            # [수정] 해당 날짜의 기존 데이터 삭제 (Overwrite)
+            for d in target_dates:
+                # logger.info(f"기존 추천 신호 삭제(Overwrite) - Date: {d}")
+                cursor.execute("DELETE FROM daily_signals WHERE date = ?", (d,))
+            
+            # 신규 데이터 삽입
             for rec in signals_to_insert:
-                # 중복 체크
-                cursor.execute(
-                    "SELECT signal_id FROM daily_signals WHERE date = ? AND code = ? AND strategy_name = ?", 
-                    (rec['date'], rec['code'], rec['strategy_name'])
-                )
-                existing = cursor.fetchone()
-                
-                if not existing:
-                    cols = ', '.join(rec.keys())
-                    placeholders = ', '.join(['?'] * len(rec))
-                    sql = f"INSERT INTO daily_signals ({cols}) VALUES ({placeholders})"
-                    cursor.execute(sql, list(rec.values()))
+                cols = ', '.join(rec.keys())
+                placeholders = ', '.join(['?'] * len(rec))
+                sql = f"INSERT INTO daily_signals ({cols}) VALUES ({placeholders})"
+                cursor.execute(sql, list(rec.values()))
             
             conn.commit()
-            logger.info(f"{len(signals_to_insert)}개의 신규 추천 신호를 DB에 등록했습니다.")
+            logger.info(f"{len(signals_to_insert)}개의 신규 추천 신호를 DB에 등록했습니다. (기존 {len(target_dates)}일치 데이터 덮어씀)")
             
     except Exception as e:
         logger.error(f"추천 신호 등록 중 오류: {e}", exc_info=True)

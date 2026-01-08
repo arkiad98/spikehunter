@@ -205,9 +205,23 @@ def verify_signals(settings_path: str):
         strategy_name = row.get('strategy_name', 'SpikeHunter')
         
         # 동적 파라미터 결정
+        # 동적 파라미터 결정 (DB에 저장된 당시 파라미터 우선 사용)
+        # DB에 target_rate/stop_rate가 있다면 그것을 사용하고, 없다면(Old Data) 현재 설정 사용
+        db_target_r = row.get('target_rate')
+        db_stop_r = row.get('stop_rate')
+        
         st_cfg = all_strategies.get(strategy_name, {})
-        target_rate = st_cfg.get('target_r', ml_params.get('target_surge_rate', 0.10))
-        stop_rate = st_cfg.get('stop_r', ml_params.get('stop_loss_rate', -0.05))
+        
+        if pd.notna(db_target_r):
+            target_rate = float(db_target_r)
+        else:
+            target_rate = st_cfg.get('target_r', ml_params.get('target_surge_rate', 0.10))
+            
+        if pd.notna(db_stop_r):
+            stop_rate = float(db_stop_r)
+        else:
+            stop_rate = st_cfg.get('stop_r', ml_params.get('stop_loss_rate', -0.05))
+            
         max_hold = st_cfg.get('max_hold', ml_params.get('target_hold_period', 5))
         fee_rate = float(cfg.get('fee_rate', 0.0))
         
@@ -350,11 +364,24 @@ def print_detailed_verification_report(settings_path: str):
         
         # 동적 기준가 재계산 (DB값보다 현재 설정 우선 시각화 -> 혼동 방지를 위해 DB 저장값(히스토리)이 있다면 그것을 쓰거나, 
         # 아니면 현재 설정을 쓴다고 명시해야 함. 여기선 현재 설정값으로 통일)
+        # 동적 기준가 재계산 (DB에 저장된 당시 파라미터 우선)
         strategy_name = row.get('strategy_name', 'SpikeHunter')
         st_cfg = cfg.get("strategies", {}).get(strategy_name, {})
-        target_rate = st_cfg.get('target_r', ml_params.get('target_surge_rate', 0.10))
-        stop_rate = st_cfg.get('stop_r', ml_params.get('stop_loss_rate', -0.05))
         
+        db_target_r = row.get('target_rate')
+        db_stop_r = row.get('stop_rate')
+        
+        if pd.notna(db_target_r):
+            target_rate = float(db_target_r)
+        else:
+            target_rate = st_cfg.get('target_r', ml_params.get('target_surge_rate', 0.10))
+
+        if pd.notna(db_stop_r):
+            stop_rate = float(db_stop_r)
+        else:
+            stop_rate = st_cfg.get('stop_r', ml_params.get('stop_loss_rate', -0.05))
+        
+        # 목표가/손절가 계산 (DB에 저장된 값이 있으면 그것을 참고해도 되지만, rate 기반 일관성 유지)
         target_price = entry_price * (1 + target_rate)
         stop_price = entry_price * (1 + stop_rate)
         

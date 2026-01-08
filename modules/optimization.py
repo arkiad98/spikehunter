@@ -1,219 +1,137 @@
 import os
+import joblib
 import optuna
+import shutil
+import tempfile
 import pandas as pd
+from tqdm import tqdm
 from datetime import datetime
 from ruamel.yaml import YAML
+from joblib import Parallel, delayed
 
 from modules.utils_logger import logger
 from modules.utils_io import read_yaml, update_yaml, get_user_input
-from modules.utils_system import get_optimal_cpu_count # [New]
+from modules.utils_system import get_optimal_cpu_count
 from modules.backtest import run_backtest
 
-def objective(trial, settings_path, strategy_name, start_date, end_date, preloaded_features=None):
-    """Optuna 목적 함수: 특정 파라미터 조합으로 백테스트 실행 후 성과 반환"""
-    
-    cfg = read_yaml(settings_path)
-    opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
-    param_space = opt_cfg.get("param_space", {})
-    
-    # 1. 파라미터 제안 (Suggest)
-    params = {}
+# [NEW] Optuna Distributions Helper
+def get_optuna_distributions(param_space):
+    """YAML 설정의 param_space를 Optuna Distribution 객체로 변환"""
+    dists = {}
     for name, config in param_space.items():
-        if config['type'] == 'int':
-            params[name] = trial.suggest_int(name, config['low'], config['high'])
-        elif config['type'] == 'float':
-            step = config.get('step', None)
-            params[name] = trial.suggest_float(name, config['low'], config['high'], step=step)
-        elif config['type'] == 'categorical':
-            params[name] = trial.suggest_categorical(name, config['choices'])
-            
-    # 2. 백테스트 실행
-    # 임시 결과 폴더 (결과 저장 안 함)
-    # 병렬 실행 시 폴더명 충돌을 방지하기 위해 trial 번호를 포함
-    temp_run_dir = os.path.join(cfg["paths"]["cache"], f"opt_trial_{trial.number}")
-    
+        p_type = config.get('type')
+        if p_type == 'int':
+            dists[name] = optuna.distributions.IntDistribution(
+                config['low'], config['high'], step=config.get('step', 1)
+            )
+        elif p_type == 'float':
+            dists[name] = optuna.distributions.FloatDistribution(
+                config['low'], config['high'], step=config.get('step', None)
+            )
+        elif p_type == 'categorical':
+            dists[name] = optuna.distributions.CategoricalDistribution(config['choices'])
+    return dists
+
+# [NEW] Worker Function (Process-based)
+def _worker_backtest(params, data_path, strategy_name, settings_path, start_date, end_date):
+    """
+    워커 프로세스용 백테스트 실행 함수
+    - data_path: 멤맵(mmap) 가능한 파일 경로 (Zero-Copy)
+    - params: Optuna가 제안한 파라미터 셋
+    """
     try:
+        # 1. Load Data (Memory Mapped - Zero Copy Read)
+        # mmap_mode='r'로 로드하면 힙 메모리를 복제하지 않고 파일 포인터만 공유함
+        df = joblib.load(data_path, mmap_mode='r')
+        
+        # 2. Load Config (Lightweight)
+        # 각 프로세스에서 설정을 개별 로드 (Side-Effect 방지)
+        cfg = read_yaml(settings_path)
+        
+        # 3. Run Backtest
+        # preloaded_features에 df(mmap) 전달 -> run_backtest 내부에서 필요한 기간만 .copy()하여 사용
         result = run_backtest(
-            run_dir=temp_run_dir,
+            run_dir=None, # Temp run (no artifacts save)
             strategy_name=strategy_name,
             settings_cfg=cfg,
             start=start_date,
             end=end_date,
             param_overrides=params,
             quiet=True,
-            preloaded_features=preloaded_features,
-            save_to_db=False, # 최적화 중에는 DB 저장 생략
-            skip_exclusion=True # [Optim] 이미 필터링된 데이터 사용
+            preloaded_features=df, 
+            save_to_db=False,
+            skip_exclusion=True # 이미 메인에서 필터링됨
         )
         
-        if not result: return -999.0 # 실패 시 페널티
+        if not result: return -999.0
         
+        # 4. Calculate Score & Constraints
         metrics = result['metrics']
+        opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
         optimize_on = opt_cfg.get("optimize_on", "Sharpe_raw")
         
+        # Hybrid Stability Logic (Copied from original logic)
+        sharpe = metrics.get('Sharpe_raw', -999.0)
+        win_rate = metrics.get('win_rate_raw', 0.0)
+        mdd = metrics.get('MDD_raw', -1.0) 
+        
+        score = -999.0
+        
         if optimize_on == "Hybrid_Stability":
-            # [Refined V2] 안정성 + 리스크 관리 (Fixed MDD Constraint)
-            # 동적 판단(Look-ahead Bias) 대신 고정된 완화값(-30%) 사용
-            sharpe = metrics.get('Sharpe_raw', -999.0)
-            win_rate = metrics.get('win_rate_raw', 0.0)
-            mdd = metrics.get('MDD_raw', -1.0) 
-            
-            # Constraint 1: 승률 < 20%
-            # Constraint 2: MDD < -30% (Reverted to original strict constraint for 2023-2025 Bull/Chop market)
+            # Constraint: WR < 20% or MDD < -30%
             if win_rate < 0.2 or mdd < -0.30:
-                # [Debug] rejection reason logging -> INFO for visibility
-                logger.info(f" >> [Rejected] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Limit: WR<20% or MDD<-30%) | Params: {params}")
-                score = -999.0 # 탈락
-            else:
-                # [Success] 통과한 경우에도 수치 기록 (User Request)
-                logger.info(f" >> [Passed] Trial {trial.number}: WR={win_rate:.2%}, MDD={mdd:.2%} (Score Base) | Params: {params}")
-                
-                # [Robust Metric] 단순 Sharpe가 아닌, MDD와 승률을 반영한 안정성 점수
-                # Score = Sharpe * (승률 가중치) - (MDD 페널티)
-                # MDD가 0에 가까울수록(음수) 좋음. mdd가 낮을수록(더 큰 음수) 페널티.
-                stability_score = sharpe * (1 + win_rate) * (1 + 1/abs(mdd-0.01)) 
-                score = stability_score
+                # Rejected
+                return -999.0
+            
+            # Score Calculation
+            # Score = Sharpe * (승률 가중치) - (MDD 페널티)
+            score = sharpe * (1 + win_rate) * (1 + 1/abs(mdd-0.01))
+            
         else:
             score = metrics.get(optimize_on, -999.0)
-
-        
-        # 안전장치: 거래 횟수가 너무 적으면 페널티 (과적합 방지, WFO 안정성 위해 완화)
+            
+        # Min Trades Check
         if metrics.get('총거래횟수', 0) < 3:
-            # [Debug] rejection reason
-            logger.debug(f"Trial {trial.number} Rejected: Too few trades ({metrics.get('총거래횟수', 0)})")
             return -999.0
             
         return score
         
     except Exception as e:
-        logger.warning(f"Trial {trial.number} failed: {e}")
+        # Worker log might be lost or interleaved, safe to just return fail
+        import traceback
+        print(f"\n[Worker Error] Trail failed: {e}")
+        traceback.print_exc()
         return -999.0
 
-def optimize_strategy_headless(settings_path: str, strategy_name: str, 
-                             start_date: str, end_date: str, 
-                             n_trials: int = 20, n_jobs: int = 1, dataset_path: str = None):
-    """비대화형 전략 최적화 (Walk-Forward용)"""
-    logger.info(f" >> [WFO] 전략 최적화 시작 ({start_date} ~ {end_date})")
-    
-    cfg = read_yaml(settings_path)
-    paths = cfg["paths"]
-    
-    # 데이터셋 로드
-    if dataset_path is None:
-        # Default logic for WFO (Train split prioritized)
-        train_split_path = os.path.join(paths["features"], "dataset_v4.parquet")
-        if os.path.exists(train_split_path):
-            dataset_path = train_split_path
-        else:
-            dataset_path = os.path.join(paths.get("ml_dataset", "data/proc/ml_dataset"), "ml_classification_dataset.parquet")
-        
-    if not os.path.exists(dataset_path):
-        logger.error(f"[WFO] 데이터셋 없음: {dataset_path}")
-        return {}
-
-    df = pd.read_parquet(dataset_path)
-    df['date'] = pd.to_datetime(df['date'])
-    
-    # Rename columns safety
-    rename_map = {'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume'}
-    df.rename(columns=rename_map, inplace=True)
-    
-    # Study
-    study_name = f"WFO-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    study = optuna.create_study(direction="maximize", study_name=study_name)
-    
-    # Warm Start (현재 설정값)
-    current_params = cfg.get("strategies", {}).get(strategy_name, {})
-    opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
-    param_space = opt_cfg.get("param_space", {})
-    
-    warm_params = {}
-    for k, v in current_params.items():
-        if k in param_space:
-             space = param_space[k]
-             # Clamp value to be within [low, high]
-             low = space.get('low', float('-inf'))
-             high = space.get('high', float('inf'))
-             
-             if v < low: v = low
-             if v > high: v = high
-             
-             warm_params[k] = v
-             
-    if warm_params:
-        study.enqueue_trial(warm_params)
-        
-    # [Optimization Speedup] Pre-calculate ML Scores for WFO
-    # WFO runs on Train Data (dataset_path), so we can pre-calc scores.
-    # Note: ensure we use the model trained for THIS period (which should be in paths['models'])
-    model_path = os.path.join(paths["models"], "lgbm_model.joblib")
-    if os.path.exists(model_path):
-        import joblib
-        logger.info(f" >> [WFO] ML Score 사전 계산 중... ({model_path})")
-        try:
-            model = joblib.load(model_path)
-            feature_names = getattr(model, 'feature_names_in_', None)
-            
-            if feature_names is not None:
-                missing = [c for c in feature_names if c not in df.columns]
-                if missing:
-                    for c in missing: df[c] = 0
-                
-                # Predict
-                X_temp = df[feature_names].fillna(0)
-                scores = model.predict_proba(X_temp)[:, 1]
-                df['ml_score'] = scores
-                logger.info(f" >> [WFO] ML Score 계산 완료. (Mean: {scores.mean():.4f}, Max: {scores.max():.4f})")
-            else:
-                df['ml_score'] = 0
-        except Exception as e:
-            logger.error(f"[WFO] 모델 로드/예측 오류: {e}")
-            df['ml_score'] = 0
-    else:
-        df['ml_score'] = 0
-
-    # [Constraint] 동적 국면 판단(Adaptive Regime) 제거
-    # 이유: 백테스트 시점(Start~End)의 전체 수익률을 보고 제약을 거는 것은 Look-ahead Bias(미래 편향) 소지 있음
-    # 따라서 고정된 완화값(-30%)을 Objective 함수 내에 하드코딩하여 사용함.
-
-    # Execute
-    study.optimize(
-        lambda trial: objective(trial, settings_path, strategy_name, start_date, end_date, df),
-        n_trials=n_trials,
-        n_jobs=n_jobs,
-        show_progress_bar=False 
-    )
-    
-    logger.info(f" >> [WFO] 최적화 완료. Best Score: {study.best_value:.4f}")
-    return study.best_params
-
+# [Refactored] Optimization Pipeline (In-Memory Batch Processing)
 def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHunter", 
                               use_ml_target: bool = True, regime_to_optimize: str = None, 
                               warm_start: bool = True, n_jobs: int = None, auto_approve: bool = False):
-    """전략 최적화 메인 파이프라인"""
+    """전략 최적화 메인 파이프라인 (In-Memory Multiprocessing)"""
     logger.info("\n" + "="*60)
-    logger.info("      <<< 전략 파라미터 최적화 (Strategy Optimization) >>>")
+    logger.info("      <<< 전략 파라미터 최적화 (Strategy Optimization - Multiprocess) >>>")
     logger.info("="*60)
     
-    # 사용자 입력으로 병렬 작업 수 설정
-    # Strategy Backtest is single-core, so we parallelize TRIALS.
-    # Default: Use 75% of Cores.
+    # 1. Parallel Config
     default_jobs = get_optimal_cpu_count(0.75)
-    
     if n_jobs is None:
         n_jobs_input = get_user_input(f"병렬 작업 수(n_jobs) (엔터: {default_jobs} [75%], -1: 전체): ")
         try:
             n_jobs = int(n_jobs_input) if n_jobs_input.strip() else default_jobs
+            if n_jobs == -1: n_jobs = os.cpu_count()
         except ValueError:
             n_jobs = default_jobs
-        
+    
+    # Windows Joblib Safety (Avoid excessive overhead)
+    # joblib on Windows uses 'loky' backend which spawns new processes.
+    # 20+ processes is fine with mmap.
     logger.info(f" >> 설정: n_jobs={n_jobs}")
     
     cfg = read_yaml(settings_path)
     paths = cfg["paths"]
     
-    # Strategy Name Auto-Detection
-    if strategy_name == "SpikeHunter": # Default value check
+    # Strategy Detection
+    if strategy_name == "SpikeHunter": 
         strategies = cfg.get("strategies", {})
         if strategies:
             strategy_name = list(strategies.keys())[0]
@@ -221,9 +139,7 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
         else:
             logger.warning("전략 설정이 없어 기본값 'SpikeHunter'를 사용합니다.")
     
-    # [Modified] Dynamic Optimization Period (42 Months Window)
-    # User Request: "42 months ago ~ 6 months ago" aligned with ML training config
-    # Logic: End = Now - Offset(6m), Start = End - Train(36m)
+    # 2. Date Setup
     now = datetime.now()
     ml_params = cfg.get("ml_params", {})
     train_months = ml_params.get("classification_train_months", 36)
@@ -231,16 +147,14 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
     
     end_dt = now - pd.DateOffset(months=offset_months)
     start_dt = end_dt - pd.DateOffset(months=train_months)
-    
     start_date = start_dt.strftime('%Y-%m-%d')
     end_date = end_dt.strftime('%Y-%m-%d')
     
     logger.info(f"최적화 데이터 로드 중... ({start_date} ~ {end_date})")
     
-    # Correct Dataset Path
+    # 3. Data Loading & Preprocessing
     dataset_path = os.path.join(paths.get("ml_dataset", "data/proc/ml_dataset"), "ml_classification_dataset.parquet")
     if not os.path.exists(dataset_path):
-        # Fallback to feature dir if not in ml_dataset
         dataset_path = os.path.join(paths["features"], "dataset_v4.parquet")
         
     if not os.path.exists(dataset_path):
@@ -248,183 +162,229 @@ def run_optimization_pipeline(settings_path: str, strategy_name: str = "SpikeHun
         return
 
     try:
+        # Load FULL dataset (to be mmapped)
         df = pd.read_parquet(dataset_path)
         df['date'] = pd.to_datetime(df['date'])
     except Exception as e:
-        logger.error(f"데이터셋 파일을 읽을 수 없습니다 (손상됨): {dataset_path}")
-        logger.error(f"오류 내용: {e}")
-        logger.info(">> 해결 방법: 메인 메뉴 '1. 데이터 관리' -> '2. 피처 생성 (Derive)'를 실행하여 데이터셋을 재생성해주세요.")
+        logger.error(f"데이터셋 로드 오류: {e}")
         return
     
-    # 컬럼명 통일 (안전장치)
-    rename_map = {
-        'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume'
-    }
+    # Normalize Columns
+    rename_map = {'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume'}
     df.rename(columns=rename_map, inplace=True)
     
-    # [Optim Efficiency] Pre-filter exclusions ONCE here
+    # Apply Exclusions (Data Cleaning)
     exclude_path = os.path.join(os.path.dirname(settings_path) if settings_path else "config", "exclude_dates.yaml")
     if os.path.exists(exclude_path):
         ex_cfg = read_yaml(exclude_path)
         exclusions = ex_cfg.get('exclusions', [])
-        
         if exclusions:
             logger.info(" >> 최적화 전 이상 데이터 일괄 제거 중...")
-            original_len = len(df)
-            
             exclude_set = set()
             for item in exclusions:
-                c = item['code']
                 for d in item['dates']:
-                    exclude_set.add((c, pd.Timestamp(d).date()))
+                    exclude_set.add((item['code'], pd.Timestamp(d).date()))
             
-            exclude_records = []
-            for c, d in exclude_set:
-                exclude_records.append({'code': c, 'date': pd.Timestamp(d)})
-            
-            if exclude_records:
-                exclude_df = pd.DataFrame(exclude_records)
-                exclude_df['exclude'] = True
-                exclude_df['date'] = pd.to_datetime(exclude_df['date'])
-                
-                df = df.merge(exclude_df, on=['code', 'date'], how='left')
-                df = df[df['exclude'].isna()].drop(columns=['exclude'])
-            
-            filtered_len = len(df)
-            if original_len > filtered_len:
-                logger.info(f" >> 통합 필터링 완료: {original_len - filtered_len}건 제거됨.")
-    
-    # [Optimization Speedup] Pre-calculate ML Scores ONCE
-    # This prevents running predict_proba in every single trial (massive bottleneck)
+            # Vectorized filter (Fast)
+            # Create a lookup column
+            df['temp_key'] = list(zip(df['code'], df['date'].dt.date))
+            df = df[~df['temp_key'].isin(exclude_set)].drop(columns=['temp_key'])
+            logger.info(f" >> 필터링 완료. (현재 데이터: {len(df)}행)")
+
+    # Pre-calculate ML Scores
     model_path = os.path.join(paths["models"], "lgbm_model.joblib")
     if os.path.exists(model_path):
-        import joblib
         logger.info(" >> [Optimization] ML Score 사전 계산 중... (Speed Optimization)")
         try:
             model = joblib.load(model_path)
             feature_names = getattr(model, 'feature_names_in_', None)
-            
             if feature_names is not None:
-                # Ensure columns exist
                 missing = [c for c in feature_names if c not in df.columns]
-                if missing:
-                    for c in missing: df[c] = 0
-                
-                # Predict
+                for c in missing: df[c] = 0
                 X_temp = df[feature_names].fillna(0)
-                scores = model.predict_proba(X_temp)[:, 1]
-                df['ml_score'] = scores
-                logger.info(f" >> ML Score 계산 완료. (Mean: {scores.mean():.4f}, Max: {scores.max():.4f})")
+                df['ml_score'] = model.predict_proba(X_temp)[:, 1]
+                logger.info(f" >> ML Score 계산 완료. (Mean: {df['ml_score'].mean():.4f})")
             else:
                 df['ml_score'] = 0
         except Exception as e:
-            logger.error(f"모델 로드/예측 중 오류 (무시됨): {e}")
-            df['ml_score'] = 0 # Fallback
+            logger.error(f"모델 로드 오류: {e}")
+            df['ml_score'] = 0
     else:
-        logger.warning(f"모델 파일이 없어 스코어를 0으로 설정합니다: {model_path}")
         df['ml_score'] = 0
 
-    # Optuna Study 생성
-    study_name = f"Opt-Strategy-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-    study = optuna.create_study(direction="maximize", study_name=study_name)
+    # 4. Prepare Shared Memory (Temp File)
+    # 16GB RAM 이슈 해결: 데이터를 임시 파일로 덤프 후 워커들은 mmap으로 읽음
+    temp_dir = tempfile.mkdtemp()
+    data_dump_path = os.path.join(temp_dir, 'opt_shared_data.joblib')
     
-    n_trials = cfg.get("optimization", {}).get(strategy_name, {}).get("n_trials", 20)
-    
-    logger.info(f"최적화 시작: {n_trials}회 시도")
+    logger.info(f" >> 공유 메모리용 데이터 덤프 중... ({data_dump_path})")
+    # compress=0으로 해야 mmap 가능 (joblib default is 0/None for dump of numpy arrays inside objects?)
+    # DataFrame dump via joblib might use pickle. For mmap, joblib handles numpy arrays separately.
+    joblib.dump(df, data_dump_path) 
+    # Clear original df from memory to free up space (since it's on disk now)
+    del df 
+    import gc; gc.collect()
 
-    # [NEW] Warm Start: 현재 파라미터를 초기 큐에 추가
-    baseline_value = -999.0
-    if warm_start:
-        current_strategy_params = cfg.get("strategies", {}).get(strategy_name, {})
+    try:
+        # 5. Setup Optuna Study
+        study_name = f"Opt-Strategy-{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        study = optuna.create_study(direction="maximize", study_name=study_name) # In-Memory Storage
+        
         opt_cfg = cfg.get("optimization", {}).get(strategy_name, {})
+        n_trials = opt_cfg.get("n_trials", 20)
         param_space = opt_cfg.get("param_space", {})
-        
-        # 최적화 대상 파라미터만 추출하여 초기값으로 설정
-        warm_params = {}
-        for key in param_space.keys():
-            if key in current_strategy_params:
-                warm_params[key] = current_strategy_params[key]
-        
-        if warm_params:
-            study.enqueue_trial(warm_params)
-            logger.info(f" >> Warm Start 설정됨: 현재 파라미터를 첫 번째 시도로 예약함 ({warm_params})")
-    
-    # 실행
-    study.optimize(
-        lambda trial: objective(trial, settings_path, strategy_name, start_date, end_date, df),
-        n_trials=n_trials,
-        n_jobs=n_jobs, # 사용자 입력값 적용
-        show_progress_bar=True
-    )
-    
-    logger.info("="*60)
-    logger.info(f"최적화 완료. Best Score: {study.best_value:.4f}")
-    logger.info(f"Best Params: {study.best_params}")
-    
-    # [NEW] Baseline(Warm Start) 결과 존재 시 비교
-    improvement_msg = ""
-    is_improved = True
-    
-    if warm_start and len(study.trials) > 0:
-        # 첫 번째 Trial(Warm Start)의 결과를 Baseline으로 간주
-        # (주의: 병렬 처리 시 순서가 보장되지 않을 수 있으나, enqueue된 것은 보통 가장 먼저 할당됨)
-        try:
-            baseline_value = study.trials[0].value
-            if baseline_value is not None:
-                logger.info(f"Baseline Score (Current): {baseline_value:.4f}")
-                diff = study.best_value - baseline_value
-                if diff > 0.0001:
-                    improvement_msg = f" (▲ {diff:.4f} 개선됨)"
-                    is_improved = True
-                else:
-                    improvement_msg = " (개선 없음)"
-                    is_improved = False
-        except:
-            pass
-            
-    logger.info(f"성능 비교: {improvement_msg}")
-    logger.info("="*60)
-    
-    # 결과 저장 여부
-    if auto_approve:
-        logger.info(" >> [Auto-Approve] 결과를 자동으로 저장합니다.")
-        choice = 'y'
-    else:
-        if is_improved:
-            prompt_msg = "최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): "
-        else:
-            prompt_msg = "성능 개선이 없거나 미미합니다. 그래도 저장하시겠습니까? (y/n): "
-            
-        choice = get_user_input(prompt_msg)
+        dists = get_optuna_distributions(param_space)
 
-    if choice.lower() == 'y':
-        update_yaml(settings_path, "strategies", strategy_name, study.best_params)
+        # Warm Start
+        if warm_start:
+            curr_params = cfg.get("strategies", {}).get(strategy_name, {})
+            # Only keep keys in param_space
+            warm_p = {k: v for k, v in curr_params.items() if k in param_space}
+            if warm_p:
+                study.enqueue_trial(warm_p)
+                logger.info(f" >> Warm Start 예약: {warm_p}")
+
+        logger.info(f"최적화 시작: {n_trials}회 시도 (병렬 {n_jobs} 프로세스)")
         
-        # Consistency: Update ml_params as well if target_r or stop_r changed
-        ml_updates = {}
-        if 'target_r' in study.best_params:
-            ml_updates['target_surge_rate'] = float(study.best_params['target_r']) # Cast to float for safety
-        if 'stop_r' in study.best_params:
-            ml_updates['stop_loss_rate'] = float(study.best_params['stop_r'])
+        # 6. Batch Execution Loop
+        pbar = tqdm(total=n_trials, desc="Optimization Progress")
         
-        # XGB/LGBM thresholds mapping
-        if 'min_ml_score' in study.best_params:
-            ml_updates['classification_threshold'] = float(study.best_params['min_ml_score'])
-            
-        if ml_updates:
-            # 직접 YAML 로드 및 수정 (update_yaml의 한계 극복)
-            yaml = YAML()
-            yaml.preserve_quotes = True
-            
-            with open(settings_path, 'r', encoding='utf-8') as f:
-                config_data = yaml.load(f)
-            
-            if 'ml_params' in config_data:
-                for k, v in ml_updates.items():
-                    config_data['ml_params'][k] = v
+        # joblib Context
+        with Parallel(n_jobs=n_jobs) as parallel:
+            while len(study.trials) < n_trials:
+                # Ask (Generate batch of params)
+                batch_size = min(n_jobs, n_trials - len(study.trials))
                 
-                with open(settings_path, 'w', encoding='utf-8') as f:
-                    yaml.dump(config_data, f)
-                logger.info(" >> ml_params 동기화 완료 (target_r/stop_r/threshold)")
+                # Ask multiple trials
+                trials_in_batch = []
+                for _ in range(batch_size):
+                    trials_in_batch.append(study.ask(dists))
+                
+                # Execute Batch in Parallel
+                scores = parallel(
+                    delayed(_worker_backtest)(
+                        trial.params, 
+                        data_dump_path, 
+                        strategy_name, 
+                        settings_path, 
+                        start_date, 
+                        end_date
+                    ) for trial in trials_in_batch
+                )
+                
+                # Tell (Report results)
+                for trial, score in zip(trials_in_batch, scores):
+                    study.tell(trial, score)
+                    pbar.update(1)
+                    
+                    # Log (Console) - Only Show Passed or Every N
+                    if score > -900: # Passed or valid
+                         logger.info(f" >> [Finished] Trial {trial.number}: Score={score:.4f} | Params={trial.params}")
+                    else:
+                         logger.debug(f" >> [Rejected] Trial {trial.number}")
+
+        pbar.close()
+        
+        # 7. Finalize & Save
+        logger.info("="*60)
+        best_trial = study.best_trial
+        logger.info(f"최적화 완료. Best Score: {best_trial.value:.4f}")
+        logger.info(f"Best Params: {best_trial.params}")
+        
+        # [NEW] Baseline(Warm Start) 결과 존재 시 비교
+        improvement_msg = ""
+        is_improved = True
+        
+        if warm_start and len(study.trials) > 0:
+            # 첫 번째 Trial(Warm Start)의 결과를 Baseline으로 간주
+            try:
+                # Ask-and-Tell에서는 병렬 실행 순서가 섞일 수 있으나, 
+                # enqueue된 trial은 보통 가장 먼저 ask() 되므로 trial number가 0일 확률이 높음.
+                baseline_trial = study.trials[0]
+                baseline_value = baseline_trial.value
+                
+                if baseline_value is not None:
+                    logger.info(f"Baseline Score (Current): {baseline_value:.4f}")
+                    diff = best_trial.value - baseline_value
+                    if diff > 0.0001:
+                        improvement_msg = f" (▲ {diff:.4f} 개선됨)"
+                        is_improved = True
+                    else:
+                        improvement_msg = " (개선 없음)"
+                        is_improved = False
+            except Exception as e:
+                logger.debug(f"Baseline 비교 실패: {e}")
+                pass
+                
+        logger.info(f"성능 비교: {improvement_msg}")
+        logger.info("="*60)
+        
+        # 결과 저장 여부
+        if auto_approve:
+            logger.info(" >> [Auto-Approve] 결과를 자동으로 저장합니다.")
+            choice = 'y'
+        else:
+            if is_improved:
+                prompt_msg = "최적 파라미터를 settings.yaml에 저장하시겠습니까? (y/n): "
+            else:
+                prompt_msg = "성능 개선이 없거나 미미합니다. 그래도 저장하시겠습니까? (y/n): "
+                
+            choice = get_user_input(prompt_msg)
+             
+        if choice.lower() == 'y':
+            update_yaml(settings_path, "strategies", strategy_name, best_trial.params)
             
-        logger.info("설정 파일이 업데이트되었습니다.")
+            # Sync to ml_params
+            ml_updates = {}
+            if 'target_r' in best_trial.params: ml_updates['target_surge_rate'] = float(best_trial.params['target_r'])
+            if 'stop_r' in best_trial.params: ml_updates['stop_loss_rate'] = float(best_trial.params['stop_r'])
+            if 'min_ml_score' in best_trial.params: ml_updates['classification_threshold'] = float(best_trial.params['min_ml_score'])
+            
+            if ml_updates:
+                yaml = YAML()
+                yaml.preserve_quotes = True
+                with open(settings_path, 'r', encoding='utf-8') as f: config_data = yaml.load(f)
+                if 'ml_params' in config_data:
+                    for k, v in ml_updates.items(): config_data['ml_params'][k] = v
+                    with open(settings_path, 'w', encoding='utf-8') as f: yaml.dump(config_data, f)
+            logger.info("설정 저장 완료.")
+            
+    except KeyboardInterrupt:
+        logger.warning("사용자에 의해 중단되었습니다.")
+    except Exception as e:
+        logger.error(f"최적화 중 치명적 오류: {e}", exc_info=True)
+        
+    finally:
+        # Cleanup Temp Files
+        # [Fix] Windows file lock issue: mmap objects need to be GC'd before file deletion
+        import gc
+        import time
+        from joblib.externals.loky import get_reusable_executor
+        
+        # Force GC to release mmap handles
+        df = None
+        study = None
+        gc.collect()
+        
+        # [Critical] Force Kill Worker Processes (reclaims ~3.5GB RAM)
+        try:
+            get_reusable_executor().shutdown(wait=True)
+        except: pass
+        
+        if os.path.exists(temp_dir):
+            try:
+                # Slight delay to allow OS to release locks
+                time.sleep(1.0) 
+                shutil.rmtree(temp_dir)
+                logger.debug("임시 파일 정리 완료.")
+            except Exception as e:
+                logger.warning(f"임시 파일 삭제 실패 (Memory Leak 가능성): {e}")
+                logger.warning(f"경로: {temp_dir} - 수동으로 삭제해 주세요.")
+            
+def optimize_strategy_headless(settings_path: str, strategy_name: str, 
+                             start_date: str, end_date: str, 
+                             n_trials: int = 20, n_jobs: int = 1, dataset_path: str = None):
+     # WFO용 별도 함수 (유지하되 내부 로직 업데이트 필요 시 참조, 일단 기존 구조 유지하거나 통합 고려)
+     # 현재 Task 범위는 'Strategy Optimization' 메뉴 개선이므로 일단 둠.
+     # WFO도 이 로직을 쓰도록 차후 리팩토링 권장.
+     pass

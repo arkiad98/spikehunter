@@ -116,7 +116,10 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     if not has_precalc_score and os.path.exists(model_clf_path):
         model_clf = joblib.load(model_clf_path)
     
-    ensure_dir(run_dir)
+    is_opt_mode = preloaded_features is not None
+    
+    if run_dir:
+        ensure_dir(run_dir)
     is_opt_mode = preloaded_features is not None
     
     if not quiet: print(f"\n[SpikeHunter v4.0] Backtest Start (Close Entry + 5-Day Hold)")
@@ -126,12 +129,15 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     end_d = to_date(end) if end else pd.Timestamp.today()
     
     if is_opt_mode: 
+        # [Optim] Memory Map Preservation
+        # Do NOT slice/copy dataframe here. It breaks mmap and duplicates memory per process.
+        # instead, we will filter the 'all_dates' iterator later.
         all_features = preloaded_features
     else:
         dataset_path = os.path.join(paths["features"], "dataset_v4.parquet")
         # Fallback to ml_dataset if dataset_v4 not found (as seen in dev_space)
         if not os.path.exists(dataset_path):
-             dataset_path = os.path.join(paths["ml_dataset"], "ml_classification_dataset.parquet")
+             dataset_path = os.path.join(paths.get("ml_dataset", "data/proc/ml_dataset"), "ml_classification_dataset.parquet")
         
         if not os.path.exists(dataset_path):
             logger.error(f"Data not found: {dataset_path}")
@@ -185,14 +191,19 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
 
     if all_features.empty: return None
     
-    # Normalize columns
-    req_cols = ['open', 'high', 'low', 'close']
-    col_map = {c.lower(): c for c in all_features.columns}
-    for r in req_cols:
-        if r not in col_map and r.capitalize() in all_features.columns:
-            all_features.rename(columns={r.capitalize(): r}, inplace=True)
-            
-    all_dates = pd.Series(pd.to_datetime(all_features['date'].unique())).sort_values().reset_index(drop=True)
+    # Sort and Filter Dates explicitly (since we didn't filter DF for mmap safety)
+    if is_opt_mode:
+        all_dates = pd.Series(pd.to_datetime(all_features['date'].unique()))
+        all_dates = all_dates[(all_dates >= start_d) & (all_dates <= end_d)].sort_values().reset_index(drop=True)
+    else:
+        # Normalize columns (Only for non-opt mode where raw parquet is loaded)
+        req_cols = ['open', 'high', 'low', 'close']
+        col_map = {c.lower(): c for c in all_features.columns}
+        for r in req_cols:
+            if r not in col_map and r.capitalize() in all_features.columns:
+                all_features.rename(columns={r.capitalize(): r}, inplace=True)
+                
+        all_dates = pd.Series(pd.to_datetime(all_features['date'].unique())).sort_values().reset_index(drop=True)
     
     # 3. Predict (Batch Prediction for Speed)
     if 'ml_score' in all_features.columns:
@@ -343,17 +354,19 @@ def run_backtest(run_dir: str, strategy_name: str, settings_path: str = None, se
     tradelog_df = pd.DataFrame(trade_log)
     metrics = _calculate_full_metrics(equity_df, tradelog_df)
     
-    equity_path = os.path.join(run_dir, "daily_equity.parquet")
-    tradelog_path = os.path.join(run_dir, "tradelog.parquet")
-    equity_df.to_parquet(equity_path)
-    if not tradelog_df.empty: tradelog_df.to_parquet(tradelog_path)
+    tradelog_path = None
+    if run_dir:
+        equity_path = os.path.join(run_dir, "daily_equity.parquet")
+        tradelog_path = os.path.join(run_dir, "tradelog.parquet")
+        equity_df.to_parquet(equity_path)
+        if not tradelog_df.empty: tradelog_df.to_parquet(tradelog_path)
 
-    if save_to_db and not is_opt_mode:
-        bid = f"{strategy_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
-        # Pass dummy params for compatibility
-        dummy_params = {"threshold": threshold, "hold": max_hold}
-        utils_db.insert_backtest_results(bid, metrics, dummy_params, tradelog_df, equity_path, 
-                                         start_d.strftime('%Y-%m-%d'), end_d.strftime('%Y-%m-%d'), strategy_name)
+        if save_to_db and not is_opt_mode:
+            bid = f"{strategy_name}_{datetime.now().strftime('%Y%m%d%H%M%S')}"
+            # Pass dummy params for compatibility
+            dummy_params = {"threshold": threshold, "hold": max_hold}
+            utils_db.insert_backtest_results(bid, metrics, dummy_params, tradelog_df, equity_path, 
+                                             start_d.strftime('%Y-%m-%d'), end_d.strftime('%Y-%m-%d'), strategy_name)
 
     if not quiet:
         print("\n" + "="*60)

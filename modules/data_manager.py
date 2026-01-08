@@ -125,17 +125,49 @@ def delete_data_by_date(settings_path: str, target_date_str: str):
     # DB에서 해당 날짜의 PENDING 시그널 등을 지울 수도 있음
     # 필요하다면 추가 구현
     
-    # 7. Metadata Rewind
-    # 삭제한 날짜가 last_collected_date보다 아예 같거나 이전이면, last_collected_date를 삭제일 전날로 되돌려야
-    # collect가 다시 수집을 시도함.
+    # 7. Metadata Rewind / Repair
+    # 삭제한 날짜가 last_collected_date보다 아예 같거나 이전이면 (=정상 상황), last_collected_date를 삭제일 전날로 되돌림.
+    # 반대로 last_collected_date가 삭제일보다 훨씬 이전이면 (=Meta가 Stale한 상황), 실제 데이터(Merged)를 확인해 Meta를 최신화(Repair).
     meta_dir = paths.get("meta", "data/meta")
     last_collected = read_meta(meta_dir, "last_collected_date")
+    
     if last_collected:
         last_date_ts = pd.to_datetime(last_collected)
+        
+        # Case A: Normal Rewind
         if target_date <= last_date_ts:
-            # 삭제된 날짜의 전날로 설정 (시간 제거)
             new_last = target_date - pd.Timedelta(days=1)
             write_meta(meta_dir, "last_collected_date", new_last.strftime("%Y-%m-%d"))
-            logger.info(f"  [Meta] last_collected_date 업데이트: {last_collected} -> {new_last.date()}")
+            logger.info(f"  [Meta] last_collected_date 업데이트(Rewind): {last_collected} -> {new_last.date()}")
             
+        # Case B: Stale Meta Repair
+        else:
+            # target_date > last_collected (Meta가 실제 데이터보다 뒤처져 있음)
+            # Merged 파일의 실제 마지막 날짜를 확인하여 Meta를 앞당겨줌.
+            try:
+                # 현재 삭제 작업이 일어난 파티션(또는 그 이전)을 확인
+                # 삭제가 완료된 상태이므로, 파일에 남은 가장 최신 날짜가 '보유한 데이터의 끝'임.
+                year = target_date.year
+                month = target_date.month
+                
+                # util function logic reused inline for simplicity / or check partition
+                p_path = os.path.join(merged_dir, f"Y={year}", f"M={month:02d}", "part.parquet")
+                if not os.path.exists(p_path):
+                     # 삭제로 인해 파일이 없어졌다면, 그 전날(target_date-1)이 유력하지만 확신 불가.
+                     # 하지만 삭제를 시도했다는 건 데이터가 있었다는 뜻이므로, target_date-1로 복구하는 것이 합리적.
+                     repaired_last = target_date - pd.Timedelta(days=1)
+                else:
+                    target_df = pd.read_parquet(p_path, columns=['date'])
+                    if not target_df.empty:
+                        repaired_last = pd.to_datetime(target_df['date']).max()
+                    else:
+                        repaired_last = target_date - pd.Timedelta(days=1)
+
+                if repaired_last > last_date_ts:
+                    write_meta(meta_dir, "last_collected_date", repaired_last.strftime("%Y-%m-%d"))
+                    logger.info(f"  [Meta] last_collected_date 보정(Repair): {last_collected} -> {repaired_last.date()}")
+
+            except Exception as e:
+                logger.warning(f"  [Meta] Repair 시도 중 오류: {e}")
+
     logger.info(f"=== 삭제 완료 (총 {deleted_count}개 영역 수정됨) ===")
