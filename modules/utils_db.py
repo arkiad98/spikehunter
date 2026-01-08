@@ -131,6 +131,28 @@ def get_db_connection():
     os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
     return sqlite3.connect(DB_PATH, timeout=30)
 
+def _migrate_schema(conn):
+    """기존 테이블의 스키마를 최신 변경사항에 맞춰 마이그레이션합니다."""
+    try:
+        cursor = conn.cursor()
+        
+        # 1. daily_signals 테이블 컬럼 추가 (target_rate, stop_rate)
+        # 2026-01-08: 컬럼 존재 여부 확인 후 추가
+        cursor.execute("PRAGMA table_info(daily_signals)")
+        columns = [info[1] for info in cursor.fetchall()]
+        
+        if 'daily_signals' in columns or columns: # 테이블이 존재하는 경우에만
+            if 'target_rate' not in columns:
+                logger.info("마이그레이션: daily_signals에 target_rate 컬럼 추가")
+                cursor.execute("ALTER TABLE daily_signals ADD COLUMN target_rate REAL")
+            
+            if 'stop_rate' not in columns:
+                logger.info("마이그레이션: daily_signals에 stop_rate 컬럼 추가")
+                cursor.execute("ALTER TABLE daily_signals ADD COLUMN stop_rate REAL")
+                
+    except Exception as e:
+        logger.error(f"스키마 마이그레이션 중 오류: {e}")
+
 def create_tables():
     """프로그램 시작 시 필요한 모든 테이블을 생성하거나 검증합니다."""
     try:
@@ -138,6 +160,10 @@ def create_tables():
             cursor = conn.cursor()
             for table_name, ddl_script in TABLE_DEFINITIONS.items():
                 cursor.execute(ddl_script)
+            
+            # [추가] 스키마 마이그레이션 실행
+            _migrate_schema(conn)
+            
             conn.commit()
         logger.info(f"데이터베이스 테이블이 성공적으로 준비되었습니다. (경로: {DB_PATH})")
     except Exception as e:

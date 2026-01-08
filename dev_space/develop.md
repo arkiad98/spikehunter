@@ -196,3 +196,11 @@
   - 원칙: 한글 사용, 금융 무결성(Look-Ahead Bias 방지), 코드 품질, Git 컨벤션.
 - **결과**: 에이전트가 해당 규칙을 숙지하고, 향후 작업의 기준점으로 삼게 됨.
 - **교훈**: 명확한 룰 세팅은 에이전트와의 협업 퀄리티를 보장하는 기초임.
+
+### 2026-01-08 DB 스키마 자동 마이그레이션 구현 (DB Schema Auto-Migration)
+- **목표**: 코드 업데이트(`verify_daily_signals.py` 등)로 인해 DB 테이블(`daily_signals`)에 새로운 컬럼(`target_rate`, `stop_rate`)이 필요해졌으나, 기존 로컬 DB가 업데이트되지 않아 발생하는 `sqlite3.OperationalError` 해결.
+- **시도 내용**:
+  - `modules/utils_db.py`: `_migrate_schema` 함수 추가.
+  - 프로그램 시작 시(`create_tables`) 자동으로 테이블의 컬럼을 검사하고, 누락된 컬럼이 있으면 `ALTER TABLE` 구문으로 동적 추가하도록 로직 개선 (Defensive Coding).
+- **결과**: `verify_db_schema.py` 실행 결과, 기존 DB 파일에 `target_rate` 컬럼이 정상적으로 추가됨을 확인.
+- **교훈**: 로컬 DB(SQLite)를 사용하는 경우, 코드 배포 시 DB 스키마 마이그레이션 대책(Auto-Migration)이 반드시 포함되어야 함.
