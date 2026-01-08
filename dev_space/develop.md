@@ -203,4 +203,31 @@
   - `modules/utils_db.py`: `_migrate_schema` 함수 추가.
   - 프로그램 시작 시(`create_tables`) 자동으로 테이블의 컬럼을 검사하고, 누락된 컬럼이 있으면 `ALTER TABLE` 구문으로 동적 추가하도록 로직 개선 (Defensive Coding).
 - **결과**: `verify_db_schema.py` 실행 결과, 기존 DB 파일에 `target_rate` 컬럼이 정상적으로 추가됨을 확인.
-- **교훈**: 로컬 DB(SQLite)를 사용하는 경우, 코드 배포 시 DB 스키마 마이그레이션 대책(Auto-Migration)이 반드시 포함되어야 함.
+### 2026-01-08 ML 최적화 로깅 수정 (Fix ML Optimization Logging)
+- **목표**: ML 하이퍼파라미터 최적화(`optimization_ml.py`) 수행 시, JSON 로그 파일에 파라미터 정보가 기록되지 않는 문제를 해결함.
+- **원인 분석**:
+  - `python-json-logger`는 `stdout`을 캡처하도록 설정되어 있으나, Optuna는 기본적으로 `stderr`로 로그를 출력함.
+  - 이로 인해 터미널에는 보이지만 파일 로그에는 누락됨.
+- **시도 내용**:
+  - `modules/optimization_ml.py`: `logging_callback` 함수를 구현하여 Optuna의 매 Trial 결과를 `logger.info`(stdout)로 명시적으로 기록.
+  - `optuna.logging.set_verbosity(WARNING)` 설정으로 Optuna의 기본 `stderr` 출력은 억제하여 중복 방지.
+- **결과**: `python -m modules.optimization_ml` 검증 결과, JSON 로그 파일에 `[Trial X] ... Params: {...}` 형태의 상세 정보가 정상적으로 기록됨을 확인.
+- **교훈**: 라이브러리(Optuna 등)의 기본 로깅 방식(stderr vs stdout)을 이해하고, 프로젝트 표준 로거로 라우팅하는 처리가 필수적임.
+
+### 2026-01-08 ML 최적화 모듈 통합 및 리팩토링 (Refactor & Consolidate ML Optimization)
+- **목표 (Goal)**: 
+    1. `optimization_ml.py`와 `train.py` 간의 코드 중복을 제거하고 유지보수 효율성을 높임.
+    2. 데이터 로드 로직이 분산되어 발생한 **기간 불일치 문제(Dataset Period Mismatch)**를 근본적으로 해결함.
+- **계획 (Plan)**: `optimization_ml.py`의 고급 기능(`logging_callback`, 중요도 분석, Top-N Precision)을 `train.py`로 이식하고, 해당 파일은 폐기함.
+- **시도 내용 (Action)**:
+  - `modules/train.py`:
+    - `calculate_top_n_precision`, `analyze_importance`, `logging_callback` 함수 이식.
+    - `run_ml_optimization_pipeline` 함수를 고도화하여 기존 `optimization_ml.py`의 기능(Warm Start, 사용자 입력 프로세스 등)을 통합.
+    - 데이터 로드 로직에서 `dataset_v4.parquet`(WF 학습 데이터)가 존재할 경우 우선 로드하도록 통일.
+  - `modules/run_pipeline.py`: 분리되어 있던 "3. Advanced Optimization" 메뉴를 제거하고 2번 메뉴로 통합.
+  - `modules/optimization_ml.py`: 파일 삭제.
+- **결과 (Result)**:
+  - `python run_pipeline.py` 실행 시 ML 최적화 메뉴가 간소화됨.
+  - 최적화 실행 결과, `Top-N Precision` 및 `Hyperparameter Importance`가 정상적으로 로깅 및 분석됨.
+  - 학습 기간 데이터 로드 로직이 일원화되어 불일치 가능성이 사라짐.
+- **교훈 (Lessons)**: 기능이 유사한 모듈은 초기에 분리하기보다, 하나의 모듈 내에서 옵션으로 처리하는 것이 장기적인 유지보수와 데이터 일관성 유지에 유리함.

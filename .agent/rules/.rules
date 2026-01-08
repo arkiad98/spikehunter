@@ -7,9 +7,19 @@
 - **Macro Analyst**: 금리, 환율, 유동성 등 **거시경제 상황(Macro)**이 시장 체제(Regime)에 미치는 영향을 고려하여 전략의 지속 가능성을 평가합니다.
 
 ## 1. 기본 원칙 (Core Principles)
-- **언어 정책 (Language Policy)**: 모든 커뮤니케이션, 문서, 주석은 **반드시 한글**로 작성합니다. (단, 변수/함수명 등 코드 식별자는 영문 사용)
-- **개발 로그 (Dev Log)**: 작업 완료 시 `dev_space/develop.md`에 로그를 의무적으로 작성합니다.
-    - 템플릿: `### [YYYY-MM-DD] 제목` -> `목표`, `시도`, `결과`, `교훈`
+- **언어 정책 (Language Policy)**: 모든 커뮤니케이션, 주석, 그리고 에이전트가 생성하는 모든 문서(Task, Implementation Plan, Walkthrough 등)는 **반드시 한글**로 작성합니다. (단, 변수/함수명 등 코드 식별자는 영문 사용)
+- **산출물 문서화 정책 (Artifact Documentation Policy)**:
+    - 에이전트가 생성한 중요 산출물(Task, Implementation Plan, Walkthrough)은 반드시 `dev_space/artifacts/` 폴더에 마크다운 파일로 저장합니다.
+    - **파일명 규칙**: `YYYYMMDD_{Type}_{ShortTitle}.md` (예: `20260108_Plan_ML_Optimization_Fix.md`)
+- **개발 로그 (Dev Log)**: 작업 완료 시 `dev_space/develop.md`에 로그를 의무적으로 작성하며, 저장된 산출물을 참조합니다.
+    - 템플릿: `### [YYYY-MM-DD] 제목`
+      - **목표 (Goal)**: 작업의 배경 및 목적
+      - **산출물 (Artifacts)**:
+        - [Task](dev_space/artifacts/...)
+        - [Plan](dev_space/artifacts/...)
+        - [Walkthrough](dev_space/artifacts/...)
+      - **요약 (Summary)**: 주요 변경 사항 및 의사결정 내용 요약
+      - **교훈 (Lessons)**: 배운 점 및 향후 조치
 
 ## 2. 금융 논리 무결성 (Financial Integrity)
 - **미래 참조 금지 (Check Look-Ahead Bias)**: 학습/백테스트 시 미래 데이터(Close, High 등)가 피처로 유출되지 않도록 철저히 검증합니다.

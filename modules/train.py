@@ -37,6 +37,59 @@ except ImportError:
 # -----------------------------------------------------------------------------
 # 1. Helper Functions & Training Logic
 # -----------------------------------------------------------------------------
+def calculate_top_n_precision(y_true, y_scores, n=5):
+    """
+    Calculate Precision of Top-N items per day.
+    For optimization speed, we use top-k percentile as proxy for top-n strategy.
+    """
+    if len(y_true) == 0: return 0.0
+    
+    # Simply take top 5% as proxy for "Trade Candidates"
+    k = max(int(len(y_true) * 0.05), 5) 
+    
+    try:
+        top_k_indices = np.argsort(y_scores)[-k:]
+        y_true_top_k = y_true.iloc[top_k_indices] if hasattr(y_true, 'iloc') else y_true[top_k_indices]
+        return np.mean(y_true_top_k)
+    except:
+        return 0.0
+
+def analyze_importance(study):
+    """
+    Analyze and print hyperparameter importances.
+    """
+    try:
+        logger.info("\n" + "="*40)
+        logger.info("   [Hyperparameter Importance Analysis]")
+        logger.info("="*40)
+        
+        importance = optuna.importance.get_param_importances(study)
+        
+        for i, (param, score) in enumerate(importance.items()):
+            logger.info(f" {i+1}. {param:<20}: {score*100:.1f}%")
+            
+        logger.info("="*40 + "\n")
+            
+    except Exception as e:
+        logger.warning(f"Importance analysis failed: {e}")
+
+def logging_callback(study, frozen_trial):
+    """
+    Optuna Trial 완료 시 호출되는 콜백.
+    logger를 사용하여 Trial 결과를 JSON 및 콘솔에 기록합니다.
+    """
+    try:
+        # Best Trial 여부 확인
+        is_best = (study.best_trial.number == frozen_trial.number)
+        best_mark = "[BEST]" if is_best else ""
+        
+        logger.info(
+            f"[Trial {frozen_trial.number}] {best_mark} Value: {frozen_trial.value:.6f} | "
+            f"Params: {frozen_trial.params}"
+        )
+    except Exception as e:
+        logger.warning(f"Logging callback failed: {e}")
+
 def _get_core_features_from_registry(registry_path: str) -> list:
     if not os.path.exists(registry_path): return []
     try:
@@ -346,19 +399,24 @@ class Objective:
             model.fit(X_train, y_train, eval_set=[(X_val, y_val)], early_stopping_rounds=50, verbose=False)
             
         y_pred_proba = model.predict_proba(X_val)[:, 1]
+        
+        # [New] Auxiliary Metric: Top-N Precision (Proxy)
+        top_prec = calculate_top_n_precision(y_val, y_pred_proba)
+        trial.set_user_attr("top_n_precision", top_prec)
+        
         return average_precision_score(y_val, y_pred_proba)
 
 def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_trials: int = 20, n_jobs: int = 1, save: bool = False):
-    """ML 모델 최적화 (LGBM / XGB / CatBoost 선택 가능)"""
-    print("\n" + "="*60)
-    print("      <<< ML 모델 하이퍼파라미터 최적화 >>>")
-    print("="*60)
+    """ML 모델 최적화 (LGBM / XGB / CatBoost 선택 가능) - 통합 버전"""
+    logger.info("="*60)
+    logger.info("      <<< ML 모델 하이퍼파라미터 최적화 >>>")
+    logger.info("="*60)
     
     if model_type:
         choice = {'lgbm': '1', 'xgb': '2', 'cat': '3'}.get(model_type, '1')
     else:
         print("최적화할 모델을 선택하세요:")
-        print("1. LightGBM")
+        print("1. LightGBM (추천)")
         print("2. XGBoost")
         print("3. CatBoost")
         choice = get_user_input("선택 (1/2/3): ")
@@ -379,16 +437,22 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
         print("잘못된 선택입니다.")
         return
     
+    # [New] Trial Mode Selection (if n_trials default)
+    if n_trials == 20: # Assuming 20 is the default passed from menu
+        print("\n[Optimization Mode]")
+        print("1. Fast Scan (20 trials)")
+        print("2. Deep Search (100 trials)")
+        print("3. Custom Input")
+        mode = get_user_input("선택 (1/2/3): ")
+        if mode == '2': n_trials = 100
+        elif mode == '3':
+             try: n_trials = int(get_user_input("Trials 입력: "))
+             except: n_trials = 20
+    
     # 병렬 설정
-    if n_jobs is None:
-        # User explicitly requested 75% logic for optimization
-        # ML Optimization: Trials are heavy (Training), so run trials serially (Optuna=1)
-        # but allocate High CPU to the model (Model=75%)
-        # But wait, user input prompt was asking for n_jobs. 
-        # Let's change default behavior: if no arg provided, assume optimized default.
-        
+    if n_jobs is None or n_jobs == 1:
         # Ask user but default to 1 (Serial Optuna) to allow Model parallelism
-        n_jobs_input = get_user_input("병렬 작업 수(Optuna Trials) (엔터: 1 [권장], -1: 전체): ")
+        n_jobs_input = get_user_input("병렬 작업 수(Optuna Trials) (엔터=1 [권장/모델병렬], -1=전체): ")
         try:
             optuna_n_jobs = int(n_jobs_input) if n_jobs_input.strip() else 1
         except: optuna_n_jobs = 1
@@ -417,10 +481,10 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
         print(f"설정 파일({target_key})에 {space_key}가 없습니다.")
         return
         
-    # n_trials is passed as argument
+    logger.info(f" >> 모델: {target_model.upper()}, Trials: {n_trials}, Optuna Jobs: {optuna_n_jobs}")
     
-    print(f" >> 모델: {target_model.upper()}, Trials: {n_trials}, Optuna Jobs: {optuna_n_jobs}")
-    
+    # [Mod] Optuna 기본 로깅 억제 (커스텀 콜백 사용)
+    optuna.logging.set_verbosity(optuna.logging.WARNING)
     study = optuna.create_study(direction="maximize")
     objective = Objective(target_model, param_space, "AP", model_n_jobs)
     
@@ -441,13 +505,29 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
                  warm_params[k] = v
                  
         if warm_params:
-            print(f" >> Warm Start 설정됨: {warm_params}")
+            logger.info(f" >> Warm Start 설정됨: {len(warm_params)} params")
             study.enqueue_trial(warm_params)
 
-        study.optimize(objective, n_trials=n_trials, n_jobs=optuna_n_jobs, show_progress_bar=True)
+        study.optimize(
+            objective, 
+            n_trials=n_trials, 
+            n_jobs=optuna_n_jobs, 
+            show_progress_bar=True,
+            callbacks=[logging_callback] # [Mod] Callback 추가
+        )
         
-        print(f"\n [최적화 완료] Best AP: {study.best_value:.4f}")
-        print(f" Best Params: {study.best_params}")
+        logger.info("\n" + "="*60)
+        logger.info(f" [Optimization Result]")
+        logger.info(f" Best AP: {study.best_value:.4f}")
+        
+        best_trial = study.best_trial
+        top_n_prec = best_trial.user_attrs.get("top_n_precision", 0.0)
+        logger.info(f" Top-N Precision (Proxy): {top_n_prec:.4f}")
+        logger.info(f" Best Params: {study.best_params}")
+        logger.info("="*60)
+
+        # [New] Importance Analysis
+        analyze_importance(study)
         
         if save:
             do_save = 'y'
@@ -459,18 +539,14 @@ def run_ml_optimization_pipeline(settings_path: str, model_type: str = None, n_t
             base_params = cfg['ml_params'].get(target_key, {})
             base_params.update(study.best_params)
             update_yaml(settings_path, "ml_params", target_key, base_params)
-            print(" >> 저장 완료. '모델 학습' 메뉴를 통해 재학습해주세요.")
+            logger.info(" >> 저장 완료. '모델 학습' 메뉴를 통해 재학습해주세요.")
             
     except Exception as e:
         logger.error(f"최적화 중 오류: {e}")
 
-# -----------------------------------------------------------------------------
-# 3. Entry Points
-# -----------------------------------------------------------------------------
 def run_train_pipeline(settings_path: str):
     cfg = read_yaml(settings_path)
     _run_classification_training(cfg)
-
 def run_benchmark_mode(settings_path: str):
     """LGBM, XGB, CatBoost 3종 모델 성능 비교 벤치마크"""
     print("\n" + "="*60)
