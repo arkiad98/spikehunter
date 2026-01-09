@@ -361,6 +361,9 @@ class Objective:
         
         df = df[(df['date'] >= effective_start_date) & (df['date'] <= effective_end_date)]
         
+        logger.info(f" >> 최적화 데이터 구간: {effective_start_date.date()} ~ {effective_end_date.date()} (Train: {train_months}m, Gap: {end_offset}m)")
+        logger.info(f" >> 학습 데이터 수: {len(df)} samples")
+        
         self.X = df[self.feature_cols]
         self.y = df['label_class']
 
