@@ -36,8 +36,8 @@ ml_params:
   krx_api_key: "9366E92B67004AC7889ED857B0A2C589C8A69D1B"
 
   # 데이터 수집 (2025.12.31까지 실제 데이터, 이후 예측/시뮬레이션)거래의 기대수익률(13.5%)이 높아 전체 성과는 더 우수함
-  target_surge_rate: 0.06438400612569851
-  stop_loss_rate: -0.04570015613459495
+  target_surge_rate: 0.0632319226372963
+  stop_loss_rate: -0.031118247743738354
   target_hold_period: 5
   regression_sampling_quantile: 0.9
   classification_train_months: 24  # [Update] 27 months ago ~ 3 months ago (24m training + 3m offset)
@@ -51,13 +51,13 @@ ml_params:
   lgbm_params_classification:
     objective: binary
     metric: average_precision
-    scale_pos_weight: 5.314731756464871 # [Restored] Exact Value
-    n_estimators: 602     # [Restored] High estimators for low LR
-    learning_rate: 0.004483644884687222  # [Restored] Low LR
-    num_leaves: 249      # [Restored] Simple Model
+    scale_pos_weight: 8.328252618162537 # [Restored] Exact Value
+    n_estimators: 547     # [Restored] High estimators for low LR
+    learning_rate: 0.014652537945122049  # [Restored] Low LR
+    num_leaves: 60       # [Restored] Simple Model
     max_depth: 10          # [Restored] Shallow Depth
-    colsample_bytree: 0.5148344778223497
-    subsample: 0.7481413548066166
+    colsample_bytree: 0.9374499501836483
+    subsample: 0.7565568823031625
 
     n_jobs: -1 # [Dynamic] Handled by code
     verbose: -1
@@ -72,7 +72,7 @@ ml_params:
       colsample_bytree: {type: float, low: 0.5, high: 1.0}
       subsample: {type: float, low: 0.5, high: 1.0}
       min_child_samples: {type: int, low: 10, high: 100}
-    min_child_samples: 89
+    min_child_samples: 21
 
   # [NEW] XGBoost 파라미터
   xgb_params_classification:
@@ -127,15 +127,15 @@ ml_params:
     random_strength: 0.5607904698110447
 
 # 4. 전략 최적화 설정
-  classification_threshold: 0.5267801051556564
+  classification_threshold: 0.6688018832549658
 optimization:
   SpikeHunter_R1_BullStable:
     optimize_on: Hybrid_Stability
-    n_trials: 100
+    n_trials: 2000
     param_space:
       target_r: {type: float, low: 0.06, high: 0.10} # [Refined] WFO Optimized Range (Center 8-9%)
       stop_r: {type: float, low: -0.05, high: -0.025} # [Refined] WFO Optimized Range (Include -4~-5%)
-      min_ml_score: {type: float, low: 0.20, high: 0.60} # [Correction] User reported scores > 0.50, expanded range
+      min_ml_score: {type: float, low: 0.45, high: 0.7} # [Correction] User reported scores > 0.50, expanded range
       max_market_vol: {type: float, low: 0.015, high: 0.50} # [Modified] Comparing: Effectively Removed (High=0.5)
       vbo_k: {type: float, low: 0.3, high: 0.7}
       min_mfi: {type: float, low: 40.0, high: 60.0}
@@ -144,13 +144,13 @@ optimization:
 strategies:
   SpikeHunter_R1_BullStable:
     name: SpikeHunter_R1_BullStable
-    target_r: 0.06438400612569851 # [수정] 예측력 우선 초기값
-    stop_r: -0.04570015613459495  # [수정] 하한 -5%
+    target_r: 0.0632319226372963  # [수정] 예측력 우선 초기값
+    stop_r: -0.031118247743738354 # [수정] 하한 -5%
     max_hold: 5
-    min_ml_score: 0.5267801051556564  # [수정] 무난한 시작값
-    vbo_k: 0.3679056932195563
-    max_market_vol: 0.2098230247166528
-    min_mfi: 44.08925455282127
+    min_ml_score: 0.6688018832549658  # [수정] 무난한 시작값
+    vbo_k: 0.584410555750316
+    max_market_vol: 0.12366791193649548
+    min_mfi: 58.980089066227634
     min_obv_slope: 0
     top_n: 5
 
