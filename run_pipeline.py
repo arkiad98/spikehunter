@@ -9,6 +9,10 @@ import os
 import sys
 import os
 import sys
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning, module='pykrx')
+# Suppress pkg_resources deprecation warning specifically
+warnings.filterwarnings("ignore", message=".*pkg_resources is deprecated.*")
 # [Fix] Apply Pykrx Patch (PR #249)
 try:
     from modules.patch_pykrx import patch_pykrx_referer
